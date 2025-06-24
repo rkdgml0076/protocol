@@ -70,17 +70,15 @@
         return;
     }
 
-    fieldMap.forEach(([length, start], idx) => {
+      fieldMap.forEach(([length, start, fieldName]) => {
         const startIdx = start - 1;
         const endIdx = startIdx + length;
         const rawValue = data.slice(startIdx, endIdx);
 
-        const fieldName = `해석:${String(idx + 1).padStart(2, '02')}`;
-
         const row = document.createElement("tr");
         row.innerHTML = `<td>${fieldName}</td><td>${rawValue}</td>`;
         tbody.appendChild(row);
-    });
+      });
     }
   </script>
 
