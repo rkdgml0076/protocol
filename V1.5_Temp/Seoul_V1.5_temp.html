@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8"> 
+  <meta charset="UTF-8">
   <title>파싱 도구</title>
   <style>
     body {
@@ -38,7 +38,7 @@
 </head>
 <body>
 
-  <h2>서울시 확장형(온도, 단선) 원격검침 서버 수신용 데이터포맷[V1.5] NB-IoT</h2>
+  <h2>서울시 확장형(온도) 원격검침 서버 수신용 데이터포맷[V1.5] NB-IoT</h2>
   <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 90자)"></textarea>
   <br />
   <button onclick="parseData()">파싱하기</button>
@@ -84,59 +84,45 @@
   [8, 111, "msrStdValue"],
   [4, 119, "msrOffset 0"],
   [4, 123, "tempValue 0"],
-  [2, 127, "cableStatus 0"],
-  [4, 129, "msrOffset 1"],
-  [4, 133, "tempValue 1"],
-  [2, 137, "cableStatus 1"],
-  [4, 139, "msrOffset 2"],
-  [4, 143, "tempValue 2"],
-  [2, 147, "cableStatus 2"],
-  [4, 149, "msrOffset 3"],
-  [4, 153, "tempValue 3"],
-  [2, 157, "cableStatus 3"],
-  [4, 159, "msrOffset 4"],
-  [4, 163, "tempValue 4"],
-  [2, 167, "cableStatus 4"],
-  [4, 169, "msrOffset 5"],
-  [4, 173, "tempValue 5"],
-  [2, 177, "cableStatus 5"],
-  [4, 179, "msrOffset 6"],
-  [4, 183, "tempValue 6"],
-  [2, 187, "cableStatus 6"],
-  [4, 189, "msrOffset 7"],
-  [4, 193, "tempValue 7"],
-  [2, 197, "cableStatus 7"],
-  [4, 199, "msrOffset 8"],
-  [4, 203, "tempValue 8"],
-  [2, 207, "cableStatus 8"],
-  [4, 209, "msrOffset 9"],
-  [4, 213, "tempValue 9"],
-  [2, 217, "cableStatus 0"],
-  [4, 219, "msrOffset 10"],
-  [4, 223, "tempValue 10"],
-  [2, 227, "cableStatus 10"],
-  [4, 229, "msrOffset 11"],
-  [4, 233, "tempValue 11"],
-  [2, 237, "cableStatus 11"],
-  [4, 239, "msrOffset 12"],
-  [4, 243, "tempValue 12"],
-  [2, 247, "cableStatus 12"],
-  [4, 249, "msrOffset 13"],
-  [4, 253, "tempValue 13"],
-  [2, 257, "cableStatus 13"],
-  [4, 259, "msrOffset 14"],
-  [4, 263, "tempValue 14"],
-  [2, 267, "cableStatus 14"],
-  [4, 269, "msrOffset 15"],
-  [4, 273, "tempValue 15"],
-  [2, 277, "cableStatus 15"],
-  [4, 279, "msrOffset 16"],
-  [4, 283, "tempValue 16"],
-  [2, 287, "cableStatus 16"],
-  [4, 289, "msrOffset 17"],
-  [4, 293, "tempValue 17"],
-  [2, 297, "cableStatus 17"],
-  [2, 299, "checksum"]
+  [4, 127, "msrOffset 1"],
+  [4, 131, "tempValue 1"],
+  [4, 135, "msrOffset 2"],
+  [4, 139, "tempValue 2"],
+  [4, 143, "msrOffset 3"],
+  [4, 147, "tempValue 3"],
+  [4, 151, "msrOffset 4"],
+  [4, 155, "tempValue 4"],
+  [4, 159, "msrOffset 5"],
+  [4, 163, "tempValue 5"],
+  [4, 167, "msrOffset 6"],
+  [4, 171, "tempValue 6"],
+  [4, 175, "msrOffset 7"],
+  [4, 179, "tempValue 7"],
+  [4, 183, "msrOffset 8"],
+  [4, 187, "tempValue 8"],
+  [4, 191, "msrOffset 9"],
+  [4, 195, "tempValue 9"],
+  [4, 199, "msrOffset 10"],
+  [4, 203, "tempValue 10"],
+  [4, 207, "msrOffset 11"],
+  [4, 211, "tempValue 11"],
+  [4, 215, "msrOffset 12"],
+  [4, 219, "tempValue 12"],
+  [4, 223, "msrOffset 13"],
+  [4, 227, "tempValue 13"],
+  [4, 231, "msrOffset 14"],
+  [4, 235, "tempValue 14"],
+  [4, 239, "msrOffset 15"],
+  [4, 243, "tempValue 15"],
+  [4, 247, "msrOffset 16"],
+  [4, 251, "tempValue 16"],
+  [4, 255, "msrOffset 17"],
+  [4, 259, "tempValue 17"],
+  [4, 263, "msrOffset 18"],
+  [4, 267, "tempValue 18"],
+  [4, 271, "msrOffset 19"],
+  [4, 275, "tempValue 19"],
+  [2, 279, "checksum"]
 ];
 
     function parseData() {
