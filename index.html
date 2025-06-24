@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"> <!-- 인코딩 설정 반드시 첫줄 -->
+  <title>파싱 도구</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 30px;
+      background: #f7f7f7;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>파싱 도구 (입력 데이터는 90자 이상)</h2>
+  <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 90자)"></textarea>
+  <br />
+  <button onclick="parseData()">파싱하기</button>
+
+  <table id="resultTable">
+    <thead>
+      <tr><th>필드</th><th>값</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const fieldMap = [
+    [2, 1], [2, 3], [2, 5], [16, 7], [16, 23], [2, 39], [2, 41], [4, 43], [4, 47],
+    [4, 51], [4, 55], [10, 59], [4, 69], [2, 73], [8, 75], [2, 83], [2, 85],
+    [2, 87], [2, 89], [2, 91], [2, 93], [2, 95], [2, 97], [2, 99], [2, 101],
+    [2, 103], [2, 105], [2, 107], [2, 109], [8, 111], [4, 119], [4, 123], [2, 127],
+    [4, 129], [4, 133], [2, 137], [4, 139], [4, 143], [2, 147], [4, 149], [4, 153],
+    [2, 157], [4, 159], [4, 163], [2, 167], [4, 169], [4, 173], [2, 177], [2, 179]
+    ];
+
+    function parseData() {
+    const data = document.getElementById("inputData").value.trim();
+    const tbody = document.querySelector("#resultTable tbody");
+    tbody.innerHTML = "";
+
+    if (data.length < 90) {
+        alert("데이터는 최소 90자 이상이어야 합니다.");
+        return;
+    }
+
+    fieldMap.forEach(([length, start], idx) => {
+        const startIdx = start - 1;
+        const endIdx = startIdx + length;
+        const rawValue = data.slice(startIdx, endIdx);
+
+        const fieldName = `해석:${String(idx + 1).padStart(2, '02')}`;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${fieldName}</td><td>${rawValue}</td>`;
+        tbody.appendChild(row);
+    });
+    }
+  </script>
+
+</body>
+</html>
