@@ -45,7 +45,7 @@
 
   <table id="resultTable">
     <thead>
-      <tr><th>데이터 키</th><th>값(샘플)</th></tr>
+      <tr><th>데이터 키</th><th>원본값(샘플)</th><th>해석</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -122,65 +122,168 @@
     [4, 267, "tempValue 18"],
     [4, 271, "msrOffset 19"],
     [4, 275, "tempValue 19"],
-    [2, 279, "checksum"]
+    [4, 279, "msrOffset 20"],
+    [4, 283, "tempValue 20"],
+    [4, 287, "msrOffset 21"],
+    [4, 291, "tempValue 21"],
+    [4, 295, "msrOffset 22"],
+    [4, 299, "tempValue 22"],
+    [4, 303, "msrOffset 23"],
+    [4, 307, "tempValue 23"]
+    // [2, 311, "checksum"]
   ];
 
-  function parseData() {
-    const data = document.getElementById("inputData").value.trim();
-    const tbody = document.querySelector("#resultTable tbody");
-    tbody.innerHTML = "";
+  const meterCaliberMap = {
+  "13": "15mm",
+  "23": "20mm",
+  "33": "25mm",
+  "43": "32mm",
+  "53": "40mm",
+  "63": "50mm",
+  "73": "80mm",
+  "83": "100mm",
+  "93": "150mm",
+  "A3": "200mm",
+  "B3": "250mm",
+  "C3": "300mm"
+};
 
-    if (data.length < 90) {
-      alert("데이터는 최소 90자 이상이어야 합니다.");
-      return;
-    }
+function parseData() {
+  const data = document.getElementById("inputData").value.trim();
+  const tbody = document.querySelector("#resultTable tbody");
+  tbody.innerHTML = "";
 
-    const dexFields = [
-      "rssi", "cid", "rsrp", "rsrq", "snr", "devVolt",
-      "year", "month", "day", "hour", "minute", "second",
-      "msrStdValue 0", "msrOffset 0", "tempValue 0"
-    ];
-
-    let checksumRow = null;
-
-    fieldMap.forEach(([length, start, fieldName]) => {
-      const startIdx = start - 1;
-      const endIdx = startIdx + length;
-      const rawValue = data.slice(startIdx, endIdx);
-      let displayValue = rawValue;
-
-      // checksum은 나중에 출력
-      if (fieldName === "checksum") {
-        checksumRow = [fieldName, rawValue];
-        return;
-      }
-
-      // msrOffset은 바이트 순서 스왑 후 DEX 변환
-      if (fieldName.startsWith("msrOffset")) {
-        if (rawValue.length === 4) {
-          const swapped = rawValue.match(/../g).reverse().join("");
-          displayValue = parseInt(swapped, 16).toString();
-        }
-      }
-      // DEX 변환 대상 필드 목록 처리
-      else if (dexFields.some(prefix => fieldName.startsWith(prefix))) {
-        displayValue = parseInt(rawValue, 16).toString();
-      }
-
-      // 출력
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${fieldName}</td><td>${displayValue}</td>`;
-      tbody.appendChild(row);
-    });
-
-    // checksum은 항상 마지막 출력
-    if (checksumRow) {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${checksumRow[0]}</td><td>${checksumRow[1]}</td>`;
-      tbody.appendChild(row);
-    };
-
+  if (data.length < 90) {
+    alert("데이터는 최소 90자 이상이어야 합니다.");
+    return;
   }
+
+const swapAndDexFields = [
+  "rssi", "cid", "rsrp", "rsrq", "snr", 
+  "year", "month", "day", "hour", "minute", "second",
+  "msrStdValue","msrOffset", "tempValue"
+];
+
+const checksumValue = data.slice(-2);
+const dataWithoutChecksum = data.slice(0, -2);
+
+fieldMap.forEach(([length, start, fieldName]) => {
+  const startIdx = start - 1;
+  const endIdx = startIdx + length;
+  if (endIdx > dataWithoutChecksum.length) return;
+  const rawValue = data.slice(startIdx, endIdx);
+  let displayValue = rawValue;
+
+  if (fieldName === "imei" && rawValue.length >= 16) {
+  let chars = rawValue.split("");
+  chars.splice(15, 1); // 16번째 문자 제거
+  displayValue = chars.join("");
+  }
+
+  if (fieldName === "imsi" && rawValue.length >= 16) {
+    // 문자열을 배열로 변환
+    let chars = rawValue.split("");
+    // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
+    chars.splice(15, 1); // 16번째 문자 제거
+    displayValue = chars.join("");
+  }
+
+  if (fieldName === "devNo" && rawValue.length >= 10) {
+    // 문자열을 배열로 변환
+    let chars = rawValue.split("");
+    // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
+    chars.splice(3, 1);
+    chars.splice(2, 1);
+    chars.splice(1, 1);
+    displayValue = chars.join("");
+  }
+
+  if (fieldName.trim() === "devVolt") {
+  // devVolt는 HEX 2자리 → DEX → 소수점 한자리
+    if (rawValue.length === 2) {
+      // 예: 36 → 54 → 5.4
+      const dex = parseInt(rawValue, 16);
+      displayValue = (dex / 10).toFixed(1);
+      displayValue = `${displayValue}V`;
+    }
+  }
+
+  if (fieldName === "meterCaliber") {
+    displayValue = meterCaliberMap[rawValue] || rawValue;
+  }
+
+  if (fieldName.trim() === "meterNo" && rawValue.length >= 8) {
+  displayValue = rawValue.slice(0, 2) + "-" + rawValue.slice(2, 8);
+  }
+
+  if (fieldName === "devFw" && rawValue.length >= 4) {
+    displayValue = 'V'+ rawValue[1] + rawValue[3];
+  }
+  
+  // 스왑 및 DEX 변환 대상
+  if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
+    if (rawValue.length >= 4) {
+      // 2바이트 이상이면 바이트 순서 스왑 후 DEX
+      const swapped = rawValue.match(/../g).reverse().join("");
+      displayValue = parseInt(swapped, 16).toString();
+    } 
+    else {
+      // 1바이트 HEX → DEX 변환
+      displayValue = parseInt(rawValue, 16).toString();
+    }
+  
+  if (fieldName === "rsrp") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "rsrq") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "year") {
+    displayValue = `20${displayValue}년`;
+  }
+  if (fieldName === "month") {
+    displayValue = `${displayValue}월`;
+  }
+  if (fieldName === "day") {
+    displayValue = `${displayValue}일`;
+  }
+  if (fieldName === "hour") {
+    displayValue = `${displayValue}시`;
+  }
+  if (fieldName === "minute") {
+    displayValue = `${displayValue}분`;
+  }
+  if (fieldName === "second") {
+    displayValue = `${displayValue}초`;
+  }
+  if (fieldName === "msrStdValue") {
+    displayValue = `${displayValue/1000}`;
+  }
+  if (fieldName.startsWith("tempValue") && displayValue.length >= 3) {
+    displayValue = displayValue.slice(0, -1);
+  }
+  }
+
+  const row = document.createElement("tr");
+  row.innerHTML = 
+    `<td>${fieldName}</td>
+    <td>${rawValue}</td>
+    <td>${displayValue}</td>`;
+  tbody.appendChild(row);
+
+  });
+
+//   const checksum = data.slice(-2);
+//   const checksumRow = document.createElement("tr");
+//   checksumRow.innerHTML = `<td>checksum</td><td>${checksum}</td><td>${checksum}</td>`;
+//   tbody.appendChild(checksumRow);
+// }
+
+const checksumRow = document.createElement("tr");
+  checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+  tbody.appendChild(checksumRow);
+}
+
 </script>
 
 </body>
