@@ -135,40 +135,50 @@
       return;
     }
 
+    const dexFields = [
+      "rssi", "cid", "rsrp", "rsrq", "snr", "devVolt",
+      "year", "month", "day", "hour", "minute", "second",
+      "msrStdValue 0", "msrOffset 0", "tempValue 0"
+    ];
+
+    let checksumRow = null;
+
     fieldMap.forEach(([length, start, fieldName]) => {
       const startIdx = start - 1;
       const endIdx = startIdx + length;
       const rawValue = data.slice(startIdx, endIdx);
-
       let displayValue = rawValue;
 
-      // msrOffset인 경우 HEX → DEX 변환
-      if (fieldName.startsWith("rssi") ||
-          fieldName.startsWith("cid") ||
-          fieldName.startsWith("rsrp") ||
-          fieldName.startsWith("rsrq") ||
-          fieldName.startsWith("snr") ||
-          fieldName.startsWith("devVolt") ||
-          fieldName.startsWith("year") ||
-          fieldName.startsWith("month") ||
-          fieldName.startsWith("day") ||
-          fieldName.startsWith("hour") ||
-          fieldName.startsWith("minute") ||
-          fieldName.startsWith("second") ||
-          fieldName.startsWith("msrStdValue 0") ||
-          fieldName.startsWith("msrOffset 0") ||
-          fieldName.startsWith("tempValue 0") ||
-          fieldName.startsWith("msrStdValue 1") ||
-          fieldName.startsWith("msrOffset 1") ||
-          fieldName.startsWith("tempValue 1")) 
-          {
-            displayValue = parseInt(rawValue, 16).toString();
-          }
-          
+      // checksum은 나중에 출력
+      if (fieldName === "checksum") {
+        checksumRow = [fieldName, rawValue];
+        return;
+      }
+
+      // msrOffset은 바이트 순서 스왑 후 DEX 변환
+      if (fieldName.startsWith("msrOffset")) {
+        if (rawValue.length === 4) {
+          const swapped = rawValue.match(/../g).reverse().join("");
+          displayValue = parseInt(swapped, 16).toString();
+        }
+      }
+      // DEX 변환 대상 필드 목록 처리
+      else if (dexFields.some(prefix => fieldName.startsWith(prefix))) {
+        displayValue = parseInt(rawValue, 16).toString();
+      }
+
+      // 출력
       const row = document.createElement("tr");
       row.innerHTML = `<td>${fieldName}</td><td>${displayValue}</td>`;
       tbody.appendChild(row);
     });
+
+    // checksum은 항상 마지막 출력
+    if (checksumRow) {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${checksumRow[0]}</td><td>${checksumRow[1]}</td>`;
+      tbody.appendChild(row);
+    };
 
   }
 </script>
