@@ -257,7 +257,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = `${displayValue}초`;
   }
   if (fieldName === "msrStdValue") {
-    displayValue = `${displayValue/1000}`;
+    displayValue = `${displayValue/1000} ton`;
   }
   if (fieldName.startsWith("tempValue") && displayValue.length >= 3) {
     displayValue = displayValue.slice(0, -1);
