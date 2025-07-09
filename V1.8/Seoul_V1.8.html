@@ -39,7 +39,7 @@
 <body>
 
   <h2>서울시 원격검침 서버 수신용 데이터포맷[V1.8] NB-IoT</h2>
-  <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 62자)"></textarea>
+  <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 61자)"></textarea>
   <br/>
   <button onclick="parseData()">파싱하기</button>
 
@@ -110,7 +110,20 @@ const fieldMapFixed = [
   [8, 311, "mValue 23"]
 ];
 
-  const meterCaliberMap = {
+const headerMap = {
+  "A3": "DataFormat_V1.5",
+  "A4": "DataFormat_V1.7",
+  "A5": "DataFormat_V1.8",
+  "B1": "DataFormat_V2.0"
+};
+
+const typeMap = {
+  "70": "(Default Version)",
+  "75": "(Temp Version)",
+  "76": "(Temp + Cable Version)"
+};
+
+const meterCaliberMap = {
   "13": "15mm",
   "23": "20mm",
   "33": "25mm",
@@ -130,8 +143,8 @@ function parseData() {
   const tbody = document.querySelector("#resultTable tbody");
   tbody.innerHTML = "";
 
-if (data.length < 61 || data.length > 158) {
-  alert("데이터는 62자 이상 157자 이하이어야 합니다.");
+if (data.length < 61 || data.length > 401) {
+  alert("데이터는 62자 이상 400자 이하이어야 합니다.");
   return;
 }
 
@@ -173,6 +186,14 @@ fieldMap.forEach(([length, start, fieldName]) => {
     chars.splice(2, 1);
     chars.splice(1, 1);
     displayValue = chars.join("");
+  }
+
+ if (fieldName === "header") {
+    displayValue = headerMap[rawValue] || rawValue;
+  }
+
+  if (fieldName === "type") {
+    displayValue = typeMap[rawValue] || rawValue;
   }
 
   if (fieldName === "meterCaliber") {
@@ -235,7 +256,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "msrStdValue") {
     displayValue = `${displayValue/1000} ton`;
   }
-  if (fieldName.startsWith("mValue") && displayValue.length >= 4) {
+  if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
     displayValue = displayValue.slice(0, 10)/1000 + " ton";
   }
   }
