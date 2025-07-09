@@ -45,13 +45,13 @@
 
   <table id="resultTable">
     <thead>
-      <tr><th>데이터 키</th><th>값(샘플)</th></tr>
+      <tr><th>데이터 키</th><th>값(샘플)</th><th>해석</th></tr>
     </thead>
     <tbody></tbody>
   </table>
 
   <script>
- const fieldMap = [
+  const fieldMap = [
   [2, 1, "header"],
   [2, 3, "length"],
   [2, 5, "type"],
@@ -84,82 +84,280 @@
   [8, 111, "msrStdValue"],
   [4, 119, "msrOffset 0"],
   [4, 123, "tempValue 0"],
-  [2, 127, "cableStatus 0"],
-  [4, 129, "msrOffset 1"],
-  [4, 133, "tempValue 1"],
-  [2, 137, "cableStatus 1"],
-  [4, 139, "msrOffset 2"],
-  [4, 143, "tempValue 2"],
-  [2, 147, "cableStatus 2"],
-  [4, 149, "msrOffset 3"],
-  [4, 153, "tempValue 3"],
-  [2, 157, "cableStatus 3"],
-  [4, 159, "msrOffset 4"],
-  [4, 163, "tempValue 4"],
-  [2, 167, "cableStatus 4"],
-  [4, 169, "msrOffset 5"],
-  [4, 173, "tempValue 5"],
-  [2, 177, "cableStatus 5"],
-  [4, 179, "msrOffset 6"],
-  [4, 183, "tempValue 6"],
-  [2, 187, "cableStatus 6"],
-  [4, 189, "msrOffset 7"],
-  [4, 193, "tempValue 7"],
-  [2, 197, "cableStatus 7"],
-  [4, 199, "msrOffset 8"],
-  [4, 203, "tempValue 8"],
-  [2, 207, "cableStatus 8"],
-  [4, 209, "msrOffset 9"],
-  [4, 213, "tempValue 9"],
-  [2, 217, "cableStatus 0"],
-  [4, 219, "msrOffset 10"],
-  [4, 223, "tempValue 10"],
-  [2, 227, "cableStatus 10"],
-  [4, 229, "msrOffset 11"],
-  [4, 233, "tempValue 11"],
-  [2, 237, "cableStatus 11"],
-  [4, 239, "msrOffset 12"],
-  [4, 243, "tempValue 12"],
-  [2, 247, "cableStatus 12"],
-  [4, 249, "msrOffset 13"],
-  [4, 253, "tempValue 13"],
-  [2, 257, "cableStatus 13"],
-  [4, 259, "msrOffset 14"],
-  [4, 263, "tempValue 14"],
-  [2, 267, "cableStatus 14"],
-  [4, 269, "msrOffset 15"],
-  [4, 273, "tempValue 15"],
-  [2, 277, "cableStatus 15"],
-  [4, 279, "msrOffset 16"],
-  [4, 283, "tempValue 16"],
-  [2, 287, "cableStatus 16"],
-  [4, 289, "msrOffset 17"],
-  [4, 293, "tempValue 17"],
-  [2, 297, "cableStatus 17"],
-  [2, 299, "checksum"]
+  [4, 127, "msrOffset 1"],
+  [4, 131, "tempValue 1"],
+  [4, 135, "msrOffset 2"],
+  [4, 139, "tempValue 2"],
+  [4, 143, "msrOffset 3"],
+  [4, 147, "tempValue 3"],
+  [4, 151, "msrOffset 4"],
+  [4, 155, "tempValue 4"],
+  [4, 159, "msrOffset 5"],
+  [4, 163, "tempValue 5"],
+  [4, 167, "msrOffset 6"],
+  [4, 171, "tempValue 6"],
+  [4, 175, "msrOffset 7"],
+  [4, 179, "tempValue 7"],
+  [4, 183, "msrOffset 8"],
+  [4, 187, "tempValue 8"],
+  [4, 191, "msrOffset 9"],
+  [4, 195, "tempValue 9"],
+  [4, 199, "msrOffset 10"],
+  [4, 203, "tempValue 10"],
+  [4, 207, "msrOffset 11"],
+  [4, 211, "tempValue 11"],
+  [4, 215, "msrOffset 12"],
+  [4, 219, "tempValue 12"],
+  [4, 223, "msrOffset 13"],
+  [4, 227, "tempValue 13"],
+  [4, 231, "msrOffset 14"],
+  [4, 235, "tempValue 14"],
+  [4, 239, "msrOffset 15"],
+  [4, 243, "tempValue 15"],
+  [4, 247, "msrOffset 16"],
+  [4, 251, "tempValue 16"],
+  [4, 255, "msrOffset 17"],
+  [4, 259, "tempValue 17"],
+  [4, 263, "msrOffset 18"],
+  [4, 267, "tempValue 18"],
+  [4, 271, "msrOffset 19"],
+  [4, 275, "tempValue 19"],
+  [4, 279, "msrOffset 20"],
+  [4, 283, "tempValue 20"],
+  [4, 287, "msrOffset 21"],
+  [4, 291, "tempValue 21"],
+  [4, 295, "msrOffset 22"],
+  [4, 299, "tempValue 22"],
+  [4, 303, "msrOffset 23"],
+  [4, 307, "tempValue 23"]
+];
+//  const fieldMap = [
+//   [2, 1, "header"],
+//   [2, 3, "length"],
+//   [2, 5, "type"],
+//   [16, 7, "imei"],
+//   [16, 23, "imsi"],
+//   [2, 39, "rssi"],
+//   [2, 41, "ber"],
+//   [4, 43, "cid"],
+//   [4, 47, "rsrp"],
+//   [4, 51, "rsrq"],
+//   [4, 55, "snr"],
+//   [10, 59, "devNo"],
+//   [4, 69, "devFw"],
+//   [2, 73, "devVolt"],
+//   [8, 75, "meterNo"],
+//   [2, 83, "meterType"],
+//   [2, 85, "meterCaliber"],
+//   [2, 87, "meterStatus"],
+//   [2, 89, "msrCycle"],
+//   [2, 91, "msrReport"],
+//   [2, 93, "year"],
+//   [2, 95, "month"],
+//   [2, 97, "day"],
+//   [2, 99, "hour"],
+//   [2, 101, "minute"],
+//   [2, 103, "second"],
+//   [2, 105, "msrCycle"],
+//   [2, 107, "msrCnt"],
+//   [2, 109, "msrStdIdx"],
+//   [8, 111, "msrStdValue"],
+//   [4, 119, "msrOffset 0"],
+//   [4, 123, "tempValue 0"],
+//   [2, 127, "cableStatus 0"],
+//   [4, 129, "msrOffset 1"],
+//   [4, 133, "tempValue 1"],
+//   [2, 137, "cableStatus 1"],
+//   [4, 139, "msrOffset 2"],
+//   [4, 143, "tempValue 2"],
+//   [2, 147, "cableStatus 2"],
+//   [4, 149, "msrOffset 3"],
+//   [4, 153, "tempValue 3"],
+//   [2, 157, "cableStatus 3"],
+//   [4, 159, "msrOffset 4"],
+//   [4, 163, "tempValue 4"],
+//   [2, 167, "cableStatus 4"],
+//   [4, 169, "msrOffset 5"],
+//   [4, 173, "tempValue 5"],
+//   [2, 177, "cableStatus 5"],
+//   [4, 179, "msrOffset 6"],
+//   [4, 183, "tempValue 6"],
+//   [2, 187, "cableStatus 6"],
+//   [4, 189, "msrOffset 7"],
+//   [4, 193, "tempValue 7"],
+//   [2, 197, "cableStatus 7"],
+//   [4, 199, "msrOffset 8"],
+//   [4, 203, "tempValue 8"],
+//   [2, 207, "cableStatus 8"],
+//   [4, 209, "msrOffset 9"],
+//   [4, 213, "tempValue 9"],
+//   [2, 217, "cableStatus 0"],
+//   [4, 219, "msrOffset 10"],
+//   [4, 223, "tempValue 10"],
+//   [2, 227, "cableStatus 10"],
+//   [4, 229, "msrOffset 11"],
+//   [4, 233, "tempValue 11"],
+//   [2, 237, "cableStatus 11"],
+//   [4, 239, "msrOffset 12"],
+//   [4, 243, "tempValue 12"],
+//   [2, 247, "cableStatus 12"],
+//   [4, 249, "msrOffset 13"],
+//   [4, 253, "tempValue 13"],
+//   [2, 257, "cableStatus 13"],
+//   [4, 259, "msrOffset 14"],
+//   [4, 263, "tempValue 14"],
+//   [2, 267, "cableStatus 14"],
+//   [4, 269, "msrOffset 15"],
+//   [4, 273, "tempValue 15"],
+//   [2, 277, "cableStatus 15"],
+//   [4, 279, "msrOffset 16"],
+//   [4, 283, "tempValue 16"],
+//   [2, 287, "cableStatus 16"],
+//   [4, 289, "msrOffset 17"],
+//   [4, 293, "tempValue 17"],
+//   [2, 297, "cableStatus 17"],
+//   [2, 299, "checksum"]
+// ];
+
+  const meterCaliberMap = {
+  "13": "15mm",
+  "23": "20mm",
+  "33": "25mm",
+  "43": "32mm",
+  "53": "40mm",
+  "63": "50mm",
+  "73": "80mm",
+  "83": "100mm",
+  "93": "150mm",
+  "A3": "200mm",
+  "B3": "250mm",
+  "C3": "300mm"
+};
+
+function parseData() {
+  const data = document.getElementById("inputData").value.trim();
+  const tbody = document.querySelector("#resultTable tbody");
+  tbody.innerHTML = "";
+
+  if (data.length < 90) {
+    alert("데이터는 최소 90자 이상이어야 합니다.");
+    return;
+  }
+
+const swapAndDexFields = [
+  "rssi", "cid", "rsrp", "rsrq", "snr", 
+  "year", "month", "day", "hour", "minute", "second",
+  "msrStdValue","msrOffset", "tempValue"
 ];
 
-    function parseData() {
-    const data = document.getElementById("inputData").value.trim();
-    const tbody = document.querySelector("#resultTable tbody");
-    tbody.innerHTML = "";
+const checksumValue = data.slice(-2);
+const dataWithoutChecksum = data.slice(0, -2);
 
-    if (data.length < 90) {
-        alert("데이터는 최소 90자 이상이어야 합니다.");
-        return;
+fieldMap.forEach(([length, start, fieldName]) => {
+  const startIdx = start - 1;
+  const endIdx = startIdx + length;
+  if (endIdx > dataWithoutChecksum.length) return;
+  const rawValue = data.slice(startIdx, endIdx);
+  let displayValue = rawValue;
+
+  if (fieldName === "imei" && rawValue.length >= 16) {
+  let chars = rawValue.split("");
+  chars.splice(15, 1); // 16번째 문자 제거
+  displayValue = chars.join("");
+  }
+
+  if (fieldName === "imsi" && rawValue.length >= 16) {
+    // 문자열을 배열로 변환
+    let chars = rawValue.split("");
+    // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
+    chars.splice(15, 1); // 16번째 문자 제거
+    displayValue = chars.join("");
+  }
+
+  if (fieldName.trim() === "devVolt") {
+  // devVolt는 HEX 2자리 → DEX → 소수점 한자리
+    if (rawValue.length === 2) {
+      // 예: 36 → 54 → 5.4
+      const dex = parseInt(rawValue, 16);
+      displayValue = (dex / 10).toFixed(1);
+      displayValue = `${displayValue}V`;
     }
+  }
 
-      fieldMap.forEach(([length, start, fieldName]) => {
-        const startIdx = start - 1;
-        const endIdx = startIdx + length;
-        const rawValue = data.slice(startIdx, endIdx);
+  if (fieldName === "meterCaliber") {
+    displayValue = meterCaliberMap[rawValue] || rawValue;
+  }
 
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${fieldName}</td><td>${rawValue}</td>`;
-        tbody.appendChild(row);
-      });
+  if (fieldName.trim() === "meterNo" && rawValue.length >= 8) {
+  displayValue = rawValue.slice(0, 2) + "-" + rawValue.slice(2, 8);
+  }
+
+  if (fieldName === "devFw" && rawValue.length >= 4) {
+    displayValue = 'V'+ rawValue[1] + rawValue[3];
+  }
+  
+  // 스왑 및 DEX 변환 대상
+  if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
+    if (rawValue.length >= 4) {
+      // 2바이트 이상이면 바이트 순서 스왑 후 DEX
+      const swapped = rawValue.match(/../g).reverse().join("");
+      displayValue = parseInt(swapped, 16).toString();
+    } 
+    else {
+      // 1바이트 HEX → DEX 변환
+      displayValue = parseInt(rawValue, 16).toString();
     }
-  </script>
+  
+  if (fieldName === "rsrp") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "rsrq") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "year") {
+    displayValue = `20${displayValue}년`;
+  }
+  if (fieldName === "month") {
+    displayValue = `${displayValue}월`;
+  }
+  if (fieldName === "day") {
+    displayValue = `${displayValue}일`;
+  }
+  if (fieldName === "hour") {
+    displayValue = `${displayValue}시`;
+  }
+  if (fieldName === "minute") {
+    displayValue = `${displayValue}분`;
+  }
+  if (fieldName === "second") {
+    displayValue = `${displayValue}초`;
+  }
+  if (fieldName === "msrStdValue") {
+    displayValue = `${displayValue/1000} ton`;
+  }
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+  }
+  if (fieldName.startsWith("tempValue") && displayValue.length >= 3) {
+    displayValue = displayValue.slice(0, -1) + "℃";
+  }
+  }
+
+  const row = document.createElement("tr");
+  row.innerHTML = 
+    `<td>${fieldName}</td>
+    <td>${rawValue}</td>
+    <td>${displayValue}</td>`;
+  tbody.appendChild(row);
+
+  });
+
+const checksumRow = document.createElement("tr");
+  checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+  tbody.appendChild(checksumRow);
+}
+
+</script>
 
 </body>
 </html>

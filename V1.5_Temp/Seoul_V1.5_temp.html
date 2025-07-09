@@ -259,8 +259,11 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "msrStdValue") {
     displayValue = `${displayValue/1000} ton`;
   }
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+  }
   if (fieldName.startsWith("tempValue") && displayValue.length >= 3) {
-    displayValue = displayValue.slice(0, -1);
+    displayValue = displayValue.slice(0, -1) + "℃";
   }
   }
 
@@ -272,12 +275,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
   tbody.appendChild(row);
 
   });
-
-//   const checksum = data.slice(-2);
-//   const checksumRow = document.createElement("tr");
-//   checksumRow.innerHTML = `<td>checksum</td><td>${checksum}</td><td>${checksum}</td>`;
-//   tbody.appendChild(checksumRow);
-// }
 
 const checksumRow = document.createElement("tr");
   checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;

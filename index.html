@@ -58,7 +58,7 @@
     [16, 7, "imei"],
     [16, 23, "imsi"],
     [2, 39, "rssi"],
-    [2, 41, "devTemp"],
+    [2, 41, "ber"],
     [4, 43, "cid"],
     [4, 47, "rsrp"],
     [4, 51, "rsrq"],
@@ -83,29 +83,53 @@
     [2, 109, "msrStdIdx"],
     [8, 111, "msrStdValue"],
     [4, 119, "msrOffset 0"],
-    [4, 123, "msrOffset 1"],
-    [4, 127, "msrOffset 2"],
-    [4, 131, "msrOffset 3"],
-    [4, 135, "msrOffset 4"],
-    [4, 139, "msrOffset 5"],
-    [4, 143, "msrOffset 6"],
-    [4, 147, "msrOffset 7"],
-    [4, 151, "msrOffset 8"],
-    [4, 155, "msrOffset 9"],
-    [4, 159, "msrOffset 10"],
-    [4, 163, "msrOffset 11"],
-    [4, 167, "msrOffset 12"],
-    [4, 171, "msrOffset 13"],
-    [4, 175, "msrOffset 14"],
-    [4, 179, "msrOffset 15"],
-    [4, 183, "msrOffset 16"],
-    [4, 187, "msrOffset 17"],
-    [4, 191, "msrOffset 18"],
-    [4, 195, "msrOffset 19"],
-    [4, 199, "msrOffset 20"],
-    [4, 203, "msrOffset 21"],
-    [4, 207, "msrOffset 22"],
-    [4, 211, "msrOffset 23"]
+    [4, 123, "tempValue 0"],
+    [4, 127, "msrOffset 1"],
+    [4, 131, "tempValue 1"],
+    [4, 135, "msrOffset 2"],
+    [4, 139, "tempValue 2"],
+    [4, 143, "msrOffset 3"],
+    [4, 147, "tempValue 3"],
+    [4, 151, "msrOffset 4"],
+    [4, 155, "tempValue 4"],
+    [4, 159, "msrOffset 5"],
+    [4, 163, "tempValue 5"],
+    [4, 167, "msrOffset 6"],
+    [4, 171, "tempValue 6"],
+    [4, 175, "msrOffset 7"],
+    [4, 179, "tempValue 7"],
+    [4, 183, "msrOffset 8"],
+    [4, 187, "tempValue 8"],
+    [4, 191, "msrOffset 9"],
+    [4, 195, "tempValue 9"],
+    [4, 199, "msrOffset 10"],
+    [4, 203, "tempValue 10"],
+    [4, 207, "msrOffset 11"],
+    [4, 211, "tempValue 11"],
+    [4, 215, "msrOffset 12"],
+    [4, 219, "tempValue 12"],
+    [4, 223, "msrOffset 13"],
+    [4, 227, "tempValue 13"],
+    [4, 231, "msrOffset 14"],
+    [4, 235, "tempValue 14"],
+    [4, 239, "msrOffset 15"],
+    [4, 243, "tempValue 15"],
+    [4, 247, "msrOffset 16"],
+    [4, 251, "tempValue 16"],
+    [4, 255, "msrOffset 17"],
+    [4, 259, "tempValue 17"],
+    [4, 263, "msrOffset 18"],
+    [4, 267, "tempValue 18"],
+    [4, 271, "msrOffset 19"],
+    [4, 275, "tempValue 19"],
+    [4, 279, "msrOffset 20"],
+    [4, 283, "tempValue 20"],
+    [4, 287, "msrOffset 21"],
+    [4, 291, "tempValue 21"],
+    [4, 295, "msrOffset 22"],
+    [4, 299, "tempValue 22"],
+    [4, 303, "msrOffset 23"],
+    [4, 307, "tempValue 23"]
   ];
 
   const meterCaliberMap = {
@@ -134,7 +158,7 @@ function parseData() {
   }
 
 const swapAndDexFields = [
-  "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", 
+  "rssi", "cid", "rsrp", "rsrq", "snr", 
   "year", "month", "day", "hour", "minute", "second",
   "msrStdValue","msrOffset", "tempValue"
 ];
@@ -160,16 +184,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
     let chars = rawValue.split("");
     // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
     chars.splice(15, 1); // 16번째 문자 제거
-    displayValue = chars.join("");
-  }
-
-  if (fieldName === "devNo" && rawValue.length >= 10) {
-    // 문자열을 배열로 변환
-    let chars = rawValue.split("");
-    // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
-    chars.splice(3, 1);
-    chars.splice(2, 1);
-    chars.splice(1, 1);
     displayValue = chars.join("");
   }
 
@@ -206,12 +220,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
       // 1바이트 HEX → DEX 변환
       displayValue = parseInt(rawValue, 16).toString();
     }
-  if (fieldName === "devTemp") {
-    displayValue = `${displayValue}°C`;
-  }
-  if (fieldName === "rsrp") {
-    displayValue = `${displayValue}`;
-  }
+  
   if (fieldName === "rsrp") {
     displayValue = `-${displayValue}`;
   }
@@ -238,6 +247,12 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
   if (fieldName === "msrStdValue") {
     displayValue = `${displayValue/1000} ton`;
+  }
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+  }
+  if (fieldName.startsWith("tempValue") && displayValue.length >= 3) {
+    displayValue = displayValue.slice(0, -1) + "℃";
   }
   }
 
