@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>ÌååÏã± ÎèÑÍµ¨</title>
+  <title>∆ƒΩÃ µµ±∏</title>
   <style>
     body {
       font-family: sans-serif;
@@ -38,14 +38,14 @@
 </head>
 <body>
 
-  <h2>ÏÑúÏö∏Ïãú ÏõêÍ≤©Í≤ÄÏπ® ÏÑúÎ≤Ñ ÏàòÏã†Ïö© Îç∞Ïù¥ÌÑ∞Ìè¨Îß∑[V1.8] NB-IoT</h2>
-  <textarea id="inputData" placeholder="Ïó¨Í∏∞Ïóê Îç∞Ïù¥ÌÑ∞Î•º Î∂ôÏó¨ÎÑ£ÏúºÏÑ∏Ïöî (ÏµúÏÜå 90Ïûê)"></textarea>
+  <h2>º≠øÔΩ√ ø¯∞›∞Àƒß º≠πˆ ºˆΩ≈øÎ µ•¿Ã≈Õ∆˜∏À[V1.8] NB-IoT</h2>
+  <textarea id="inputData" placeholder="ø©±‚ø° µ•¿Ã≈Õ∏¶ ∫Ÿø©≥÷¿∏ººø‰ (√÷º“ 90¿⁄)"></textarea>
   <br/>
-  <button onclick="parseData()">ÌååÏã±ÌïòÍ∏∞</button>
+  <button onclick="parseData()">∆ƒΩÃ«œ±‚</button>
 
   <table id="resultTable">
     <thead>
-      <tr><th>Îç∞Ïù¥ÌÑ∞ ÌÇ§</th><th>ÏõêÎ≥∏Í∞í(ÏÉòÌîå)</th><th>Ìï¥ÏÑù</th></tr>
+      <tr><th>µ•¿Ã≈Õ ≈∞</th><th>ø¯∫ª∞™(ª˘«√)</th><th>«ÿºÆ</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -69,48 +69,45 @@ const fieldMapFixed = [
   [8, 79, "meterNo"],
   [2, 87, "meterType"],
   [2, 89, "meterCaliber"],
-  [2, 91, "meterStatus"],
-  [2, 93, "manufacturerCode"],
-  [2, 95, "tempInfo"],
-  [2, 97, "correctionInfo"],
-  [4, 99, "Reserved"],
-  [2, 103, "timeInterval"],
-  [2, 105, "msrCycle"],
-  [2, 107, "msrReport"],
-  [2, 109, "year"],
-  [2, 111, "month"],
-  [2, 113, "day"],
-  [2, 115, "hour"],
-  [2, 117, "minute"],
-  [2, 119, "second"],
-  [2, 121, "msrCycle"],
-  [2, 123, "msrCnt"],
-  [2, 125, "msrStdIdx"],
-  [8, 127, "msrStdValue"],
-  [8, 135, "mValue 0"],
-  [8, 143, "mValue 1"],
-  [8, 151, "mValue 2"],
-  [8, 159, "mValue 3"],
-  [8, 167, "mValue 4"],
-  [8, 175, "mValue 5"],
-  [8, 183, "mValue 6"],
-  [8, 191, "mValue 7"],
-  [8, 199, "mValue 8"],
-  [8, 207, "mValue 9"],
-  [8, 215, "mValue 10"],
-  [8, 223, "mValue 11"],
-  [8, 231, "mValue 12"],
-  [8, 239, "mValue 13"],
-  [8, 247, "mValue 14"],
-  [8, 255, "mValue 15"],
-  [8, 263, "mValue 16"],
-  [8, 271, "mValue 17"],
-  [8, 279, "mValue 18"],
-  [8, 287, "mValue 19"],
-  [8, 295, "mValue 20"],
-  [8, 303, "mValue 21"],
-  [8, 311, "mValue 22"],
-  [8, 319, "mValue 23"]
+  [2, 91, "meterStatus1"],
+  [2, 93, "meterStatus2"],
+  [2, 95, "timeInterval"],
+  [2, 97, "msrCycle"],
+  [2, 99, "msrReport"],
+  [2, 101, "year"],
+  [2, 103, "month"],
+  [2, 105, "day"],
+  [2, 107, "hour"],
+  [2, 109, "minute"],
+  [2, 111, "second"],
+  [2, 113, "msrCycle"],
+  [2, 115, "msrCnt"],
+  [2, 117, "msrStdIdx"],
+  [8, 119, "msrStdValue"],
+  [8, 127, "mValue 0"],
+  [8, 135, "mValue 1"],
+  [8, 143, "mValue 2"],
+  [8, 151, "mValue 3"],
+  [8, 159, "mValue 4"],
+  [8, 167, "mValue 5"],
+  [8, 175, "mValue 6"],
+  [8, 183, "mValue 7"],
+  [8, 191, "mValue 8"],
+  [8, 199, "mValue 9"],
+  [8, 207, "mValue 10"],
+  [8, 215, "mValue 11"],
+  [8, 223, "mValue 12"],
+  [8, 231, "mValue 13"],
+  [8, 239, "mValue 14"],
+  [8, 247, "mValue 15"],
+  [8, 255, "mValue 16"],
+  [8, 263, "mValue 17"],
+  [8, 271, "mValue 18"],
+  [8, 279, "mValue 19"],
+  [8, 287, "mValue 20"],
+  [8, 295, "mValue 21"],
+  [8, 303, "mValue 22"],
+  [8, 311, "mValue 23"]
 ];
 
   const meterCaliberMap = {
@@ -134,7 +131,7 @@ function parseData() {
   tbody.innerHTML = "";
 
   if (data.length < 90) {
-    alert("Îç∞Ïù¥ÌÑ∞Îäî ÏµúÏÜå 90Ïûê Ïù¥ÏÉÅÏù¥Ïñ¥Ïïº Ìï©ÎãàÎã§.");
+    alert("µ•¿Ã≈Õ¥¬ √÷º“ 90¿⁄ ¿ÃªÛ¿ÃæÓæﬂ «’¥œ¥Ÿ.");
     return;
   }
 
@@ -156,22 +153,22 @@ fieldMap.forEach(([length, start, fieldName]) => {
 
   if (fieldName === "imei" && rawValue.length >= 16) {
   let chars = rawValue.split("");
-  chars.splice(15, 1); // 16Î≤àÏß∏ Î¨∏Ïûê Ï†úÍ±∞
+  chars.splice(15, 1); // 16π¯¬∞ πÆ¿⁄ ¡¶∞≈
   displayValue = chars.join("");
   }
 
   if (fieldName === "imsi" && rawValue.length >= 16) {
-    // Î¨∏ÏûêÏó¥ÏùÑ Î∞∞Ïó¥Î°ú Î≥ÄÌôò
+    // πÆ¿⁄ø≠¿ª πËø≠∑Œ ∫Ø»Ø
     let chars = rawValue.split("");
-    // spliceÎ°ú Îí§ÏóêÏÑúÎ∂ÄÌÑ∞ ÏÇ≠Ï†ú (ÏïûÎ∂ÄÌÑ∞ ÌïòÎ©¥ Ïù∏Îç±Ïä§Í∞Ä Î∞ÄÎ¶ΩÎãàÎã§)
-    chars.splice(15, 1); // 16Î≤àÏß∏ Î¨∏Ïûê Ï†úÍ±∞
+    // splice∑Œ µ⁄ø°º≠∫Œ≈Õ ªË¡¶ (æ’∫Œ≈Õ «œ∏È ¿Œµ¶Ω∫∞° π–∏≥¥œ¥Ÿ)
+    chars.splice(15, 1); // 16π¯¬∞ πÆ¿⁄ ¡¶∞≈
     displayValue = chars.join("");
   }
 
   if (fieldName === "devNo" && rawValue.length >= 10) {
-    // Î¨∏ÏûêÏó¥ÏùÑ Î∞∞Ïó¥Î°ú Î≥ÄÌôò
+    // πÆ¿⁄ø≠¿ª πËø≠∑Œ ∫Ø»Ø
     let chars = rawValue.split("");
-    // spliceÎ°ú Îí§ÏóêÏÑúÎ∂ÄÌÑ∞ ÏÇ≠Ï†ú (ÏïûÎ∂ÄÌÑ∞ ÌïòÎ©¥ Ïù∏Îç±Ïä§Í∞Ä Î∞ÄÎ¶ΩÎãàÎã§)
+    // splice∑Œ µ⁄ø°º≠∫Œ≈Õ ªË¡¶ (æ’∫Œ≈Õ «œ∏È ¿Œµ¶Ω∫∞° π–∏≥¥œ¥Ÿ)
     chars.splice(3, 1);
     chars.splice(2, 1);
     chars.splice(1, 1);
@@ -191,24 +188,24 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
 
   if (fieldName.trim() === "devVolt") {
-  // devVoltÎäî HEX 2ÏûêÎ¶¨ ‚Üí DEX ‚Üí ÏÜåÏàòÏ†ê ÌïúÏûêÎ¶¨
+  // devVolt¥¬ HEX 2¿⁄∏Æ °Ê DEX °Ê º“ºˆ¡° «—¿⁄∏Æ
     if (rawValue.length === 2) {
-      // Ïòà: 36 ‚Üí 54 ‚Üí 5.4
+      // øπ: 36 °Ê 54 °Ê 5.4
       const dex = parseInt(rawValue, 16);
       displayValue = (dex / 10).toFixed(1);
       displayValue = `${displayValue}V`;
     }
   }
 
-  // Ïä§Ïôë Î∞è DEX Î≥ÄÌôò ÎåÄÏÉÅ
+  // Ω∫ø“ π◊ DEX ∫Ø»Ø ¥ÎªÛ
   if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
     if (rawValue.length >= 4) {
-      // 2Î∞îÏù¥Ìä∏ Ïù¥ÏÉÅÏù¥Î©¥ Î∞îÏù¥Ìä∏ ÏàúÏÑú Ïä§Ïôë ÌõÑ DEX
+      // 2πŸ¿Ã∆Æ ¿ÃªÛ¿Ã∏È πŸ¿Ã∆Æ º¯º≠ Ω∫ø“ »ƒ DEX
       const swapped = rawValue.match(/../g).reverse().join("");
       displayValue = parseInt(swapped, 16).toString();
     } 
     else {
-      // 1Î∞îÏù¥Ìä∏ HEX ‚Üí DEX Î≥ÄÌôò
+      // 1πŸ¿Ã∆Æ HEX °Ê DEX ∫Ø»Ø
       displayValue = parseInt(rawValue, 16).toString();
     }
   if (fieldName === "rsrp") {
@@ -218,22 +215,22 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = `-${displayValue}`;
   }
   if (fieldName === "year") {
-    displayValue = `20${displayValue}ÎÖÑ`;
+    displayValue = `20${displayValue}≥‚`;
   }
   if (fieldName === "month") {
-    displayValue = `${displayValue}Ïõî`;
+    displayValue = `${displayValue}ø˘`;
   }
   if (fieldName === "day") {
-    displayValue = `${displayValue}Ïùº`;
+    displayValue = `${displayValue}¿œ`;
   }
   if (fieldName === "hour") {
-    displayValue = `${displayValue}Ïãú`;
+    displayValue = `${displayValue}Ω√`;
   }
   if (fieldName === "minute") {
-    displayValue = `${displayValue}Î∂Ñ`;
+    displayValue = `${displayValue}∫–`;
   }
   if (fieldName === "second") {
-    displayValue = `${displayValue}Ï¥à`;
+    displayValue = `${displayValue}√ `;
   }
   if (fieldName === "msrStdValue") {
     displayValue = `${displayValue/1000} ton`;

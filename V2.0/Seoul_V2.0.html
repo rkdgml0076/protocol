@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>íŒŒì‹± ë„êµ¬</title>
+  <title>ÆÄ½Ì µµ±¸</title>
   <style>
     body {
       font-family: sans-serif;
@@ -38,14 +38,14 @@
 </head>
 <body>
 
-  <h2>ì„œìš¸ì‹œ ì›ê²©ê²€ì¹¨ ì„œë²„ ìˆ˜ì‹ ìš© ë°ì´í„°í¬ë§·[V1.8] NB-IoT</h2>
-  <textarea id="inputData" placeholder="ì—¬ê¸°ì— ë°ì´í„°ë¥¼ ë¶™ì—¬ë„£ìœ¼ì„¸ìš” (ìµœì†Œ 90ì)"></textarea>
+  <h2>¼­¿ï½Ã ¿ø°İ°ËÄ§ ¼­¹ö ¼ö½Å¿ë µ¥ÀÌÅÍÆ÷¸Ë[V2.0] NB-IoT</h2>
+  <textarea id="inputData" placeholder="¿©±â¿¡ µ¥ÀÌÅÍ¸¦ ºÙ¿©³ÖÀ¸¼¼¿ä (ÃÖ¼Ò 90ÀÚ)"></textarea>
   <br/>
-  <button onclick="parseData()">íŒŒì‹±í•˜ê¸°</button>
+  <button onclick="parseData()">ÆÄ½ÌÇÏ±â</button>
 
   <table id="resultTable">
     <thead>
-      <tr><th>ë°ì´í„° í‚¤</th><th>ì›ë³¸ê°’(ìƒ˜í”Œ)</th><th>í•´ì„</th></tr>
+      <tr><th>µ¥ÀÌÅÍ Å°</th><th>¿øº»°ª(»ùÇÃ)</th><th>ÇØ¼®</th></tr>
     </thead>
     <tbody></tbody>
   </table>
@@ -134,7 +134,7 @@ function parseData() {
   tbody.innerHTML = "";
 
   if (data.length < 90) {
-    alert("ë°ì´í„°ëŠ” ìµœì†Œ 90ì ì´ìƒì´ì–´ì•¼ í•©ë‹ˆë‹¤.");
+    alert("µ¥ÀÌÅÍ´Â ÃÖ¼Ò 90ÀÚ ÀÌ»óÀÌ¾î¾ß ÇÕ´Ï´Ù.");
     return;
   }
 
@@ -156,22 +156,22 @@ fieldMap.forEach(([length, start, fieldName]) => {
 
   if (fieldName === "imei" && rawValue.length >= 16) {
   let chars = rawValue.split("");
-  chars.splice(15, 1); // 16ë²ˆì§¸ ë¬¸ì ì œê±°
+  chars.splice(15, 1); // 16¹øÂ° ¹®ÀÚ Á¦°Å
   displayValue = chars.join("");
   }
 
   if (fieldName === "imsi" && rawValue.length >= 16) {
-    // ë¬¸ìì—´ì„ ë°°ì—´ë¡œ ë³€í™˜
+    // ¹®ÀÚ¿­À» ¹è¿­·Î º¯È¯
     let chars = rawValue.split("");
-    // spliceë¡œ ë’¤ì—ì„œë¶€í„° ì‚­ì œ (ì•ë¶€í„° í•˜ë©´ ì¸ë±ìŠ¤ê°€ ë°€ë¦½ë‹ˆë‹¤)
-    chars.splice(15, 1); // 16ë²ˆì§¸ ë¬¸ì ì œê±°
+    // splice·Î µÚ¿¡¼­ºÎÅÍ »èÁ¦ (¾ÕºÎÅÍ ÇÏ¸é ÀÎµ¦½º°¡ ¹Ğ¸³´Ï´Ù)
+    chars.splice(15, 1); // 16¹øÂ° ¹®ÀÚ Á¦°Å
     displayValue = chars.join("");
   }
 
   if (fieldName === "devNo" && rawValue.length >= 10) {
-    // ë¬¸ìì—´ì„ ë°°ì—´ë¡œ ë³€í™˜
+    // ¹®ÀÚ¿­À» ¹è¿­·Î º¯È¯
     let chars = rawValue.split("");
-    // spliceë¡œ ë’¤ì—ì„œë¶€í„° ì‚­ì œ (ì•ë¶€í„° í•˜ë©´ ì¸ë±ìŠ¤ê°€ ë°€ë¦½ë‹ˆë‹¤)
+    // splice·Î µÚ¿¡¼­ºÎÅÍ »èÁ¦ (¾ÕºÎÅÍ ÇÏ¸é ÀÎµ¦½º°¡ ¹Ğ¸³´Ï´Ù)
     chars.splice(3, 1);
     chars.splice(2, 1);
     chars.splice(1, 1);
@@ -191,24 +191,24 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
 
   if (fieldName.trim() === "devVolt") {
-  // devVoltëŠ” HEX 2ìë¦¬ â†’ DEX â†’ ì†Œìˆ˜ì  í•œìë¦¬
+  // devVolt´Â HEX 2ÀÚ¸® ¡æ DEX ¡æ ¼Ò¼öÁ¡ ÇÑÀÚ¸®
     if (rawValue.length === 2) {
-      // ì˜ˆ: 36 â†’ 54 â†’ 5.4
+      // ¿¹: 36 ¡æ 54 ¡æ 5.4
       const dex = parseInt(rawValue, 16);
       displayValue = (dex / 10).toFixed(1);
       displayValue = `${displayValue}V`;
     }
   }
 
-  // ìŠ¤ì™‘ ë° DEX ë³€í™˜ ëŒ€ìƒ
+  // ½º¿Ò ¹× DEX º¯È¯ ´ë»ó
   if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
     if (rawValue.length >= 4) {
-      // 2ë°”ì´íŠ¸ ì´ìƒì´ë©´ ë°”ì´íŠ¸ ìˆœì„œ ìŠ¤ì™‘ í›„ DEX
+      // 2¹ÙÀÌÆ® ÀÌ»óÀÌ¸é ¹ÙÀÌÆ® ¼ø¼­ ½º¿Ò ÈÄ DEX
       const swapped = rawValue.match(/../g).reverse().join("");
       displayValue = parseInt(swapped, 16).toString();
     } 
     else {
-      // 1ë°”ì´íŠ¸ HEX â†’ DEX ë³€í™˜
+      // 1¹ÙÀÌÆ® HEX ¡æ DEX º¯È¯
       displayValue = parseInt(rawValue, 16).toString();
     }
   if (fieldName === "rsrp") {
@@ -218,22 +218,22 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = `-${displayValue}`;
   }
   if (fieldName === "year") {
-    displayValue = `20${displayValue}ë…„`;
+    displayValue = `20${displayValue}³â`;
   }
   if (fieldName === "month") {
-    displayValue = `${displayValue}ì›”`;
+    displayValue = `${displayValue}¿ù`;
   }
   if (fieldName === "day") {
-    displayValue = `${displayValue}ì¼`;
+    displayValue = `${displayValue}ÀÏ`;
   }
   if (fieldName === "hour") {
-    displayValue = `${displayValue}ì‹œ`;
+    displayValue = `${displayValue}½Ã`;
   }
   if (fieldName === "minute") {
-    displayValue = `${displayValue}ë¶„`;
+    displayValue = `${displayValue}ºĞ`;
   }
   if (fieldName === "second") {
-    displayValue = `${displayValue}ì´ˆ`;
+    displayValue = `${displayValue}ÃÊ`;
   }
   if (fieldName === "msrStdValue") {
     displayValue = `${displayValue/1000} ton`;
