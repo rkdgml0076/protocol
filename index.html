@@ -38,7 +38,7 @@
 </head>
 <body>
 
-  <h2>서울시 원격검침 서버 수신용 데이터포맷[V1.8] NB-IoT</h2>
+  <h2>서울시 원격검침 서버 수신용 데이터포맷[V1.5] NB-IoT</h2>
   <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 90자)"></textarea>
   <br/>
   <button onclick="parseData()">파싱하기</button>
@@ -51,67 +51,62 @@
   </table>
 
   <script>
-const fieldMapFixed = [
-  [2, 1, "header"],
-  [2, 3, "length"],
-  [2, 5, "type"],
-  [16, 7, "imei"],
-  [16, 23, "imsi"],
-  [2, 39, "rssi"],
-  [2, 41, "ber"],
-  [8, 43, "cid"],
-  [4, 51, "rsrp"],
-  [4, 55, "rsrq"],
-  [4, 59, "snr"],
-  [10, 63, "devNo"],
-  [4, 73, "devFw"],
-  [2, 77, "devVolt"],
-  [8, 79, "meterNo"],
-  [2, 87, "meterType"],
-  [2, 89, "meterCaliber"],
-  [2, 91, "meterStatus"],
-  [2, 93, "manufacturerCode"],
-  [2, 95, "tempInfo"],
-  [2, 97, "correctionInfo"],
-  [4, 99, "Reserved"],
-  [2, 103, "timeInterval"],
-  [2, 105, "msrCycle"],
-  [2, 107, "msrReport"],
-  [2, 109, "year"],
-  [2, 111, "month"],
-  [2, 113, "day"],
-  [2, 115, "hour"],
-  [2, 117, "minute"],
-  [2, 119, "second"],
-  [2, 121, "msrCycle"],
-  [2, 123, "msrCnt"],
-  [2, 125, "msrStdIdx"],
-  [8, 127, "msrStdValue"],
-  [8, 135, "mValue 0"],
-  [8, 143, "mValue 1"],
-  [8, 151, "mValue 2"],
-  [8, 159, "mValue 3"],
-  [8, 167, "mValue 4"],
-  [8, 175, "mValue 5"],
-  [8, 183, "mValue 6"],
-  [8, 191, "mValue 7"],
-  [8, 199, "mValue 8"],
-  [8, 207, "mValue 9"],
-  [8, 215, "mValue 10"],
-  [8, 223, "mValue 11"],
-  [8, 231, "mValue 12"],
-  [8, 239, "mValue 13"],
-  [8, 247, "mValue 14"],
-  [8, 255, "mValue 15"],
-  [8, 263, "mValue 16"],
-  [8, 271, "mValue 17"],
-  [8, 279, "mValue 18"],
-  [8, 287, "mValue 19"],
-  [8, 295, "mValue 20"],
-  [8, 303, "mValue 21"],
-  [8, 311, "mValue 22"],
-  [8, 319, "mValue 23"]
-];
+  const fieldMap = [
+    [2, 1, "header"],
+    [2, 3, "length"],
+    [2, 5, "type"],
+    [16, 7, "imei"],
+    [16, 23, "imsi"],
+    [2, 39, "rssi"],
+    [2, 41, "devTemp"],
+    [4, 43, "cid"],
+    [4, 47, "rsrp"],
+    [4, 51, "rsrq"],
+    [4, 55, "snr"],
+    [10, 59, "devNo"],
+    [4, 69, "devFw"],
+    [2, 73, "devVolt"],
+    [8, 75, "meterNo"],
+    [2, 83, "meterType"],
+    [2, 85, "meterCaliber"],
+    [2, 87, "meterStatus"],
+    [2, 89, "msrCycle"],
+    [2, 91, "msrReport"],
+    [2, 93, "year"],
+    [2, 95, "month"],
+    [2, 97, "day"],
+    [2, 99, "hour"],
+    [2, 101, "minute"],
+    [2, 103, "second"],
+    [2, 105, "msrCycle"],
+    [2, 107, "msrCnt"],
+    [2, 109, "msrStdIdx"],
+    [8, 111, "msrStdValue"],
+    [4, 119, "msrOffset 0"],
+    [4, 123, "msrOffset 1"],
+    [4, 127, "msrOffset 2"],
+    [4, 131, "msrOffset 3"],
+    [4, 135, "msrOffset 4"],
+    [4, 139, "msrOffset 5"],
+    [4, 143, "msrOffset 6"],
+    [4, 147, "msrOffset 7"],
+    [4, 151, "msrOffset 8"],
+    [4, 155, "msrOffset 9"],
+    [4, 159, "msrOffset 10"],
+    [4, 163, "msrOffset 11"],
+    [4, 167, "msrOffset 12"],
+    [4, 171, "msrOffset 13"],
+    [4, 175, "msrOffset 14"],
+    [4, 179, "msrOffset 15"],
+    [4, 183, "msrOffset 16"],
+    [4, 187, "msrOffset 17"],
+    [4, 191, "msrOffset 18"],
+    [4, 195, "msrOffset 19"],
+    [4, 199, "msrOffset 20"],
+    [4, 203, "msrOffset 21"],
+    [4, 207, "msrOffset 22"],
+    [4, 211, "msrOffset 23"]
+  ];
 
   const meterCaliberMap = {
   "13": "15mm",
@@ -141,7 +136,7 @@ function parseData() {
 const swapAndDexFields = [
   "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", 
   "year", "month", "day", "hour", "minute", "second",
-  "msrStdValue", "mValue"
+  "msrStdValue","msrOffset"
 ];
 
 const checksumValue = data.slice(-2);
@@ -178,6 +173,16 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = chars.join("");
   }
 
+  if (fieldName.trim() === "devVolt") {
+  // devVolt는 HEX 2자리 → DEX → 소수점 한자리
+    if (rawValue.length === 2) {
+      // 예: 36 → 54 → 5.4
+      const dex = parseInt(rawValue, 16);
+      displayValue = (dex / 10).toFixed(1);
+      displayValue = `${displayValue}V`;
+    }
+  }
+
   if (fieldName === "meterCaliber") {
     displayValue = meterCaliberMap[rawValue] || rawValue;
   }
@@ -189,17 +194,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "devFw" && rawValue.length >= 4) {
     displayValue = 'V'+ rawValue[1] + rawValue[3];
   }
-
-  if (fieldName.trim() === "devVolt") {
-  // devVolt는 HEX 2자리 → DEX → 소수점 한자리
-    if (rawValue.length === 2) {
-      // 예: 36 → 54 → 5.4
-      const dex = parseInt(rawValue, 16);
-      displayValue = (dex / 10).toFixed(1);
-      displayValue = `${displayValue}V`;
-    }
-  }
-
+  
   // 스왑 및 DEX 변환 대상
   if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
     if (rawValue.length >= 4) {
@@ -211,6 +206,12 @@ fieldMap.forEach(([length, start, fieldName]) => {
       // 1바이트 HEX → DEX 변환
       displayValue = parseInt(rawValue, 16).toString();
     }
+  if (fieldName === "devTemp") {
+    displayValue = `${displayValue}°C`;
+  }
+  if (fieldName === "rsrp") {
+    displayValue = `${displayValue}`;
+  }
   if (fieldName === "rsrp") {
     displayValue = `-${displayValue}`;
   }
@@ -238,7 +239,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "msrStdValue") {
     displayValue = `${displayValue/1000} ton`;
   }
-  if (fieldName.startsWith("mValue") && displayValue.length >= 4) {
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
     displayValue = displayValue.slice(0, 10)/1000 + " ton";
   }
   }

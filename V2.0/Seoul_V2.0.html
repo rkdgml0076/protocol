@@ -133,10 +133,10 @@ function parseData() {
   const tbody = document.querySelector("#resultTable tbody");
   tbody.innerHTML = "";
 
-  if (data.length < 90) {
-    alert("데이터는 최소 90자 이상이어야 합니다.");
-    return;
-  }
+if (data.length < 68 || data.length > 168) {
+  alert("데이터는 68자 이상 168자 이하이어야 합니다.");
+  return;
+}
 
 const swapAndDexFields = [
   "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", 
