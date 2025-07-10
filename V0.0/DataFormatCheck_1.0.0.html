@@ -455,10 +455,14 @@ const fieldMapV6 = [
 ];
 
 const headerMap = {
-  "A3": "DataFormat_V1.5",
-  "A4": "DataFormat_V1.7",
-  "A5": "DataFormat_V1.8",
-  "B1": "DataFormat_V2.0"
+  "A3": "서울시 데이터포맷[1.5]",
+  "a3": "서울시 데이터포맷[1.5]",
+  "A4": "서울시 데이터포맷[1.7]",
+  "a4": "서울시 데이터포맷[1.7]",
+  "A5": "서울시 데이터포맷[1.8]",
+  "a5": "서울시 데이터포맷[1.8]",
+  "B1": "서울시 데이터포맷[2.0]",
+  "b1": "서울시 데이터포맷[2.0]"
 };
 
 const typeMap = {
@@ -486,6 +490,8 @@ function parseData() {
   const data = document.getElementById("inputData").value.trim();
   const tbody = document.querySelector("#resultTable tbody");
   tbody.innerHTML = "";
+
+
 
 if (data.length < 61 || data.length > 401) {
   alert("데이터는 62자 이상 400자 이하이어야 합니다.");
@@ -515,7 +521,6 @@ if (headerHex === "A3" && typeHex === "70") {
 } else if (headerHex === "B1" && typeHex === "70") {
   fieldMap = fieldMapV6;
 } else {
-  // alert(`지원하지 않는 header(${headerHex}) 또는 type(${typeHex}) 값입니다.`);
     alert(`지원하지 않는 데이터포맷입니다.`);
   return;
 }
