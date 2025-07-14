@@ -64,7 +64,7 @@
   <button onclick="parseData()">파싱하기</button>
 
   <div id="summaryBox" style="margin-top:20px; background:#fff; padding:10px; border:1px solid #ddd;">
-    <strong>데이터 요약:</strong>
+    <strong><데이터 요약></strong>
     <div id="summaryContent">-</div>
   </div>
 
@@ -557,6 +557,10 @@ const swapAndDexFields = [
 const checksumValue = data.slice(-2);
 const dataWithoutChecksum = data.slice(0, -2);
 
+let yearVal = "", monthVal = "", dayVal = "";
+let hourVal = "", minuteVal = "", secondVal = "";
+let msrStdValueVal = "";
+
 fieldMap.forEach(([length, start, fieldName]) => {
   const startIdx = start - 1;
   const endIdx = startIdx + length;
@@ -662,25 +666,26 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = `${displayValue}`;
   }
   if (fieldName === "year") {
-    displayValue = `20${displayValue}년`;
+    displayValue = `20${displayValue}`;
+    yearVal = displayValue;
   }
   if (fieldName === "month") {
-    displayValue = `${displayValue}월`;
+    monthVal = displayValue;
   }
   if (fieldName === "day") {
-    displayValue = `${displayValue}일`;
+    dayVal = displayValue;
   }
   if (fieldName === "hour") {
-    displayValue = `${displayValue}시`;
+    hourVal = displayValue;
   }
   if (fieldName === "minute") {
-    displayValue = `${displayValue}분`;
+    minuteVal = displayValue;
   }
   if (fieldName === "second") {
-    displayValue = `${displayValue}초`;
+    secondVal = displayValue;
   }
   if (fieldName === "msrStdValue") {
-    displayValue = `${displayValue/1000} ton`;
+    msrStdValueVal = displayValue/1000;
   }
   if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
     displayValue = displayValue.slice(0, 10)/1000 + " ton";
@@ -722,12 +727,15 @@ fieldMap.forEach(([length, start, fieldName]) => {
     <td>${rawValue}</td>
     <td>${displayValue}</td>`;
   tbody.appendChild(row);
-
   });
 
-const checksumRow = document.createElement("tr");
-  checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
-  tbody.appendChild(checksumRow);
+  document.getElementById("summaryContent").innerHTML =
+  `<p><strong>검침 값:</strong> ${msrStdValueVal} ton</p>` +
+  `<p><strong>데이터 전송 시간:</strong> ${yearVal}년 ${monthVal}월 ${dayVal}일 ${hourVal}시 ${minuteVal}분 ${secondVal}초</p>`;
+
+  const checksumRow = document.createElement("tr");
+    checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+    tbody.appendChild(checksumRow);
 }
 
 </script>
