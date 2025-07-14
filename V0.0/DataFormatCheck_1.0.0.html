@@ -682,7 +682,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     secondVal = displayValue;
   }
   if (fieldName === "msrStdValue") {
-    displayValue = displayValue/1000;
+    displayValue = displayValue/1000 + " ton";
     msrStdValueVal = displayValue;
   }
   if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
@@ -728,7 +728,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   });
 
   document.getElementById("summaryContent").innerHTML =
-  `<p><strong>검침 값:</strong> ${msrStdValueVal} ton</p>` +
+  `<p><strong>검침 값:</strong> ${msrStdValueVal}</p>` +
   `<p><strong>데이터 전송 시간:</strong> ${yearVal}년 ${monthVal}월 ${dayVal}일 ${hourVal}시 ${minuteVal}분 ${secondVal}초</p>`;
 
   const checksumRow = document.createElement("tr");
