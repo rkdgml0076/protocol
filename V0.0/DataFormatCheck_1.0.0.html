@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>DataFormatCheck_1.0.0</title>
+  <meta charset="UTF-8" />
+  <title>파싱 도구</title>
   <style>
     body {
       font-family: sans-serif;
       margin: 30px;
       background: #f7f7f7;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* padding: 10px 20px; */
+      background-color: #f7f7f7;
+    }
+    .header img {
+      padding: 10px 20px;
+      height: 50px;
+      object-fit: contain;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 30px;
     }
     textarea {
       width: 100%;
@@ -38,10 +54,19 @@
 </head>
 <body>
 
-  <h2>서울시 원격검침 서버 수신용 데이터포맷 NB-IoT</h2>
+  <div class="header">
+    <h2>서울시 원격검침 서버 수신용 데이터포맷 NB-IoT</h2>
+    <img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo">
+  </div>
+
   <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 61자)"></textarea>
   <br/>
   <button onclick="parseData()">파싱하기</button>
+
+  <div id="summaryBox" style="margin-top:20px; background:#fff; padding:10px; border:1px solid #ddd;">
+    <strong>데이터 요약:</strong>
+    <div id="summaryContent">-</div>
+  </div>
 
   <table id="resultTable">
     <thead>
@@ -491,8 +516,6 @@ function parseData() {
   const tbody = document.querySelector("#resultTable tbody");
   tbody.innerHTML = "";
 
-
-
 if (data.length < 61 || data.length > 401) {
   alert("데이터는 62자 이상 400자 이하이어야 합니다.");
   return;
@@ -540,6 +563,18 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (endIdx > dataWithoutChecksum.length) return;
   const rawValue = data.slice(startIdx, endIdx);
   let displayValue = rawValue;
+
+  if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
+    if (rawValue.length >= 4) {
+      const swapped = rawValue.match(/../g).reverse().join("");
+      displayValue = parseInt(swapped, 16).toString();
+    } else {
+      displayValue = parseInt(rawValue, 16).toString();
+    }
+    if (fieldName === "msrStdValue") {
+      displayValue = `${displayValue/1000}`;
+    }
+  }
 
   if (fieldName === "imei" && rawValue.length >= 16) {
   let chars = rawValue.split("");
@@ -606,17 +641,25 @@ fieldMap.forEach(([length, start, fieldName]) => {
     // 1바이트 HEX → DEX 변환
     displayValue = parseInt(rawValue, 16).toString();
   }
-  if (fieldName === "devTemp") {
-    displayValue = `${displayValue}°C`;
+  if (fieldName.startsWith("devTemp")) {
+    const intValue = parseInt(rawValue, 16);
+    if (intValue >= 128) {
+      displayValue = `-${intValue - 128 + 1}℃`;
+    } else {
+      displayValue = intValue.toString();
+    }
   }
-  if (fieldName === "rsrp") {
-    displayValue = `${displayValue}`;
+  if (fieldName === "rssi") {
+    displayValue = `-${displayValue}`;
   }
   if (fieldName === "rsrp") {
     displayValue = `-${displayValue}`;
   }
   if (fieldName === "rsrq") {
     displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "snr") {
+    displayValue = `${displayValue}`;
   }
   if (fieldName === "year") {
     displayValue = `20${displayValue}년`;
@@ -645,9 +688,32 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
     displayValue = displayValue.slice(0, 10)/1000 + " ton";
   }
-  if (fieldName.startsWith("tempValue") && displayValue.length >= 3) {
-    displayValue = displayValue.slice(0, -1) + "℃";
+  else if (fieldName.startsWith("tempValue")) {
+    if (rawValue.length === 4) {
+      // 상위 바이트 (앞 2자리)
+      const upperHex = rawValue.slice(0, 2);
+      const upperVal = parseInt(upperHex, 16);
+      // 하위 바이트 (뒤 2자리)
+      const lowerHex = rawValue.slice(2, 4);
+      const lowerVal = parseInt(lowerHex, 16);
+
+      let tempC = Math.floor(upperVal / 10);
+      if (lowerVal >= 0x80) {
+        tempC = -tempC;
+      }
+      displayValue = tempC + "℃";
+    } else {
+      displayValue = rawValue;
+    }
   }
+
+  if (fieldName === "year") summaryYear = displayValue;
+  if (fieldName === "month") summaryMonth = displayValue;
+  if (fieldName === "day") summaryDay = displayValue;
+  if (fieldName === "hour") summaryHour = displayValue;
+  if (fieldName === "minute") summaryMinute = displayValue;
+  if (fieldName === "second") summarySecond = displayValue;
+  if (fieldName === "msrStdValue") summaryMsrStdValue = displayValue;
   }
 
   const row = document.createElement("tr");
