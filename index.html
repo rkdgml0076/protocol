@@ -575,9 +575,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
     } else {
       displayValue = parseInt(rawValue, 16).toString();
     }
-    if (fieldName === "msrStdValue") {
-      displayValue = `${displayValue/1000}`;
-    }
   }
 
   if (fieldName === "imei" && rawValue.length >= 16) {
@@ -685,7 +682,8 @@ fieldMap.forEach(([length, start, fieldName]) => {
     secondVal = displayValue;
   }
   if (fieldName === "msrStdValue") {
-    msrStdValueVal = displayValue/1000;
+    displayValue = displayValue/1000;
+    msrStdValueVal = displayValue;
   }
   if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
     displayValue = displayValue.slice(0, 10)/1000 + " ton";
