@@ -52,7 +52,7 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
   <div class="header">
     <h2>서울시 원격검침 서버 수신용 데이터포맷 NB-IoT</h2>
@@ -76,6 +76,17 @@
   </table>
 
   <script>
+document.addEventListener('keydown', (e) => {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' )) ||
+    (e.ctrlKey && e.key === 'U')
+  ) {
+    e.preventDefault();
+    alert('Error');
+  }
+});
+
 /* DataFormat_V1.5 */
 const fieldMapV1 = [
   [2, 1, "header"],
