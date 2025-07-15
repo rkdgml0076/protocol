@@ -615,9 +615,9 @@ fieldMap.forEach(([length, start, fieldName]) => {
     // 문자열을 배열로 변환
     let chars = rawValue.split("");
     // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
-    chars.splice(3, 1);
     chars.splice(2, 1);
     chars.splice(1, 1);
+    chars.splice(0, 1);
     displayValue = chars.join("");
   }
 
