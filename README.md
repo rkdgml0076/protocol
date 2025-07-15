@@ -7,7 +7,7 @@ Site URL: https://rkdgml0076.github.io/protocol/
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
 - 개발 환경(Code Editer) Visual Studio Code 사용 <br>
-- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- HTML 파일 내부에 style 코드 포함하여 진행(CSS 파일 미분류, JS 파일 분류)
 - Github 와 연동 및 git 활용을 위하여 git Download
 URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
