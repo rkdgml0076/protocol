@@ -667,7 +667,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     if (intValue >= 128) {
       displayValue = `-${intValue - 128 + 1}℃`;
     } else {
-      displayValue = intValue.toString();
+      displayValue = intValue.toString() + '℃';
     }
   }
   if (fieldName === "rssi") {
