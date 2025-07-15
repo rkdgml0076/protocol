@@ -1,0 +1,684 @@
+  document.addEventListener('keydown', function (e) {
+    // F12
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      alert('Error');
+    }
+
+    // Ctrl + Shift + I/J/C
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      alert('Error');
+    }
+
+    // Ctrl + U
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      alert('Error');
+    }
+});
+
+/* DataFormat_V1.5 */
+const fieldMapV1 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "devTemp"],
+  [4, 43, "cid"],
+  [4, 47, "rsrp"],
+  [4, 51, "rsrq"],
+  [4, 55, "snr"],
+  [10, 59, "devNo"],
+  [4, 69, "devFw"],
+  [2, 73, "devVolt"],
+  [8, 75, "meterNo"],
+  [2, 83, "meterType"],
+  [2, 85, "meterCaliber"],
+  [2, 87, "meterStatus"],
+  [2, 89, "msrCycle"],
+  [2, 91, "msrReport"],
+  [2, 93, "year"],
+  [2, 95, "month"],
+  [2, 97, "day"],
+  [2, 99, "hour"],
+  [2, 101, "minute"],
+  [2, 103, "second"],
+  [2, 105, "msrCycle"],
+  [2, 107, "msrCnt"],
+  [2, 109, "msrStdIdx"],
+  [8, 111, "msrStdValue"],
+  [4, 119, "msrOffset 0"],
+  [4, 123, "msrOffset 1"],
+  [4, 127, "msrOffset 2"],
+  [4, 131, "msrOffset 3"],
+  [4, 135, "msrOffset 4"],
+  [4, 139, "msrOffset 5"],
+  [4, 143, "msrOffset 6"],
+  [4, 147, "msrOffset 7"],
+  [4, 151, "msrOffset 8"],
+  [4, 155, "msrOffset 9"],
+  [4, 159, "msrOffset 10"],
+  [4, 163, "msrOffset 11"],
+  [4, 167, "msrOffset 12"],
+  [4, 171, "msrOffset 13"],
+  [4, 175, "msrOffset 14"],
+  [4, 179, "msrOffset 15"],
+  [4, 183, "msrOffset 16"],
+  [4, 187, "msrOffset 17"],
+  [4, 191, "msrOffset 18"],
+  [4, 195, "msrOffset 19"],
+  [4, 199, "msrOffset 20"],
+  [4, 203, "msrOffset 21"],
+  [4, 207, "msrOffset 22"],
+  [4, 211, "msrOffset 23"]
+];
+
+/* DataFormat_V1.5 (Temp) */
+const fieldMapV2 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "ber"],
+  [4, 43, "cid"],
+  [4, 47, "rsrp"],
+  [4, 51, "rsrq"],
+  [4, 55, "snr"],
+  [10, 59, "vendor_devNo"],
+  [4, 69, "devFw"],
+  [2, 73, "devVolt"],
+  [8, 75, "meterNo"],
+  [2, 83, "meterType"],
+  [2, 85, "meterCaliber"],
+  [2, 87, "meterStatus"],
+  [2, 89, "msrCycle"],
+  [2, 91, "msrReport"],
+  [2, 93, "year"],
+  [2, 95, "month"],
+  [2, 97, "day"],
+  [2, 99, "hour"],
+  [2, 101, "minute"],
+  [2, 103, "second"],
+  [2, 105, "msrCycle"],
+  [2, 107, "msrCnt"],
+  [2, 109, "msrStdIdx"],
+  [8, 111, "msrStdValue"],
+  [4, 119, "msrOffset 0"],
+  [4, 123, "tempValue 0"],
+  [4, 127, "msrOffset 1"],
+  [4, 131, "tempValue 1"],
+  [4, 135, "msrOffset 2"],
+  [4, 139, "tempValue 2"],
+  [4, 143, "msrOffset 3"],
+  [4, 147, "tempValue 3"],
+  [4, 151, "msrOffset 4"],
+  [4, 155, "tempValue 4"],
+  [4, 159, "msrOffset 5"],
+  [4, 163, "tempValue 5"],
+  [4, 167, "msrOffset 6"],
+  [4, 171, "tempValue 6"],
+  [4, 175, "msrOffset 7"],
+  [4, 179, "tempValue 7"],
+  [4, 183, "msrOffset 8"],
+  [4, 187, "tempValue 8"],
+  [4, 191, "msrOffset 9"],
+  [4, 195, "tempValue 9"],
+  [4, 199, "msrOffset 10"],
+  [4, 203, "tempValue 10"],
+  [4, 207, "msrOffset 11"],
+  [4, 211, "tempValue 11"],
+  [4, 215, "msrOffset 12"],
+  [4, 219, "tempValue 12"],
+  [4, 223, "msrOffset 13"],
+  [4, 227, "tempValue 13"],
+  [4, 231, "msrOffset 14"],
+  [4, 235, "tempValue 14"],
+  [4, 239, "msrOffset 15"],
+  [4, 243, "tempValue 15"],
+  [4, 247, "msrOffset 16"],
+  [4, 251, "tempValue 16"],
+  [4, 255, "msrOffset 17"],
+  [4, 259, "tempValue 17"],
+  [4, 263, "msrOffset 18"],
+  [4, 267, "tempValue 18"],
+  [4, 271, "msrOffset 19"],
+  [4, 275, "tempValue 19"],
+  [4, 279, "msrOffset 20"],
+  [4, 283, "tempValue 20"],
+  [4, 287, "msrOffset 21"],
+  [4, 291, "tempValue 21"],
+  [4, 295, "msrOffset 22"],
+  [4, 299, "tempValue 22"],
+  [4, 303, "msrOffset 23"],
+  [4, 307, "tempValue 23"]
+];
+
+/* DataFormat_V1.5 (Temp + Cable) */
+const fieldMapV3 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "ber"],
+  [4, 43, "cid"],
+  [4, 47, "rsrp"],
+  [4, 51, "rsrq"],
+  [4, 55, "snr"],
+  [10, 59, "devNo"],
+  [4, 69, "devFw"],
+  [2, 73, "devVolt"],
+  [8, 75, "meterNo"],
+  [2, 83, "meterType"],
+  [2, 85, "meterCaliber"],
+  [2, 87, "meterStatus"],
+  [2, 89, "msrCycle"],
+  [2, 91, "msrReport"],
+  [2, 93, "year"],
+  [2, 95, "month"],
+  [2, 97, "day"],
+  [2, 99, "hour"],
+  [2, 101, "minute"],
+  [2, 103, "second"],
+  [2, 105, "msrCycle"],
+  [2, 107, "msrCnt"],
+  [2, 109, "msrStdIdx"],
+  [8, 111, "msrStdValue"],
+  [4, 119, "msrOffset 0"],
+  [4, 123, "tempValue 0"],
+  [4, 127, "msrOffset 1"],
+  [4, 131, "tempValue 1"],
+  [4, 135, "msrOffset 2"],
+  [4, 139, "tempValue 2"],
+  [4, 143, "msrOffset 3"],
+  [4, 147, "tempValue 3"],
+  [4, 151, "msrOffset 4"],
+  [4, 155, "tempValue 4"],
+  [4, 159, "msrOffset 5"],
+  [4, 163, "tempValue 5"],
+  [4, 167, "msrOffset 6"],
+  [4, 171, "tempValue 6"],
+  [4, 175, "msrOffset 7"],
+  [4, 179, "tempValue 7"],
+  [4, 183, "msrOffset 8"],
+  [4, 187, "tempValue 8"],
+  [4, 191, "msrOffset 9"],
+  [4, 195, "tempValue 9"],
+  [4, 199, "msrOffset 10"],
+  [4, 203, "tempValue 10"],
+  [4, 207, "msrOffset 11"],
+  [4, 211, "tempValue 11"],
+  [4, 215, "msrOffset 12"],
+  [4, 219, "tempValue 12"],
+  [4, 223, "msrOffset 13"],
+  [4, 227, "tempValue 13"],
+  [4, 231, "msrOffset 14"],
+  [4, 235, "tempValue 14"],
+  [4, 239, "msrOffset 15"],
+  [4, 243, "tempValue 15"],
+  [4, 247, "msrOffset 16"],
+  [4, 251, "tempValue 16"],
+  [4, 255, "msrOffset 17"],
+  [4, 259, "tempValue 17"],
+  [4, 263, "msrOffset 18"],
+  [4, 267, "tempValue 18"],
+  [4, 271, "msrOffset 19"],
+  [4, 275, "tempValue 19"],
+  [4, 279, "msrOffset 20"],
+  [4, 283, "tempValue 20"],
+  [4, 287, "msrOffset 21"],
+  [4, 291, "tempValue 21"],
+  [4, 295, "msrOffset 22"],
+  [4, 299, "tempValue 22"],
+  [4, 303, "msrOffset 23"],
+  [4, 307, "tempValue 23"]
+];
+
+/* DataFormat_V1.7 */
+const fieldMapV4 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "ber"],
+  [8, 43, "cid"],
+  [4, 51, "rsrp"],
+  [4, 55, "rsrq"],
+  [4, 59, "snr"],
+  [10, 63, "devNo"],
+  [4, 73, "devFw"],
+  [2, 77, "devVolt"],
+  [8, 79, "meterNo"],
+  [2, 87, "meterType"],
+  [2, 89, "meterCaliber"],
+  [2, 91, "meterStatus"],
+  [2, 93, "msrCycle"],
+  [2, 95, "msrReport"],
+  [2, 97, "year"],
+  [2, 99, "month"],
+  [2, 101, "day"],
+  [2, 103, "hour"],
+  [2, 105, "minute"],
+  [2, 107, "second"],
+  [2, 109, "msrCycle"],
+  [2, 111, "msrCnt"],
+  [2, 113, "msrStdIdx"],
+  [8, 115, "msrStdValue"],
+  [8, 123, "mValue 0"],
+  [8, 131, "mValue 1"],
+  [8, 139, "mValue 2"],
+  [8, 147, "mValue 3"],
+  [8, 155, "mValue 4"],
+  [8, 163, "mValue 5"],
+  [8, 171, "mValue 6"],
+  [8, 179, "mValue 7"],
+  [8, 187, "mValue 8"],
+  [8, 195, "mValue 9"],
+  [8, 203, "mValue 10"],
+  [8, 211, "mValue 11"],
+  [8, 219, "mValue 12"],
+  [8, 227, "mValue 13"],
+  [8, 235, "mValue 14"],
+  [8, 243, "mValue 15"],
+  [8, 251, "mValue 16"],
+  [8, 259, "mValue 17"],
+  [8, 267, "mValue 18"],
+  [8, 275, "mValue 19"],
+  [8, 283, "mValue 20"],
+  [8, 291, "mValue 21"],
+  [8, 299, "mValue 22"],
+  [8, 307, "mValue 23"]
+];
+
+/* DataFormat_V1.8 */
+const fieldMapV5 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "ber"],
+  [8, 43, "cid"],
+  [4, 51, "rsrp"],
+  [4, 55, "rsrq"],
+  [4, 59, "snr"],
+  [10, 63, "devNo"],
+  [4, 73, "devFw"],
+  [2, 77, "devVolt"],
+  [8, 79, "meterNo"],
+  [2, 87, "meterType"],
+  [2, 89, "meterCaliber"],
+  [2, 91, "meterStatus1"],
+  [2, 93, "meterStatus2"],
+  [2, 95, "timeInterval"],
+  [2, 97, "msrCycle"],
+  [2, 99, "msrReport"],
+  [2, 101, "year"],
+  [2, 103, "month"],
+  [2, 105, "day"],
+  [2, 107, "hour"],
+  [2, 109, "minute"],
+  [2, 111, "second"],
+  [2, 113, "msrCycle"],
+  [2, 115, "msrCnt"],
+  [2, 117, "msrStdIdx"],
+  [8, 119, "msrStdValue"],
+  [8, 127, "mValue 0"],
+  [8, 135, "mValue 1"],
+  [8, 143, "mValue 2"],
+  [8, 151, "mValue 3"],
+  [8, 159, "mValue 4"],
+  [8, 167, "mValue 5"],
+  [8, 175, "mValue 6"],
+  [8, 183, "mValue 7"],
+  [8, 191, "mValue 8"],
+  [8, 199, "mValue 9"],
+  [8, 207, "mValue 10"],
+  [8, 215, "mValue 11"],
+  [8, 223, "mValue 12"],
+  [8, 231, "mValue 13"],
+  [8, 239, "mValue 14"],
+  [8, 247, "mValue 15"],
+  [8, 255, "mValue 16"],
+  [8, 263, "mValue 17"],
+  [8, 271, "mValue 18"],
+  [8, 279, "mValue 19"],
+  [8, 287, "mValue 20"],
+  [8, 295, "mValue 21"],
+  [8, 303, "mValue 22"],
+  [8, 311, "mValue 23"]
+];
+
+/* DataFormat_V2.0 */
+const fieldMapV6 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "ber"],
+  [8, 43, "cid"],
+  [4, 51, "rsrp"],
+  [4, 55, "rsrq"],
+  [4, 59, "snr"],
+  [10, 63, "devNo"],
+  [4, 73, "devFw"],
+  [2, 77, "devVolt"],
+  [8, 79, "meterNo"],
+  [2, 87, "meterType"],
+  [2, 89, "meterCaliber"],
+  [2, 91, "meterStatus"],
+  [2, 93, "manufacturerCode"],
+  [2, 95, "tempInfo"],
+  [2, 97, "correctionInfo"],
+  [4, 99, "Reserved"],
+  [2, 103, "timeInterval"],
+  [2, 105, "msrCycle"],
+  [2, 107, "msrReport"],
+  [2, 109, "year"],
+  [2, 111, "month"],
+  [2, 113, "day"],
+  [2, 115, "hour"],
+  [2, 117, "minute"],
+  [2, 119, "second"],
+  [2, 121, "msrCycle"],
+  [2, 123, "msrCnt"],
+  [2, 125, "msrStdIdx"],
+  [8, 127, "msrStdValue"],
+  [8, 135, "mValue 0"],
+  [8, 143, "mValue 1"],
+  [8, 151, "mValue 2"],
+  [8, 159, "mValue 3"],
+  [8, 167, "mValue 4"],
+  [8, 175, "mValue 5"],
+  [8, 183, "mValue 6"],
+  [8, 191, "mValue 7"],
+  [8, 199, "mValue 8"],
+  [8, 207, "mValue 9"],
+  [8, 215, "mValue 10"],
+  [8, 223, "mValue 11"],
+  [8, 231, "mValue 12"],
+  [8, 239, "mValue 13"],
+  [8, 247, "mValue 14"],
+  [8, 255, "mValue 15"],
+  [8, 263, "mValue 16"],
+  [8, 271, "mValue 17"],
+  [8, 279, "mValue 18"],
+  [8, 287, "mValue 19"],
+  [8, 295, "mValue 20"],
+  [8, 303, "mValue 21"],
+  [8, 311, "mValue 22"],
+  [8, 319, "mValue 23"]
+];
+
+const headerMap = {
+  "A3": "서울시 데이터포맷[V1.5]",
+  "a3": "서울시 데이터포맷[V1.5]",
+  "A4": "서울시 데이터포맷[V1.7]",
+  "a4": "서울시 데이터포맷[V1.7]",
+  "A5": "서울시 데이터포맷[V1.8]",
+  "a5": "서울시 데이터포맷[V1.8]",
+  "B1": "서울시 데이터포맷[V2.0]",
+  "b1": "서울시 데이터포맷[V2.0]"
+};
+
+const typeMap = {
+  "70": "(Default Version)",
+  "75": "(Temp Version)",
+  "76": "(Temp + Cable Version)"
+};
+
+const meterCaliberMap = {
+  "13": "15mm",
+  "23": "20mm",
+  "33": "25mm",
+  "43": "32mm",
+  "53": "40mm",
+  "63": "50mm",
+  "73": "80mm",
+  "83": "100mm",
+  "93": "150mm",
+  "A3": "200mm",
+  "B3": "250mm",
+  "C3": "300mm"
+};
+
+function parseData() {
+  const data = document.getElementById("inputData").value.trim();
+  const tbody = document.querySelector("#resultTable tbody");
+  tbody.innerHTML = "";
+
+if (data.length < 61 || data.length > 401) {
+  alert("데이터는 62자 이상 400자 이하이어야 합니다.");
+  return;
+}
+
+// header (2글자)와 type (2글자) 추출
+const headerHex = data.slice(0, 2).toUpperCase();
+const typeHex = data.slice(4, 6).toUpperCase();
+
+console.log("Header:", headerHex);
+console.log("Type:", typeHex);
+
+let fieldMap;
+
+// header + type 값으로 분기
+if (headerHex === "A3" && typeHex === "70") {
+  fieldMap = fieldMapV1;
+} else if (headerHex === "A3" && typeHex === "75") {
+  fieldMap = fieldMapV2;
+} else if (headerHex === "A3" && typeHex === "76") {
+  fieldMap = fieldMapV3;
+} else if (headerHex === "A4" && typeHex === "70") {
+  fieldMap = fieldMapV4;
+} else if (headerHex === "A5" && typeHex === "70") {
+  fieldMap = fieldMapV5;
+} else if (headerHex === "B1" && typeHex === "70") {
+  fieldMap = fieldMapV6;
+} else {
+    alert(`지원하지 않는 데이터포맷입니다.`);
+  return;
+}
+
+const swapAndDexFields = [
+  "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", 
+  "year", "month", "day", "hour", "minute", "second",
+  "msrStdValue", "msrOffset", "mValue", "tempValue"
+];
+
+const checksumValue = data.slice(-2);
+const dataWithoutChecksum = data.slice(0, -2);
+
+let yearVal = "", monthVal = "", dayVal = "";
+let hourVal = "", minuteVal = "", secondVal = "";
+let msrStdValueVal = "";
+
+fieldMap.forEach(([length, start, fieldName]) => {
+  const startIdx = start - 1;
+  const endIdx = startIdx + length;
+  if (endIdx > dataWithoutChecksum.length) return;
+  const rawValue = data.slice(startIdx, endIdx);
+  let displayValue = rawValue;
+
+  if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
+    if (rawValue.length >= 4) {
+      const swapped = rawValue.match(/../g).reverse().join("");
+      displayValue = parseInt(swapped, 16).toString();
+    } else {
+      displayValue = parseInt(rawValue, 16).toString();
+    }
+  }
+
+  if (fieldName === "imei" && rawValue.length >= 16) {
+  let chars = rawValue.split("");
+  chars.splice(15, 1); // 16번째 문자 제거
+  displayValue = chars.join("");
+  }
+
+  if (fieldName === "imsi" && rawValue.length >= 16) {
+    // 문자열을 배열로 변환
+    let chars = rawValue.split("");
+    // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
+    chars.splice(15, 1); // 16번째 문자 제거
+    displayValue = chars.join("");
+  }
+
+  if (fieldName === "devNo" && rawValue.length >= 10) {
+    // 문자열을 배열로 변환
+    let chars = rawValue.split("");
+    // splice로 뒤에서부터 삭제 (앞부터 하면 인덱스가 밀립니다)
+    chars.splice(3, 1);
+    chars.splice(2, 1);
+    chars.splice(1, 1);
+    displayValue = chars.join("");
+  }
+
+  if (fieldName.trim() === "devVolt") {
+  // devVolt는 HEX 2자리 → DEX → 소수점 한자리
+    if (rawValue.length === 2) {
+      // 예: 36 → 54 → 5.4
+      const dex = parseInt(rawValue, 16);
+      displayValue = (dex / 10).toFixed(1);
+      displayValue = `${displayValue}V`;
+    }
+  }
+
+  if (fieldName === "header") {
+    displayValue = headerMap[rawValue] || rawValue;
+  }
+
+  if (fieldName === "type") {
+    displayValue = typeMap[rawValue] || rawValue;
+  }
+
+  if (fieldName === "meterCaliber") {
+    displayValue = meterCaliberMap[rawValue] || rawValue;
+  }
+
+  if (fieldName.trim() === "meterNo" && rawValue.length >= 8) {
+  displayValue = rawValue.slice(0, 2) + "-" + rawValue.slice(2, 8);
+  }
+
+  if (fieldName === "devFw" && rawValue.length >= 4) {
+    displayValue = 'V'+ rawValue[1] + rawValue[3];
+  }
+  
+  // 스왑 및 DEX 변환 대상
+  if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
+  if (rawValue.length >= 4) {
+    // 2바이트 이상이면 바이트 순서 스왑 후 DEX
+    const swapped = rawValue.match(/../g).reverse().join("");
+    displayValue = parseInt(swapped, 16).toString();
+  } 
+  else {
+    // 1바이트 HEX → DEX 변환
+    displayValue = parseInt(rawValue, 16).toString();
+  }
+  if (fieldName.startsWith("devTemp")) {
+    const intValue = parseInt(rawValue, 16);
+    if (intValue >= 128) {
+      displayValue = `-${intValue - 128 + 1}℃`;
+    } else {
+      displayValue = intValue.toString();
+    }
+  }
+  if (fieldName === "rssi") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "rsrp") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "rsrq") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "snr") {
+    displayValue = `${displayValue}`;
+  }
+  if (fieldName === "year") {
+    displayValue = `20${displayValue}년`;
+    yearVal = displayValue;
+  }
+  if (fieldName === "month") {
+    displayValue = displayValue + "월";
+    monthVal = displayValue;
+  }
+  if (fieldName === "day") {
+    displayValue = displayValue + "일";
+    dayVal = displayValue;
+  }
+  if (fieldName === "hour") {
+    displayValue = displayValue + "시";
+    hourVal = displayValue;
+  }
+  if (fieldName === "minute") {
+    displayValue = displayValue + "분";
+    minuteVal = displayValue;
+  }
+  if (fieldName === "second") {
+    displayValue = displayValue + "초";
+    secondVal = displayValue;
+  }
+  if (fieldName === "msrStdValue") {
+    displayValue = displayValue/1000 + " ton";
+    msrStdValueVal = displayValue;
+  }
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+  }
+  if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+  }
+  else if (fieldName.startsWith("tempValue")) {
+    if (rawValue.length === 4) {
+      // 상위 바이트 (앞 2자리)
+      const upperHex = rawValue.slice(0, 2);
+      const upperVal = parseInt(upperHex, 16);
+      // 하위 바이트 (뒤 2자리)
+      const lowerHex = rawValue.slice(2, 4);
+      const lowerVal = parseInt(lowerHex, 16);
+
+      let tempC = Math.floor(upperVal / 10);
+      if (lowerVal >= 0x80) {
+        tempC = -tempC;
+      }
+      displayValue = tempC + "℃";
+    } else {
+      displayValue = rawValue;
+    }
+  }
+
+  if (fieldName === "year") summaryYear = displayValue;
+  if (fieldName === "month") summaryMonth = displayValue;
+  if (fieldName === "day") summaryDay = displayValue;
+  if (fieldName === "hour") summaryHour = displayValue;
+  if (fieldName === "minute") summaryMinute = displayValue;
+  if (fieldName === "second") summarySecond = displayValue;
+  if (fieldName === "msrStdValue") summaryMsrStdValue = displayValue;
+  }
+
+  const row = document.createElement("tr");
+  row.innerHTML = 
+    `<td>${fieldName}</td>
+    <td>${rawValue}</td>
+    <td>${displayValue}</td>`;
+  tbody.appendChild(row);
+  });
+
+  document.getElementById("summaryContent").innerHTML =
+  `<p><strong>검침 값:</strong> ${msrStdValueVal}</p>` +
+  `<p><strong>데이터 전송 시간:</strong> ${yearVal} ${monthVal} ${dayVal} ${hourVal} ${minuteVal} ${secondVal}</p>`;
+
+  const checksumRow = document.createElement("tr");
+    checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+    tbody.appendChild(checksumRow);
+}

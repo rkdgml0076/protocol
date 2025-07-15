@@ -96,6 +96,12 @@ if (fieldName === "year") {
 </script>
 ```
 
+## JS
+script 코드 JS 파일로 분류 <br>
+```html
+  <script src="/JS/parse.js"></script>
+```
+
 <br>
 
 ### 진행 내용
