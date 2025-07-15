@@ -76,15 +76,15 @@
   </table>
 
   <script>
-document.addEventListener('keydown', (e) => {
-  if (
-    e.key === 'F12' ||
-    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' )) ||
-    (e.ctrlKey && e.key === 'U')
-  ) {
-    e.preventDefault();
-    alert('Error');
-  }
+  document.addEventListener('keydown', (e) => {
+    if (
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' )) ||
+      (e.ctrlKey && e.key === 'U')
+    ) {
+      e.preventDefault();
+      alert('Error');
+    }
 });
 
 /* DataFormat_V1.5 */

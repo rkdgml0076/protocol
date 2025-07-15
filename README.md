@@ -68,6 +68,25 @@ if (fieldName === "year") {
 </script>
 ```
 
+## Code Shield
+개발자 도구 차단 <br>
+```html
+<script>
+<body oncontextmenu="return false;">
+
+  document.addEventListener('keydown', (e) => {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' )) ||
+    (e.ctrlKey && e.key === 'U')
+  ) {
+    e.preventDefault();
+    alert('Error');
+    }
+  })
+</script>
+```
+
 <br>
 
 ### 진행 내용
@@ -75,6 +94,8 @@ if (fieldName === "year") {
 2. 검침 값 및 시간 확인 데이터 요약만 기입(필요 시 추후 다른 데이터 기입)
 --Image 참고-- <br>
 ![Image](https://github.com/user-attachments/assets/6000b4f8-38b7-4653-99af-f1da42dd27eb)
+3. 개발자도구 관련 키 입력 시 Error 팝업 생성
+![Image](https://github.com/user-attachments/assets/1cc4e059-a127-44ba-90c4-427365e389f3)
 <br>
 
 ---
