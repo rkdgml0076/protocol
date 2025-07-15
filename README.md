@@ -74,14 +74,23 @@ if (fieldName === "year") {
 <script>
 <body oncontextmenu="return false;">
 
-  document.addEventListener('keydown', (e) => {
-  if (
-    e.key === 'F12' ||
-    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' )) ||
-    (e.ctrlKey && e.key === 'U')
-  ) {
-    e.preventDefault();
-    alert('Error');
+  document.addEventListener('keydown', function (e) {
+    // F12
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      alert('Error');
+    }
+
+    // Ctrl + Shift + I/J/C
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      alert('Error');
+    }
+
+    // Ctrl + U
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      alert('Error');
     }
   })
 </script>
