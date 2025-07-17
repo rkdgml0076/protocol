@@ -3,6 +3,64 @@ Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
 
+### 2025-07-17 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## 검침이상
+<br>
+
+검침 값을 못 읽어온 값 FFFFFFFF,ffff... 이하 검침이상 값 검침이상 텍스트로 변환하여 출력 <br>
+```html
+<script>
+if (fieldName === "msrStdValue") {
+    displayValue = displayValue/1000 + " ton";
+    if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+    }
+    msrStdValueVal = displayValue;
+  }
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+    if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+    }
+  }
+  if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
+    displayValue = displayValue.slice(0, 10)/1000 + " ton";
+    if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+    }
+  }
+
+  function isFailValue(value) {
+    if (!value) return false;
+    if (!(value.length === 4 || value.length === 8)) return false;
+    return /^[fF]+$/.test(value);
+  }
+</script>
+```
+
+<br>
+
+### 진행 내용
+**HEX -> DEX 변환 완료**
+1. 검침이상 값 숫자는 FFFFFFFF, ffffffff, FFFF, ffff 4종류로 고정
+2. '검침이상' 이상 명칭 변경이나 구경 및 타 계량기 값도 검침이상 출력 변경 예정
+
+--Image 참고-- <br>
+
+![Image](https://github.com/user-attachments/assets/23a8d7c9-9cab-4079-87f3-3b0d3ca4022f)<br>
+<br>
+
+---
+
 ### 2025-07-15 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
