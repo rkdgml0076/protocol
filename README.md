@@ -3,6 +3,86 @@ Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
 
+### 2025-07-18 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## 그렉터 API
+<br>
+
+지자체를 선택한 뒤 IMEI를 입력하여 API 데이터를 화면에 출력<br>
+```html
+<div id="apiheader">
+    <h2>그렉터 API 데이터 확인</h2>
+  </div>
+  <textarea id="grtIdInput" placeholder="IMEI(예: 865343071819914)"></textarea><br>
+  <select id="siteIdInput">
+    <option value="gochang">고창군</option>
+    <option value="gunpo">군포시</option>
+    <option value="gimje">김제시</option>
+    <option value="gimhae">김해시</option>
+    <option value="namhae">남해군</option>
+    <option value="busan">부산시</option>
+    <option value="asan">아산시</option>
+    <option value="yangsan">양산시</option>
+    <option value="yeoncheon">연천군</option>
+    <option value="uijeongbu">의정부시</option>
+    <option value="hadong">하동군</option>
+    <option value="haman">함안군</option>
+  <!-- 필요한 만큼 추가 가능 -->
+</select><br>
+  <div class="input-row">
+    <button id="fetchBtn">데이터 가져오기</button>
+    <pre id="output"></pre>
+  </div>
+
+<script>
+document.getElementById('fetchBtn').addEventListener('click', async () => {
+      const grtId = document.getElementById('grtIdInput').value.trim();
+      const siteId = document.getElementById('siteIdInput').value.trim();
+
+      if (!grtId || !siteId) {
+        alert("IMEI를 입력하세요.");
+        return;
+      }
+
+  const url = `https://dfm-ct.watergrid.kr/api?grtId=${encodeURIComponent(grtId)}&siteId=${encodeURIComponent(siteId)}`;
+  try {
+        const response = await fetch(url);
+        const result = await response.json();  // 전체 JSON 받아옴
+        const nodesData = result.nodes; // nodes 안의 값만 가져오기
+        console.log(nodesData); // nodes 안의 데이터만 출력
+
+        // 화면에 nodes 값 출력
+        const outputEl = document.getElementById("output");
+        outputEl.textContent = JSON.stringify(nodesData, null, 2);
+      } 
+      catch (error) {
+        alert("데이터를 불러오는 중 오류 발생: " + error.message);
+      }
+  });
+</script>
+```
+
+<br>
+
+### 진행 내용
+**그렉터 API 값 출력 성공**
+1. nodes 내부의 값만 가져오도록 코딩
+2. 서버업체 그렉터 지차체만 메뉴 고를 수 있게 설정: 의정부시, 부산시, 연천군, 김해시, 아산시, 함안군, 고창군, 하동군, 양산시, 군포시 김제시, 남해군
+--Image 참고-- <br>
+
+![Image](https://github.com/user-attachments/assets/2d0e4cbe-99c7-4690-b8a8-223b9d161a6d)<br>
+<br>
+
+---
+
 ### 2025-07-17 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
@@ -158,7 +238,7 @@ if (fieldName === "year") {
 
 ### 진행 내용
 1. feeld 맵 부분에 텍스트 재 기입하여 해석 필드 텍스트 출력 및 중복 출력 방지
-2. 검침 값 및 시간 확인 데이터 요약만 기입(필요 시 추후 다른 데이터 기입)
+2. 검침 값 및 시간 확인 데이터 요약만 기입(필요 시 추후 다른 데이터 기입)<br>
 --Image 참고-- <br>
 ![Image](https://github.com/user-attachments/assets/6000b4f8-38b7-4653-99af-f1da42dd27eb)
 3. 개발자도구 관련 키 입력 시 Error 팝업 생성
@@ -638,7 +718,7 @@ const headerMap = {
 **해당 날짜를 기점으로 GitHub HTML 사이트 링크 생성**
 URL: https://rkdgml0076.github.io/protocol/
 1. Site name: DataFormatCheck_1.0.0
-2. 지원하지 않는 데이터 포멧일 시 팝업 생성
+2. 지원하지 않는 데이터 포멧일 시 팝업 생성<br>
 --Image 참고-- <br>
 ![Image](https://github.com/user-attachments/assets/754cdca4-bd56-419d-8dc7-938acb34b614)
 

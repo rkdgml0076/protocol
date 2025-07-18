@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>DataFormatCheck_1.0.0</title>
+  <title>DataFormatCheck_1.1.0</title>
   <style>
     body {
       font-family: sans-serif;
@@ -50,6 +50,23 @@
     th {
       background: #eee;
     }
+    #grtIdInput {
+      width: 250px;
+      height: 20px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: none;
+      padding: 8px;
+    }
+    #siteIdInput {
+      width: 200px;
+      height: 40px;
+      font-family: sans-serif;
+      font-size: 14px;
+    }
+    #apiheader {
+      height: 45px;
+    }
   </style>
 </head>
 <body oncontextmenu="return false;">
@@ -63,8 +80,34 @@
   <br/>
   <button onclick="parseData()">파싱하기</button>
 
+  <br>
+  <div id="apiheader">
+    <h2>그렉터 API 데이터 확인</h2>
+  </div>
+  <textarea id="grtIdInput" placeholder="IMEI(예: 865343071819914)"></textarea><br>
+  <select id="siteIdInput">
+    <option value="gochang">고창군</option>
+    <option value="gunpo">군포시</option>
+    <option value="gimje">김제시</option>
+    <option value="gimhae">김해시</option>
+    <option value="namhae">남해군</option>
+    <option value="busan">부산시</option>
+    <option value="asan">아산시</option>
+    <option value="yangsan">양산시</option>
+    <option value="yeoncheon">연천군</option>
+    <option value="uijeongbu">의정부시</option>
+    <option value="hadong">하동군</option>
+    <option value="haman">함안군</option>
+  <!-- 필요한 만큼 추가 가능 -->
+</select><br>
+  <div class="input-row">
+    <button id="fetchBtn">데이터 가져오기</button>
+    <pre id="output"></pre>
+  </div>
+  <br>
+  <br>
   <div id="summaryBox" style="margin-top:20px; background:#fff; padding:10px; border:1px solid #ddd;">
-    <strong><데이터 요약></strong>
+    <strong><파싱 데이터 요약></strong>
     <div id="summaryContent">-</div>
   </div>
 
@@ -95,6 +138,31 @@
       alert('Error');
     }
 });
+
+ document.getElementById('fetchBtn').addEventListener('click', async () => {
+      const grtId = document.getElementById('grtIdInput').value.trim();
+      const siteId = document.getElementById('siteIdInput').value.trim();
+
+      if (!grtId || !siteId) {
+        alert("IMEI를 입력하세요.");
+        return;
+      }
+
+  const url = `https://dfm-ct.watergrid.kr/api?grtId=${encodeURIComponent(grtId)}&siteId=${encodeURIComponent(siteId)}`;
+  try {
+        const response = await fetch(url);
+        const result = await response.json();  // 전체 JSON 받아옴
+        const nodesData = result.nodes; // nodes 안의 값만 가져오기
+        console.log(nodesData); // nodes 안의 데이터만 출력
+
+        // 화면에 nodes 값 출력
+        const outputEl = document.getElementById("output");
+        outputEl.textContent = JSON.stringify(nodesData, null, 2);
+      } 
+      catch (error) {
+        alert("데이터를 불러오는 중 오류 발생: " + error.message);
+      }
+  });
 
 /* DataFormat_V1.5 */
 const fieldMapV1 = [
