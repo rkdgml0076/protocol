@@ -76,7 +76,7 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
 **그렉터 API 데이터 출력 성공**
 1. nodes 내부의 값만 가져오도록 코딩
 2. 서버업체 그렉터 지차체만 메뉴 고를 수 있게 설정: 의정부시, 부산시, 연천군, 김해시, 아산시, 함안군, 고창군, 하동군, 양산시, 군포시 김제시, 남해군<br>
---Image 참고--
+--Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/2d0e4cbe-99c7-4690-b8a8-223b9d161a6d)<br>
 <br>
 
