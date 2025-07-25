@@ -837,17 +837,19 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
   else if (fieldName.startsWith("tempValue")) {
     if (rawValue.length === 4) {
-      // 상위 바이트 (앞 2자리)
-      const upperHex = rawValue.slice(0, 2);
-      const upperVal = parseInt(upperHex, 16);
-      // 하위 바이트 (뒤 2자리)
-      const lowerHex = rawValue.slice(2, 4);
-      const lowerVal = parseInt(lowerHex, 16);
+      const upperHex = rawValue.slice(0, 2); // 상위 바이트
+      const lowerHex = rawValue.slice(2, 4); // 하위 바이트
 
-      let tempC = Math.floor(upperVal / 10);
-      if (lowerVal >= 0x80) {
-        tempC = -tempC;
+      // Little Endian: 하위 + 상위 바이트 순서
+      const swappedHex = lowerHex + upperHex;        // 예: "01" + "0E" = "010E"
+      let tempRaw = parseInt(swappedHex, 16);        // ex: 0x010E → 270
+
+      // 2바이트 signed 변환
+      if (tempRaw > 0x0500) {
+        tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x8000 이상이면 음수
       }
+
+      const tempC = tempRaw / 10;                    // 10으로 나눠서 ℃
       displayValue = tempC + "℃";
     } else {
       displayValue = rawValue;
