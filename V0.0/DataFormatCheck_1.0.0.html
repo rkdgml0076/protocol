@@ -841,12 +841,12 @@ fieldMap.forEach(([length, start, fieldName]) => {
       const lowerHex = rawValue.slice(2, 4); // 하위 바이트
 
       // Little Endian: 하위 + 상위 바이트 순서
-      const swappedHex = lowerHex + upperHex;        // 예: "01" + "0E" = "010E"
-      let tempRaw = parseInt(swappedHex, 16);        // ex: 0x010E → 270
+      const swappedHex = lowerHex + upperHex;        // 리틀 에디안 순서 변환
+      let tempRaw = parseInt(swappedHex, 16);        // HEX 변환 
 
       // 2바이트 signed 변환
       if (tempRaw > 0x0500) {
-        tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x8000 이상이면 음수
+        tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x0500(DEX 1280) 이상이면 음수
       }
 
       const tempC = tempRaw / 10;                    // 10으로 나눠서 ℃
