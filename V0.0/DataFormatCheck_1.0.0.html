@@ -848,7 +848,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
       if (tempRaw > 0x0500) {
         tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x0500(DEX 1280) 이상이면 음수
       }
-
       const tempC = tempRaw / 10;                    // 10으로 나눠서 ℃
       displayValue = tempC + "℃";
     } else {
