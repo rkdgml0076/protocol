@@ -584,19 +584,30 @@ const typeMap = {
   "76": "(Temp + Cable Version)"
 };
 
-const meterCaliberMap = {
-  "13": "15mm",
-  "23": "20mm",
-  "33": "25mm",
-  "43": "32mm",
-  "53": "40mm",
-  "63": "50mm",
-  "73": "80mm",
-  "83": "100mm",
-  "93": "150mm",
-  "A3": "200mm",
-  "B3": "250mm",
-  "C3": "300mm"
+const caliberTypeMap = {
+  "0": "검침이상",
+  "1": "15mm",
+  "2": "20mm",
+  "3": "25mm",
+  "4": "32mm",
+  "5": "40mm",
+  "6": "50mm",
+  "7": "65mm",
+  "8": "80mm",
+  "9": "100mm",
+  "A": "125mm",
+  "B": "150mm",
+  "C": "200mm"
+  // 필요에 따라 더 추가
+};
+
+const meterDivisionMap = {
+  "0": 0,
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
 };
 
 function parseData() {
@@ -638,7 +649,7 @@ if (headerHex === "A3" && typeHex === "70") {
 
 const swapAndDexFields = [
   "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", 
-  "year", "month", "day", "hour", "minute", "second",
+  "year", "month", "day", "hour", "minute", "second", "msrCnt",
   "msrStdValue", "msrOffset", "mValue", "tempValue"
 ];
 
@@ -648,6 +659,7 @@ const dataWithoutChecksum = data.slice(0, -2);
 let yearVal = "", monthVal = "", dayVal = "";
 let hourVal = "", minuteVal = "", secondVal = "";
 let msrStdValueVal = "";
+let division = "";
 
 fieldMap.forEach(([length, start, fieldName]) => {
   const startIdx = start - 1;
@@ -689,6 +701,13 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = chars.join("");
   }
 
+  if (fieldName === "meterCaliber") {
+    const firstCaliber = rawValue.charAt(0);
+    displayValue = caliberTypeMap[firstCaliber] || `알 수 없음 (${firstCaliber})`;
+    const secondCaliber = rawValue.charAt(1);
+    division = meterDivisionMap[secondCaliber];
+  }
+
   if (fieldName.trim() === "devVolt") {
   // devVolt는 HEX 2자리 → DEX → 소수점 한자리
     if (rawValue.length === 2) {
@@ -705,10 +724,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
 
   if (fieldName === "type") {
     displayValue = typeMap[rawValue] || rawValue;
-  }
-
-  if (fieldName === "meterCaliber") {
-    displayValue = meterCaliberMap[rawValue] || rawValue;
   }
 
   if (fieldName.trim() === "meterNo" && rawValue.length >= 8) {
@@ -737,6 +752,10 @@ fieldMap.forEach(([length, start, fieldName]) => {
     } else {
       displayValue = intValue.toString() + '℃';
     }
+  }
+   if (fieldName === "meterType") {
+    displayValue = division;
+    displayValue = `-${displayValue}`;
   }
   if (fieldName === "rssi") {
     displayValue = `-${displayValue}`;
@@ -775,23 +794,46 @@ fieldMap.forEach(([length, start, fieldName]) => {
     secondVal = displayValue;
   }
   if (fieldName === "msrStdValue") {
-    displayValue = displayValue/1000 + " ton";
     if (isFailValue(rawValue)) { 
       displayValue = "검침이상";
+    } else {
+      let numericValue = Number(displayValue);
+      if (division === 1) numericValue /= 10;
+      else if (division === 2) numericValue /= 100;
+      else if (division === 3) numericValue /= 1000;
+      else if (division === 4) numericValue /= 10000;
+      else if (division === 5) numericValue /= 100000;
+      displayValue = numericValue + " ton";
     }
     msrStdValueVal = displayValue;
   }
   if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
-    displayValue = displayValue.slice(0, 10)/1000 + " ton";
     if (isFailValue(rawValue)) { 
       displayValue = "검침이상";
+    } else {
+      let numericValue = Number(displayValue);
+      if (division === 1) numericValue /= 10;
+      else if (division === 2) numericValue /= 100;
+      else if (division === 3) numericValue /= 1000;
+      else if (division === 4) numericValue /= 10000;
+      else if (division === 5) numericValue /= 100000;
+      displayValue = numericValue + " ton";
     }
+    msrStdValueVal = displayValue;
   }
   if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
-    displayValue = displayValue.slice(0, 10)/1000 + " ton";
     if (isFailValue(rawValue)) { 
       displayValue = "검침이상";
+    } else {
+      let numericValue = Number(displayValue);
+      if (division === 1) numericValue /= 10;
+      else if (division === 2) numericValue /= 100;
+      else if (division === 3) numericValue /= 1000;
+      else if (division === 4) numericValue /= 10000;
+      else if (division === 5) numericValue /= 100000;
+      displayValue = numericValue + " ton";
     }
+    msrStdValueVal = displayValue;
   }
   else if (fieldName.startsWith("tempValue")) {
     if (rawValue.length === 4) {

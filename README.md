@@ -3,6 +3,106 @@ Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
 
+### 2025-07-25 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## meterCaliber 자리수 적용
+<br>
+
+meterCaliber 상위 비트는 구경에 값에 적용되며, 하의 비트는 검침 값 소수점 자리수에 적용<br>
+```html
+<script>
+const caliberTypeMap = {
+  "0": "검침이상",
+  "1": "15mm",
+  "2": "20mm",
+  "3": "25mm",
+  "4": "32mm",
+  "5": "40mm",
+  "6": "50mm",
+  "7": "65mm",
+  "8": "80mm",
+  "9": "100mm",
+  "A": "125mm",
+  "B": "150mm",
+  "C": "200mm"
+  // 필요에 따라 더 추가
+};
+
+const meterDivisionMap = {
+  "0": 0,
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
+};
+
+if (fieldName === "meterCaliber") {
+  const firstCaliber = rawValue.charAt(0);
+  displayValue = caliberTypeMap[firstCaliber] || `알 수 없음 (${firstCaliber})`;
+  const secondCaliber = rawValue.charAt(1);
+  division = meterDivisionMap[secondCaliber];
+}
+if (fieldName === "msrStdValue") {
+    if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+    } else {
+      let numericValue = Number(displayValue);
+      if (division === 1) numericValue /= 10;
+      else if (division === 2) numericValue /= 100;
+      else if (division === 3) numericValue /= 1000;
+      else if (division === 4) numericValue /= 10000;
+      else if (division === 5) numericValue /= 100000;
+      displayValue = numericValue + " ton";
+    }
+    msrStdValueVal = displayValue;
+  }
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 2) {
+    if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+    } else {
+      let numericValue = Number(displayValue);
+      if (division === 1) numericValue /= 10;
+      else if (division === 2) numericValue /= 100;
+      else if (division === 3) numericValue /= 1000;
+      else if (division === 4) numericValue /= 10000;
+      else if (division === 5) numericValue /= 100000;
+      displayValue = numericValue + " ton";
+    }
+    msrStdValueVal = displayValue;
+  }
+  if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
+    if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+    } else {
+      let numericValue = Number(displayValue);
+      if (division === 1) numericValue /= 10;
+      else if (division === 2) numericValue /= 100;
+      else if (division === 3) numericValue /= 1000;
+      else if (division === 4) numericValue /= 10000;
+      else if (division === 5) numericValue /= 100000;
+      displayValue = numericValue + " ton";
+    }
+    msrStdValueVal = displayValue;
+  }
+</script>
+```
+### 진행 내용
+**그렉터 API 데이터 출력 성공**
+1. meterCalibe 자리수 분류 후 타 fieldName에 적용 완료
+2. 검침 값 필드에 바로 적용이 되지 않아 const 배열에 유효한 key-value 매핑을 추가
+<br>
+
+---
+
 ### 2025-07-18 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
@@ -70,6 +170,36 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
 </script>
 ```
 
+## 계량기 상태
+<br>
+
+계량기 상태 값 8진수 변환 후 출력<br>
+```html
+<script>
+const meterStatusMap = {
+  "0": "예비",
+  "10": "예비",
+  "20": "저전압 경보",
+  "30": "예비",
+  "40": "예비",
+  "50": "누수",
+  "60": "역류",
+  "70": "과부하"
+};
+
+if (fieldName === "meterStatus") {
+  try {
+    const dec = parseInt(rawValue, 16);
+    const oct = dec.toString(8);
+    const meaning = meterStatusMap[oct] || `${oct}`;
+    displayValue = meaning;
+  } catch (e) {
+    displayValue = "미할당 값";
+  }
+}
+</script>
+```
+
 <br>
 
 ### 진행 내용
@@ -78,6 +208,8 @@ document.getElementById('fetchBtn').addEventListener('click', async () => {
 2. 서버업체 그렉터 지차체만 메뉴 고를 수 있게 설정: 의정부시, 부산시, 연천군, 김해시, 아산시, 함안군, 고창군, 하동군, 양산시, 군포시 김제시, 남해군<br>
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/2d0e4cbe-99c7-4690-b8a8-223b9d161a6d)<br>
+3. Hex 변환 추가: "msrCnt" 
+4. 
 <br>
 
 ---
