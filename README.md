@@ -96,7 +96,7 @@ if (fieldName === "msrStdValue") {
 </script>
 ```
 ### 진행 내용
-**그렉터 API 데이터 출력 성공**
+**meterCaliber division**
 1. meterCalibe 자리수 분류 후 타 fieldName에 적용 완료
 2. 검침 값 필드에 바로 적용이 되지 않아 const 배열에 유효한 key-value 매핑을 추가
 <br>
