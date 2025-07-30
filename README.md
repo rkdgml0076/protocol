@@ -3,6 +3,52 @@ Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
 
+### 2025-07-30 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## meterStatus 8bit 표현
+<br>
+
+meterStatus Hex 값을 8비트 수로 변환하여 해당 8자리 수를 문자열로 받아와 텍스트를 출력<br>
+```html
+<script>
+if (fieldName === "meterStatus") {
+    const num = parseInt(rawValue, 16);  // HEX → 10진수
+    if (!isNaN(num)) {
+      const binaryStr = num.toString(2).padStart(8, '0');  // 8비트 변환
+      const events = [];
+
+      for (let i = 0; i < 8; i++) {
+        if (binaryStr.charAt(7 - i) === '1') {
+          events.push(bitEventMap[i]);
+        }
+      }
+
+      const eventText = events.length > 0 ? events.join(", ") : "이벤트 없음";
+      displayValue = `${eventText}`;
+    } else {
+      displayValue = "올바르지 않은 HEX 값";
+    }
+  }
+</script>
+```
+### 진행 내용
+**meterStatus**
+1. meterStatus 계량기 상태 이벤트 출력 완료 
+2. 예비 값은 아직 미할당된 이벤트
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/52d91e5f-d004-4e81-a19c-6a16bcb80ce5)<br>
+<br>
+
+---
+
 ### 2025-07-25 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

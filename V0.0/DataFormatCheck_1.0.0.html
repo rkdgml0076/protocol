@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>DataFormatCheck_1.1.1</title>
+  <title>DataFormatCheck_1.2.1</title>
   <style>
     body {
       font-family: sans-serif;
@@ -610,6 +610,17 @@ const meterDivisionMap = {
   "5": 5,
 };
 
+const bitEventMap = {
+      0: "예비",
+      1: "예비",
+      2: "저전압 경보",
+      3: "예비",
+      4: "예비",
+      5: "누수",
+      6: "역류",
+      7: "과부하"
+};
+
 function parseData() {
   const data = document.getElementById("inputData").value.trim();
   const tbody = document.querySelector("#resultTable tbody");
@@ -707,6 +718,26 @@ fieldMap.forEach(([length, start, fieldName]) => {
     const secondCaliber = rawValue.charAt(1);
     division = meterDivisionMap[secondCaliber];
   }
+
+  if (fieldName === "meterStatus") {
+    const num = parseInt(rawValue, 16);  // HEX → 10진수
+    if (!isNaN(num)) {
+      const binaryStr = num.toString(2).padStart(8, '0');  // 8비트 변환
+      const events = [];
+
+      for (let i = 0; i < 8; i++) {
+        if (binaryStr.charAt(7 - i) === '1') {
+          events.push(bitEventMap[i]);
+        }
+      }
+
+      const eventText = events.length > 0 ? events.join(", ") : "이벤트 없음";
+      displayValue = `${eventText}`;
+    } else {
+      displayValue = "올바르지 않은 HEX 값";
+    }
+  }
+
 
   if (fieldName.trim() === "devVolt") {
   // devVolt는 HEX 2자리 → DEX → 소수점 한자리
