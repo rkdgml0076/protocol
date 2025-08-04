@@ -1,6 +1,114 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2025-08-04 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## 그렉터 API 접속 URL 및 받아온 데이터 Excel Export
+<br>
+
+값 입력 후 데이터 가져오기를 클릭할 시 그렉터 API 사이트로 연결되는 URL 생성 및 가져온 데이터 Excel로 출력 가능<br>
+```html
+<div id="apiheader">
+  <h2>그렉터 API 데이터 확인</h2>
+</div>
+<textarea id="grtIdInput" placeholder="IMEI(예: 865343071819914)"></textarea>
+<span id="urlDisplay" style="position: absolute; margin-left: 5px;"></span><br>
+<select id="siteIdInput">
+  <option value="gochang">고창군</option>
+  <option value="gunpo">군포시</option>
+  <option value="gimje">김제시</option>
+  <option value="gimhae">김해시</option>
+  <option value="namhae">남해군</option>
+  <option value="busan">부산시</option>
+  <option value="asan">아산시</option>
+  <option value="yangsan">양산시</option>
+  <option value="yeoncheon">연천군</option>
+  <option value="uijeongbu">의정부시</option>
+  <option value="hadong">하동군</option>
+  <option value="haman">함안군</option>
+</select><br>
+<div class="input-row">
+  <button id="fetchBtn">데이터 가져오기</button>
+  <button onclick="downloadExcel()" class="excel-icon-btn" title="Export">
+  <img src="https://img.icons8.com/?size=100&id=13654&format=png&color=000000">
+  </button>
+  <pre id="output"></pre>
+</div>
+<br>
+<br>
+<div id="summaryBox" style="margin-top:20px; background:#fff; padding:10px; border:1px solid #ddd;">
+  <strong><파싱 데이터 요약></strong>
+  <div id="summaryContent">-</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+  let nodesData = [];
+  document.getElementById('fetchBtn').addEventListener('click', async () => {
+    const grtId = document.getElementById('grtIdInput').value.trim();
+    const siteId = document.getElementById('siteIdInput').value.trim();
+    if (!grtId || !siteId) {
+      alert("IMEI를 입력하세요.");
+      return;
+    }
+    const url = `https://dfm-ct.watergrid.kr/api?grtId=${encodeURIComponent(grtId)}&siteId=${encodeURIComponent(siteId)}`;
+
+    const urlDisplay = document.getElementById("urlDisplay");
+    urlDisplay.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+
+    try {
+          const response = await fetch(url);
+          const result = await response.json();
+
+          nodesData = result.nodes;  // 전역 변수 업데이트
+
+          document.getElementById("output").textContent = JSON.stringify(nodesData, null, 2);
+        } 
+        catch (error) {
+          alert("데이터를 불러오는 중 오류 발생: " + error.message);
+        }
+    });
+    
+    function downloadExcel() {
+      if (!nodesData || Object.keys(nodesData).length === 0) {
+        alert("먼저 데이터를 가져오세요.");
+        return;
+      }
+
+      console.log("다운로드 함수 실행됨");
+      console.log("nodesData:", nodesData);
+      
+      // 배열 객체를 시트로 변환
+      const worksheet = XLSX.utils.json_to_sheet([nodesData]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "NodesData");
+
+      const now = new Date();
+      const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
+
+      XLSX.writeFile(workbook, `nodesData_${dateStr}.xlsx`);
+    }
+</script>
+```
+### 진행 내용
+**API URL, Excel Export**
+1. 데이터 가져오기 이전에는 Excel Export 불가
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/f381d0c1-a01d-434d-80b2-84f6fb25abea)<br>
+2. IMEI 입력후 데이터 가져오기 클릭 시 URL이 생성되며 URL 위치는 IMEI 우측에 생성
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/064c171d-8362-457d-ae2b-f98dbab829cb)<br>
+<br>
+
 ---
 
 ### 2025-07-30 GitHub Commit
