@@ -103,10 +103,10 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 **API URL, Excel Export**
 1. 데이터 가져오기 이전에는 Excel Export 불가
 --Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/f381d0c1-a01d-434d-80b2-84f6fb25abea)<br>
+![Image](https://github.com/user-attachments/assets/064c171d-8362-457d-ae2b-f98dbab829cb)<br>
 2. IMEI 입력후 데이터 가져오기 클릭 시 URL이 생성되며 URL 위치는 IMEI 우측에 생성
 --Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/064c171d-8362-457d-ae2b-f98dbab829cb)<br>
+![Image](https://github.com/user-attachments/assets/f381d0c1-a01d-434d-80b2-84f6fb25abea)<br>
 <br>
 
 ---
