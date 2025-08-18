@@ -32,33 +32,24 @@ NTmore KT IotMaker Test Api Server Attributes의 [] 내부 값을 파싱을 위�
     const output = document.getElementById("numericOutput");
 
     try {
-      const arr = JSON.parse(raw);
+      const cleaned = raw.replace(/[\[\]]/g, "").trim();
+      const arr = cleaned.split(/[\s,]+/).map(v => parseInt(v, 10)).filter(v => !isNaN(v));
 
-      const hexValues = arr.map(v => (v < 0 ? 256 + v : v)
-                                      .toString(16)
-                                      .padStart(2, "0"));
-
+      if (arr.length === 0) throw new Error("No valid numbers");
+      const hexValues = arr.map(v => (v < 0 ? 256 + v : v).toString(16).padStart(2, "0"));
       const result = hexValues.join("").toUpperCase();
 
       output.textContent = result;
       message.style.display = "block";
-
-    } catch (e) {
-      alert("[1,2,3,...] 형태로 넣어주세요.");      
-      message.style.display = "none";
-    }
+    } 
   });
 </script>
 ```
 ### 진행 내용
 **IoTMaker Test Api Server 데이터 파싱**
-1. [1, 2, 3, ...] 형식으로 된 데이터 복사 붙여넣고 변환하기 버튼 클릭 시 파싱이 가능한 기존 서울시 데이터 포맷 양식의 Payload 데이터 출력되어, 해당 출력된 데이터를 다시한번 복사 붙여넣기 후 데이터 확인
+1. [1, 2, 3, ...] 데이터 복사 붙여넣고 변환하기 버튼 클릭 시 파싱이 가능한 기존 서울시 데이터 포맷 양식의 Payload 데이터 출력되어, 해당 출력된 데이터를 다시한번 복사 붙여넣기 후 데이터 확인
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/9f67ee98-6ee4-40d9-9029-23c1657af17e)
-
-2. [1, 2, 3, ...] 형식을 제외한 양식 입력 시 팝업 생성<br>
---Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/cbb4746d-f3ab-4844-a436-a3df874200b1)
 <br>
 
 ---
