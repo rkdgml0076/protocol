@@ -58,7 +58,7 @@ NTmore KT IotMaker Test Api Server Attributes의 [] 내부 값을 파싱을 위�
 <br>
 2. [] 형식을 제외한 양식 입력 시 팝업 생성
 --Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/cbb4746d-f3ab-4844-a436-a3df874200b1)<br>
+![Image](https://github.com/user-attachments/assets/cbb4746d-f3ab-4844-a436-a3df874200b1)
 <br>
 
 ---
