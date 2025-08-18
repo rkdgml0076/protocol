@@ -82,8 +82,14 @@
     width: 55px;               /* 이미지 크기 줄이기 */
     height: 55px;
     margin: 5px;
-
-  }
+   }
+   #message {
+    display:none; 
+    font-size:18px; 
+    font-weight:bold; 
+    margin-top:10px; 
+    color: #000;;
+   }
   </style>
 </head>
 <link rel="stylesheet">
@@ -97,7 +103,12 @@
     <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 61자)"></textarea>
     <br/>
     <button onclick="parseData()">파싱하기</button>
+    <button id="convertBtn">변환하기</button>
+    <div id="message">
+      해당 데이터를 파싱해주세요
+    </div>
 
+    <pre id="numericOutput" placeholder="해당 Payload Data 를 붙여넣은 뒤 파싱해주세요"></pre>
     <br>
     <div id="apiheader">
       <h2>그렉터 API 데이터 확인</h2>
@@ -174,8 +185,8 @@
 
     const urlDisplay = document.getElementById("urlDisplay");
     urlDisplay.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
-
-    try {
+    
+        try {
           const response = await fetch(url);
           const result = await response.json();
 
@@ -193,6 +204,12 @@
         alert("먼저 데이터를 가져오세요.");
         return;
       }
+      
+      // if (!Array.isArray(nodesData)) {
+      //   alert("다운로드할 데이터가 배열 형식이 아닙니다.");
+      //   console.log("nodesData 내용:", nodesData);
+      //   return;
+      // }
 
       console.log("다운로드 함수 실행됨");
       console.log("nodesData:", nodesData);
@@ -664,6 +681,31 @@
     6: "역류",
     7: "과부하"
   };
+
+  document.getElementById("convertBtn").addEventListener("click", () => {
+    const raw = document.getElementById("inputData").value.trim();
+    const message = document.getElementById("message");
+    const output = document.getElementById("numericOutput");
+
+    try {
+      const arr = JSON.parse(raw);
+
+      const hexValues = arr.map(v => (v < 0 ? 256 + v : v)
+                                      .toString(16)
+                                      .padStart(2, "0"));
+
+      const result = hexValues.join("").toUpperCase();
+
+      output.textContent = result;
+
+      // 변환 성공 시 안내 문구 보이도록
+      message.style.display = "block";
+
+    } catch (e) {
+      alert("[1,2,3,...] 형태로 넣어주세요.");      
+      message.style.display = "none"; // 에러 시 숨김
+    }
+  });
 
   function parseData() {
     const data = document.getElementById("inputData").value.trim();
