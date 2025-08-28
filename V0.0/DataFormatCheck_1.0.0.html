@@ -944,7 +944,9 @@
         else if (division === 5) numericValue /= 100000;
         displayValue = numericValue + " ton";
       }
+      if (msrStdValueVal === "") {
       msrStdValueVal = displayValue;
+    }
     }
     else if (fieldName.startsWith("tempValue")) {
       if (rawValue.length === 4) {
@@ -965,14 +967,13 @@
         displayValue = rawValue;
       }
     }
-
-    if (fieldName === "year") summaryYear = displayValue;
-    if (fieldName === "month") summaryMonth = displayValue;
-    if (fieldName === "day") summaryDay = displayValue;
-    if (fieldName === "hour") summaryHour = displayValue;
-    if (fieldName === "minute") summaryMinute = displayValue;
-    if (fieldName === "second") summarySecond = displayValue;
-    if (fieldName === "msrStdValue") summaryMsrStdValue = displayValue;
+      if (fieldName === "year") summaryYear = displayValue;
+      if (fieldName === "month") summaryMonth = displayValue;
+      if (fieldName === "day") summaryDay = displayValue;
+      if (fieldName === "hour") summaryHour = displayValue;
+      if (fieldName === "minute") summaryMinute = displayValue;
+      if (fieldName === "second") summarySecond = displayValue;
+      if (fieldName === "msrStdValue") summaryMsrStdValue = displayValue;
     }
 
     function isFailValue(value) {
