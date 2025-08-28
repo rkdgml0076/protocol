@@ -2,6 +2,69 @@
 Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
+### 2025-08-28 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## CODE FIX
+<br>
+
+msrOffset 상위 비트 리틀에드안 변환 값 중 한자리 수는 소수점 및 'Ton'텍스트 적용안되던 오류 수정 <br>
+
+```html
+<script>
+  if (fieldName.startsWith("msrOffset") && displayValue.length >= 1) {
+      if (isFailValue(rawValue)) { 
+        displayValue = "검침이상";
+      } else {
+        let numericValue = Number(displayValue);
+        if (division === 1) numericValue /= 10;
+        else if (division === 2) numericValue /= 100;
+        else if (division === 3) numericValue /= 1000;
+        else if (division === 4) numericValue /= 10000;
+        else if (division === 5) numericValue /= 100000;
+        displayValue = numericValue + " ton";
+      }
+  }
+</script>
+```
+
+mValue 최신 검침 값(mValue 0)이 아닌 제일 오래된 검침 값(mValue 23 등)이 <파싱 데이터 요약>의 검침 값:에 출력 되던 오류 수정<br>
+
+```html
+<script>
+   if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
+      if (isFailValue(rawValue)) { 
+        displayValue = "검침이상";
+      } else {
+        let numericValue = Number(displayValue);
+        if (division === 1) numericValue /= 10;
+        else if (division === 2) numericValue /= 100;
+        else if (division === 3) numericValue /= 1000;
+        else if (division === 4) numericValue /= 10000;
+        else if (division === 5) numericValue /= 100000;
+        displayValue = numericValue + " ton";
+      }
+      if (msrStdValueVal === "") {
+      msrStdValueVal = displayValue;
+    }
+  }
+</script>
+```
+
+### 진행 내용
+**msrOffset, mValue 검침 값 관련 코드 수정**
+1. mValue 0이 아닌 첫 번째 검침 값이 출력되게 수정
+<br>
+
+---
+
 ### 2025-08-18 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
@@ -16,6 +79,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 <br>
 
 NTmore KT IotMaker Test Api Server Attributes의 [] 내부 값을 파싱을 위한 Hex 값으로 변환<br>
+
 ```html
   <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 61자)"></textarea>
   <br/>
