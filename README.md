@@ -2,6 +2,71 @@
 Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
+### 2025-09-04 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## msrOffset 검침 값 적용
+<br>
+
+msrOffset 상승 검침 값을 msrStdValue 차감 적용하여 출력 <br>
+
+```html
+<script>
+    let prevOffsetResult = null;      // 이전 msrOffset 결과 저장
+
+    if (fieldName === "msrStdValue") {
+      if (isFailValue(rawValue)) { 
+        displayValue = "검침이상";
+      } else {
+        let numericValue = Number(displayValue);
+        if (division === 1) numericValue /= 10;
+        else if (division === 2) numericValue /= 100;
+        else if (division === 3) numericValue /= 1000;
+        else if (division === 4) numericValue /= 10000;
+        else if (division === 5) numericValue /= 100000;
+        displayValue = numericValue + " ton";
+        msrStdValueVal = numericValue;
+        prevOffsetResult = numericValue;
+      }
+      msrStdValueVal = displayValue;
+    }
+    if (fieldName.startsWith("msrOffset") && displayValue.length >= 1) {
+      if (isFailValue(rawValue)) { 
+        displayValue = "검침이상";
+      } else {
+        let offsetValue = Number(displayValue);
+        if (division === 1) offsetValue /= 10;
+        else if (division === 2) offsetValue /= 100;
+        else if (division === 3) offsetValue /= 1000;
+        else if (division === 4) offsetValue /= 10000;
+        else if (division === 5) offsetValue /= 100000;
+        if (typeof prevOffsetResult === "number") {
+          const result = prevOffsetResult - offsetValue;
+          displayValue = result.toFixed(3) + " ton";
+          prevOffsetResult = result;
+        } else {
+          displayValue = "계산 불가";
+        }
+      }
+    }
+</script>
+```
+
+### 진행 내용
+**msrOffset 결과 값 변경**
+1. 소수점 3번째 자리까지 반올림 하여 출력
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/9f67ee98-6ee4-40d9-9029-23c1657af17e)
+<br>
+
+---
 ### 2025-08-28 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

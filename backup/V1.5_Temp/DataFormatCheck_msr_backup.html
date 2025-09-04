@@ -751,7 +751,6 @@
   let hourVal = "", minuteVal = "", secondVal = "";
   let msrStdValueVal = "";
   let division = "";
-  let prevOffsetResult = null;      // 이전 msrOffset 결과 저장
 
   fieldMap.forEach(([length, start, fieldName]) => {
     const startIdx = start - 1;
@@ -916,8 +915,6 @@
         else if (division === 4) numericValue /= 10000;
         else if (division === 5) numericValue /= 100000;
         displayValue = numericValue + " ton";
-        msrStdValueVal = numericValue;
-        prevOffsetResult = numericValue;
       }
       msrStdValueVal = displayValue;
     }
@@ -925,36 +922,31 @@
       if (isFailValue(rawValue)) { 
         displayValue = "검침이상";
       } else {
-        let offsetValue = Number(displayValue);
-        if (division === 1) offsetValue /= 10;
-        else if (division === 2) offsetValue /= 100;
-        else if (division === 3) offsetValue /= 1000;
-        else if (division === 4) offsetValue /= 10000;
-        else if (division === 5) offsetValue /= 100000;
-        if (typeof prevOffsetResult === "number") {
-          const result = prevOffsetResult - offsetValue;
-          displayValue = result.toFixed(3) + " ton";
-          prevOffsetResult = result;
-        } else {
-          displayValue = "계산 불가";
-        }
+        let numericValue = Number(displayValue);
+        if (division === 1) numericValue /= 10;
+        else if (division === 2) numericValue /= 100;
+        else if (division === 3) numericValue /= 1000;
+        else if (division === 4) numericValue /= 10000;
+        else if (division === 5) numericValue /= 100000;
+        displayValue = numericValue + " ton";
       }
+      // msrStdValueVal = displayValue;
     }
     if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
       if (isFailValue(rawValue)) { 
         displayValue = "검침이상";
-        } else {
-          let numericValue = Number(displayValue);
-          if (division === 1) numericValue /= 10;
-          else if (division === 2) numericValue /= 100;
-          else if (division === 3) numericValue /= 1000;
-          else if (division === 4) numericValue /= 10000;
-          else if (division === 5) numericValue /= 100000;
-          displayValue = numericValue + " ton";
-        }
-        if (msrStdValueVal === "") {
-        msrStdValueVal = displayValue;
+      } else {
+        let numericValue = Number(displayValue);
+        if (division === 1) numericValue /= 10;
+        else if (division === 2) numericValue /= 100;
+        else if (division === 3) numericValue /= 1000;
+        else if (division === 4) numericValue /= 10000;
+        else if (division === 5) numericValue /= 100000;
+        displayValue = numericValue + " ton";
       }
+      if (msrStdValueVal === "") {
+      msrStdValueVal = displayValue;
+    }
     }
     else if (fieldName.startsWith("tempValue")) {
       if (rawValue.length === 4) {
