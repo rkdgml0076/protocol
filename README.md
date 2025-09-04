@@ -63,7 +63,7 @@ msrOffset 상승 검침 값을 msrStdValue 차감 적용하여 출력 <br>
 **msrOffset 결과 값 변경**
 1. 소수점 3번째 자리까지 반올림 하여 출력
 --Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/9f67ee98-6ee4-40d9-9029-23c1657af17e)
+![Image](https://github.com/user-attachments/assets/a8e31508-a262-4a10-afb6-0f1ee91e6c26)
 <br>
 
 ---
