@@ -933,7 +933,7 @@
         else if (division === 5) offsetValue /= 100000;
         if (typeof prevOffsetResult === "number") {
           const result = prevOffsetResult - offsetValue;
-          displayValue = result.toFixed(3) + " ton";
+          displayValue = result.toFixed(3) + " ton (-" + offsetValue + ")";
           prevOffsetResult = result;
         } else {
           displayValue = "계산 불가";

@@ -2,7 +2,7 @@
 Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
-### 2025-09-04 GitHub Commit
+### 2025-09-05 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
 - 개발 환경(Code Editer) Visual Studio Code 사용 <br>
@@ -62,8 +62,9 @@ msrOffset 상승 검침 값을 msrStdValue 차감 적용하여 출력 <br>
 ### 진행 내용
 **msrOffset 결과 값 변경**
 1. 소수점 3번째 자리까지 반올림 하여 출력
+2. 기존 msrOffset 값은 (-상승값) 양식으로 추가
 --Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/e1a87739-dbdb-4d87-b047-e9ed17384e1a)
+![Image](https://github.com/user-attachments/assets/5cf0bd05-0c0b-458a-bfa0-5f6e253ac05f)
 <br>
 
 ---
