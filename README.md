@@ -135,7 +135,7 @@ msrOffset, mValue 과거 시간대를 1시간 단위로 차감하여 측정<br>
 2. msrOffset, mValue 데이터 키 값의 숫자를 -'시간' 값으로 적용
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/6229ecf0-dfaf-4f4f-b1b2-8d9f53b4b6f9)
-3. <파싱 데이터 요약>에 mValue 검침시간이 추가로 출력되어 msrStdValueVal 수정 및 위치변경
+3. <파싱 데이터 요약>에 mValue 검침시간이 추가 출력되어 msrStdValueVal 수정 및 위치변경
 <br>
 
 
