@@ -15,7 +15,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 ## msrOffset 검침 시간 측정
 <br>
 
-msrOffset 과거 시간대를 1시간 단위로 차감하여 측정<br>
+msrOffset, mValue 과거 시간대를 1시간 단위로 차감하여 측정<br>
 
 ```html
 <script>
@@ -89,15 +89,53 @@ msrOffset 과거 시간대를 1시간 단위로 차감하여 측정<br>
         }
       }
     }
+    if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
+      if (isFailValue(rawValue)) { 
+      displayValue = "검침이상";
+        } else {
+          let numericValue = Number(displayValue);
+          if (division === 1) numericValue /= 10;
+          else if (division === 2) numericValue /= 100;
+          else if (division === 3) numericValue /= 1000;
+          else if (division === 4) numericValue /= 10000;
+          else if (division === 5) numericValue /= 100000;
+
+          const offsetIndex = parseInt(fieldName.replace("mValue", ""), 10) || 0;
+          let baseDate = new Date(
+            2000 + Number(msrOffsetyearVal),
+            Number(msrOffsetmonthVal) - 1,
+            Number(msrOffsetdayVal),
+            Number(msrOffsethourVal),
+            Number(msrOffsetminuteVal),
+            Number(msrOffsetsecondVal)
+          );
+
+          baseDate.setHours(baseDate.getHours() - offsetIndex);
+
+          const year = baseDate.getFullYear();
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const hour = String(baseDate.getHours()).padStart(2, "0");
+          const minute = String(baseDate.getMinutes()).padStart(2, "0");
+          const second = String(baseDate.getSeconds()).padStart(2, "0");
+
+          displayValue = `${numericValue} ton <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
+          if (msrStdValueVal === "") {
+            msrStdValueVal = `${numericValue} ton`;
+          }
+        }
+    }
 </script>
 ```
 
 ### 진행 내용
 **msrOffset 검침 시간 출력**
 1. 기존 파싱된 시간 값 기준을 get 함수로 시간을 적용하여 출력
-2. msrOffset 데이터 키 값의 숫자를 -'시간' 값으로 적용
+2. msrOffset, mValue 데이터 키 값의 숫자를 -'시간' 값으로 적용
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/6229ecf0-dfaf-4f4f-b1b2-8d9f53b4b6f9)
+3. <파싱 데이터 요약>에 mValue 검침시간이 추가로 출력되어 msrStdValueVal 수정 및 위치변경
 <br>
 
 

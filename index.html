@@ -977,11 +977,32 @@
           else if (division === 3) numericValue /= 1000;
           else if (division === 4) numericValue /= 10000;
           else if (division === 5) numericValue /= 100000;
-          displayValue = numericValue + " ton";
+
+          const offsetIndex = parseInt(fieldName.replace("mValue", ""), 10) || 0;
+          let baseDate = new Date(
+            2000 + Number(msrOffsetyearVal),
+            Number(msrOffsetmonthVal) - 1,
+            Number(msrOffsetdayVal),
+            Number(msrOffsethourVal),
+            Number(msrOffsetminuteVal),
+            Number(msrOffsetsecondVal)
+          );
+
+          baseDate.setHours(baseDate.getHours() - offsetIndex);
+
+          const year = baseDate.getFullYear();
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const hour = String(baseDate.getHours()).padStart(2, "0");
+          const minute = String(baseDate.getMinutes()).padStart(2, "0");
+          const second = String(baseDate.getSeconds()).padStart(2, "0");
+
+          displayValue = `${numericValue} ton <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
+          if (msrStdValueVal === "") {
+            msrStdValueVal = `${numericValue} ton`;
+          }
         }
-      if (msrStdValueVal === "") {
-        msrStdValueVal = displayValue;
-      }
     }
     else if (fieldName.startsWith("tempValue")) {
       if (rawValue.length === 4) {
