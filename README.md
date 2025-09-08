@@ -131,7 +131,7 @@ msrOffset, mValue 과거 시간대를 1시간 단위로 차감하여 측정<br>
 
 ### 진행 내용
 **msrOffset 검침 시간 출력**
-1. 기존 파싱된 시간 값 기준을 get 함수로 시간을 적용하여 출력
+1. 기존 파싱된 시간 값 기준을 baseDate 객체를 적용하여 출력
 2. msrOffset, mValue 데이터 키 값의 숫자를 -'시간' 값으로 적용
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/6229ecf0-dfaf-4f4f-b1b2-8d9f53b4b6f9)
