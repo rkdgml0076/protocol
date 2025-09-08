@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>DataFormatCheck_1.3.1</title>
+  <title>DataFormatCheck_1.5.1</title>
   <style>
     body {
       font-family: sans-serif;
@@ -882,26 +882,32 @@
       displayValue = `${displayValue}`;
     }
     if (fieldName === "year") {
+      msrOffsetyearVal = displayValue;
       displayValue = `20${displayValue}년`;
       yearVal = displayValue;
     }
     if (fieldName === "month") {
+      msrOffsetmonthVal = displayValue;
       displayValue = displayValue + "월";
       monthVal = displayValue;
     }
     if (fieldName === "day") {
+      msrOffsetdayVal = displayValue;
       displayValue = displayValue + "일";
       dayVal = displayValue;
     }
     if (fieldName === "hour") {
+      msrOffsethourVal = displayValue;
       displayValue = displayValue + "시";
       hourVal = displayValue;
     }
     if (fieldName === "minute") {
+      msrOffsetminuteVal = displayValue;
       displayValue = displayValue + "분";
       minuteVal = displayValue;
     }
     if (fieldName === "second") {
+      msrOffsetsecondVal = displayValue;
       displayValue = displayValue + "초";
       secondVal = displayValue;
     }
@@ -931,18 +937,39 @@
         else if (division === 3) offsetValue /= 1000;
         else if (division === 4) offsetValue /= 10000;
         else if (division === 5) offsetValue /= 100000;
+
         if (typeof prevOffsetResult === "number") {
           const result = prevOffsetResult - offsetValue;
-          displayValue = result.toFixed(3) + " ton (-" + offsetValue + ")";
+          const offsetIndex = parseInt(fieldName.replace("msrOffset", ""), 10) || 0;
+          let baseDate = new Date(
+            2000 + Number(msrOffsetyearVal),
+            Number(msrOffsetmonthVal) - 1,
+            Number(msrOffsetdayVal),
+            Number(msrOffsethourVal),
+            Number(msrOffsetminuteVal),
+            Number(msrOffsetsecondVal)
+          );
+
+          baseDate.setHours(baseDate.getHours() - offsetIndex);
+
+          const year = baseDate.getFullYear();
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const hour = String(baseDate.getHours()).padStart(2, "0");
+          const minute = String(baseDate.getMinutes()).padStart(2, "0");
+          const second = String(baseDate.getSeconds()).padStart(2, "0");
+
+          displayValue = `${result.toFixed(3)} ton (-${offsetValue}) <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
           prevOffsetResult = result;
         } else {
           displayValue = "계산 불가";
         }
       }
     }
+
     if (fieldName.startsWith("mValue") && displayValue.length >= 2) {
       if (isFailValue(rawValue)) { 
-        displayValue = "검침이상";
+      displayValue = "검침이상";
         } else {
           let numericValue = Number(displayValue);
           if (division === 1) numericValue /= 10;
@@ -952,7 +979,7 @@
           else if (division === 5) numericValue /= 100000;
           displayValue = numericValue + " ton";
         }
-        if (msrStdValueVal === "") {
+      if (msrStdValueVal === "") {
         msrStdValueVal = displayValue;
       }
     }
@@ -975,13 +1002,6 @@
         displayValue = rawValue;
       }
     }
-      if (fieldName === "year") summaryYear = displayValue;
-      if (fieldName === "month") summaryMonth = displayValue;
-      if (fieldName === "day") summaryDay = displayValue;
-      if (fieldName === "hour") summaryHour = displayValue;
-      if (fieldName === "minute") summaryMinute = displayValue;
-      if (fieldName === "second") summarySecond = displayValue;
-      if (fieldName === "msrStdValue") summaryMsrStdValue = displayValue;
     }
 
     function isFailValue(value) {
@@ -999,12 +1019,12 @@
     });
 
     document.getElementById("summaryContent").innerHTML =
-    `<p><strong>검침 값:</strong> ${msrStdValueVal}</p>` +
-    `<p><strong>데이터 전송 시간:</strong> ${yearVal} ${monthVal} ${dayVal} ${hourVal} ${minuteVal} ${secondVal}</p>`;
+      `<p><strong>검침 값:</strong> ${msrStdValueVal}</p>` +
+      `<p><strong>데이터 전송 시간:</strong> ${yearVal} ${monthVal} ${dayVal} ${hourVal} ${minuteVal} ${secondVal}</p>`;
 
-    const checksumRow = document.createElement("tr");
-      checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
-      tbody.appendChild(checksumRow);
+      const checksumRow = document.createElement("tr");
+        checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+        tbody.appendChild(checksumRow);
   }
   </script>
 

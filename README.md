@@ -2,6 +2,106 @@
 Site URL: https://rkdgml0076.github.io/protocol/
 
 ---
+### 2025-09-08 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## msrOffset 검침 시간 측정
+<br>
+
+msrOffset 과거 시간대를 1시간 단위로 차감하여 측정 <br>
+
+```html
+<script>
+    if (fieldName === "year") {
+      msrOffsetyearVal = displayValue;
+      displayValue = `20${displayValue}년`;
+      yearVal = displayValue;
+    }
+    if (fieldName === "month") {
+      msrOffsetmonthVal = displayValue;
+      displayValue = displayValue + "월";
+      monthVal = displayValue;
+    }
+    if (fieldName === "day") {
+      msrOffsetdayVal = displayValue;
+      displayValue = displayValue + "일";
+      dayVal = displayValue;
+    }
+    if (fieldName === "hour") {
+      msrOffsethourVal = displayValue;
+      displayValue = displayValue + "시";
+      hourVal = displayValue;
+    }
+    if (fieldName === "minute") {
+      msrOffsetminuteVal = displayValue;
+      displayValue = displayValue + "분";
+      minuteVal = displayValue;
+    }
+    if (fieldName === "second") {
+      msrOffsetsecondVal = displayValue;
+      displayValue = displayValue + "초";
+      secondVal = displayValue;
+    }
+
+    if (fieldName.startsWith("msrOffset") && displayValue.length >= 1) {
+      if (isFailValue(rawValue)) { 
+        displayValue = "검침이상";
+      } else {
+        let offsetValue = Number(displayValue);
+        if (division === 1) offsetValue /= 10;
+        else if (division === 2) offsetValue /= 100;
+        else if (division === 3) offsetValue /= 1000;
+        else if (division === 4) offsetValue /= 10000;
+        else if (division === 5) offsetValue /= 100000;
+
+        if (typeof prevOffsetResult === "number") {
+          const result = prevOffsetResult - offsetValue;
+          const offsetIndex = parseInt(fieldName.replace("msrOffset", ""), 10) || 0;
+          let baseDate = new Date(
+            2000 + Number(msrOffsetyearVal),
+            Number(msrOffsetmonthVal) - 1,
+            Number(msrOffsetdayVal),
+            Number(msrOffsethourVal),
+            Number(msrOffsetminuteVal),
+            Number(msrOffsetsecondVal)
+          );
+
+          baseDate.setHours(baseDate.getHours() - offsetIndex);
+
+          const year = baseDate.getFullYear();
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const hour = String(baseDate.getHours()).padStart(2, "0");
+          const minute = String(baseDate.getMinutes()).padStart(2, "0");
+          const second = String(baseDate.getSeconds()).padStart(2, "0");
+
+          displayValue = `${result.toFixed(3)} ton (-${offsetValue}) <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+          prevOffsetResult = result;
+        } else {
+          displayValue = "계산 불가";
+        }
+      }
+    }
+</script>
+```
+
+### 진행 내용
+**msrOffset 검침 시간 출력**
+1. 기존 파싱된 시간 값 기준을 get 함수로 시간을 적용하여 출력
+2. msrOffset 데이터 키 값의 숫자를 -'시간' 값으로 적용
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/6229ecf0-dfaf-4f4f-b1b2-8d9f53b4b6f9)
+<br>
+
+
+---
 ### 2025-09-05 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
