@@ -15,7 +15,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 ## msrOffset 검침 시간 측정
 <br>
 
-msrOffset 과거 시간대를 1시간 단위로 차감하여 측정 <br>
+msrOffset 과거 시간대를 1시간 단위로 차감하여 측정<br>
 
 ```html
 <script>
