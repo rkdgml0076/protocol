@@ -12,6 +12,141 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
+## GS2.0
+<br>
+
+GS2.0 Version DataFormat 추가<br>
+
+```html
+<script>
+  /* GS2.0 DataFormat */
+  const fieldMapV7 = [
+    [2, 1, "header"],
+    [2, 3, "length"],
+    [2, 5, "type"],
+    [16, 7, "imei"],
+    [16, 23, "imsi"],
+    [2, 39, "rssi"],
+    [2, 41, "ber"],
+    [4, 43, "cid"],
+    [4, 47, "rsrp"],
+    [4, 51, "rsrq"],
+    [4, 55, "snr"],
+    [10, 59, "devNo"],
+    [4, 69, "devFw"],
+    [2, 73, "devVolt"],
+    [8, 75, "meterNo"],
+    [2, 83, "meterType"],
+    [2, 85, "meterCaliber"],
+    [2, 87, "meterStatus"],
+    [2, 89, "msrCycle"],
+    [2, 91, "msrReport"],
+    [2, 93, "year"],
+    [2, 95, "month"],
+    [2, 97, "day"],
+    [2, 99, "hour"],
+    [2, 101, "minute"],
+    [2, 103, "second"],
+    [2, 105, "msrCycle"],
+    [2, 107, "msrCnt"],
+    [2, 109, "msrStdIdx"],
+    [8, 111, "msrStdValue"],
+    [4, 119, "msrOffset 0"],
+    [4, 123, "msrOffset 1"],
+    [4, 127, "msrOffset 2"],
+    [4, 131, "msrOffset 3"],
+    [4, 135, "msrOffset 4"],
+    [4, 139, "msrOffset 5"],
+    [4, 143, "msrOffset 6"],
+    [4, 147, "msrOffset 7"],
+    [4, 151, "msrOffset 8"],
+    [4, 155, "msrOffset 9"],
+    [4, 159, "msrOffset 10"],
+    [4, 163, "msrOffset 11"],
+    [4, 167, "msrOffset 12"],
+    [4, 171, "msrOffset 13"],
+    [4, 175, "msrOffset 14"],
+    [4, 179, "msrOffset 15"],
+    [4, 183, "msrOffset 16"],
+    [4, 187, "msrOffset 17"],
+    [4, 191, "msrOffset 18"],
+    [4, 195, "msrOffset 19"],
+    [4, 199, "msrOffset 20"],
+    [4, 203, "msrOffset 21"],
+    [4, 207, "msrOffset 22"],
+    [4, 211, "msrOffset 23"],
+    [2, 215, "devModel"],
+    [2, 217, "devTemp"],
+    [2, 219, "afCnt"],
+    [2, 221, "sfCnt"],
+    [2, 223, "devFOTA"],
+    [2, 225, "devBank"],
+    [2, 227, "msrDisperTime"],
+    [2, 229, "circuit"],
+    [2, 231, "magnetic"],
+  ];
+
+  const headerMap = {
+    "A3": "서울시 데이터포맷[V1.5]",
+    "a3": "서울시 데이터포맷[V1.5]",
+    "A4": "서울시 데이터포맷[V1.7]",
+    "a4": "서울시 데이터포맷[V1.7]",
+    "A5": "서울시 데이터포맷[V1.8]",
+    "a5": "서울시 데이터포맷[V1.8]",
+    "B1": "서울시 데이터포맷[V2.0]",
+    "b1": "서울시 데이터포맷[V2.0]"
+  };
+
+  const typeMap = {
+    "70": "(Default Version)",
+    "71": "(GS2.0 Version)",
+    "75": "(Temp Version)",
+    "76": "(Temp + Cable Version)"
+  };
+
+  // header + type 값으로 분기
+  if (headerHex === "A3" && typeHex === "70") {
+    fieldMap = fieldMapV1;
+  } else if (headerHex === "A3" && typeHex === "75") {
+    fieldMap = fieldMapV2;
+  } else if (headerHex === "A3" && typeHex === "76") {
+    fieldMap = fieldMapV3;
+  } else if (headerHex === "A4" && typeHex === "70") {
+    fieldMap = fieldMapV4;
+  } else if (headerHex === "A5" && typeHex === "70") {
+    fieldMap = fieldMapV5;
+  } else if (headerHex === "B1" && typeHex === "70") {
+    fieldMap = fieldMapV6;
+  } else if (headerHex === "A3" && typeHex === "71") {
+    fieldMap = fieldMapV7;
+  } else {
+      alert(`지원하지 않는 데이터포맷입니다.`);
+    return;
+  }
+
+</script>
+```
+
+### 진행 내용
+**msrOffset 검침 시간 출력**
+1. type 71 입력 시 GS2.0 Version DataFormat 출력
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/29502469-38eb-4128-8c0b-4d6e58e43e56)
+<br>
+
+
+
+---
+### 2025-09-08 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
 ## msrOffset 검침 시간 측정
 <br>
 
