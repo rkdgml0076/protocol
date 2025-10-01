@@ -493,7 +493,7 @@ function downloadExcel() {
  - import excel 양식 버튼 추가 (IMEI, 지자체)
  - excel 양식 기입 후 해당 파일을 "파일 선택"으로 사이트에 import
  - import 된 데이터 확인
- - "Excel 목록 전체 호출" 클릭 후 "호출된 데이터 다운로드" 클릭 시 import 한 전체 데이터 추출후 export 가능
+ - "Excel 목록 전체 호출" 클릭 후 "호출된 데이터 다운로드" 클릭 시 import 한 전체 데이터 추출후 export 가능<br>
 --상세 기능 구현 및 코드 설명은 추후 별도 기입하여 Commit 예정(해당 내용을 변경하여 추후 기입), export까지의 내용은 별도 가이드 생성--<br>
 
 ---
