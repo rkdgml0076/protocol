@@ -11,12 +11,30 @@
     <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
   </div>
   <br>
-  <div style="display:flex; align-items:flex-start; gap:16px;">
+  <div class="controls">
+    <button id="fetchAllBtn" class="btn-primary small">Excel 목록 전체 호출</button>
+    <label style="display:inline-flex; align-items:center; gap:8px;">
+      <span style="font-size:13px;">"Excel 목록 전체 호출" 진행 후 "데이터 다운로드"가 가능합니다.</span>
+    </label>
+    <button id="downloadAllResults" class="btn-primary small">호출된 데이터 다운로드</button>
+    <button class="btn-primary small" onclick="downloadTemplate()">Import 양식 다운로드</button>
+    <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" />
+  </div>
+  <div id="parsedTableContainer">
+    <table id="parsedTable">
+      <thead>
+        <tr><th>#</th><th>지자체</th><th>IMEI</th><th>동작</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <br>
+    <div style="display:flex; align-items:flex-start; gap:16px;">
     <!-- IMEI 영역 -->
     <div style="display:flex; flex-direction:column;">
       <label for="grtIdInput">IMEI</label>
       <input id="grtIdInput" placeholder="IMEI(예: 865343071819914)" />
-  </div>
+    </div>
     <!-- 지자체 영역 -->
     <div style="display:flex; flex-direction:column;">
       <label for="siteIdInput">지자체</label>
@@ -35,27 +53,9 @@
         <option value="haman">함안군</option>
       </select>
     </div>
-  </div>
-  <div class="controls">
-    <button id="fetchBtn" class="btn-primary small">데이터 호출하기</button>
-    <label style="display:inline-flex; align-items:center; gap:8px;">
-      <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" />
-      <span style="font-size:13px;">"Excel 목록 전체 호출" 진행 후 "데이터 다운로드"가 가능합니다.</span>
-    </label>
-    <button id="fetchAllBtn" class="btn-primary small">Excel 목록 전체 호출</button>
-    <button id="downloadAllResults" class="btn-primary small">호출된 데이터 다운로드</button>
-    <button class="btn-primary small" onclick="downloadTemplate()">Import 양식 다운로드</button>
-  </div>
+  </div><button id="fetchBtn" class="btn-primary small">데이터 호출하기</button>
   <span id="urlDisplay" style="display:block; margin-top:8px;"></span>
   <pre id="output"></pre>
-  <div id="parsedTableContainer">
-    <table id="parsedTable">
-      <thead>
-        <tr><th>#</th><th>지자체</th><th>IMEI</th><th>동작</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="js/gri.js"></script>

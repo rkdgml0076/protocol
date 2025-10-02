@@ -194,7 +194,11 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
       // result.nodes 안에서 뽑아오기
       검침날짜: nodes.date || '',
       일련번호: nodes.msrNo || '',
+      SW_Ver: nodes.msrFw || '',
+      배터리: nodes.msrVolt ?? '',
       RSRP: nodes.rsrp ?? '',
+      RSRQ: nodes.rsrq ?? '',
+      SINR: nodes.snr ?? '',
       검침값: nodes.msrValue ?? '',
       계량기번호: nodes.meterNo || '', 
 
@@ -221,9 +225,13 @@ function downloadExcel() {
     // result.nodes 안에서 뽑아오기
     검침날짜: nodes.date || '',
     일련번호: nodes.msrNo || '',
+    SW_Ver: nodes.msrFw || '',
+    배터리: nodes.msrVolt ?? '',
     RSRP: nodes.rsrp ?? '',
+    RSRQ: nodes.rsrq ?? '',
+    SINR: nodes.snr ?? '',
     검침값: nodes.msrValue ?? '',
-    계량기번호: nodes.meterNo || '',
+    계량기번호: nodes.meterNo || '', 
 
     // result_json: item.result ? JSON.stringify(item.result) : '',
     }));
