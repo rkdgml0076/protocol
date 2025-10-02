@@ -182,48 +182,59 @@ document.getElementById('fetchAllBtn').addEventListener('click', async () => {
 
 document.getElementById('downloadAllResults').addEventListener('click', () => {
   if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 호출을 진행하세요.'); return; }
-  const flat = nodesDataList.map((item, idx) => {
+ const flat = nodesDataList.map((item, idx) => {
+  const nodes = item.result?.nodes || {};
+
     return {
       idx: idx + 1,
-      inputSite: item.inputSite,
-      inputGrt: item.inputGrt,
       error: item.error || '',
-      result_json: item.result ? JSON.stringify(item.result) : ''
+      지자체: item.inputSite || '',
+      IMEI: item.inputGrt || '',
+      IMSI: nodes.imsi || '',
+      // result.nodes 안에서 뽑아오기
+      검침날짜: nodes.date || '',
+      일련번호: nodes.msrNo || '',
+      RSRP: nodes.rsrp ?? '',
+      검침값: nodes.msrValue ?? '',
+      계량기번호: nodes.meterNo || '', 
+
+      // result_json: item.result ? JSON.stringify(item.result) : '',
     };
   });
-  const ws = XLSX.utils.json_to_sheet(flat);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'AllResults');
-  const now = new Date();
-  const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
-  XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
+    const ws = XLSX.utils.json_to_sheet(flat);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'AllResults');
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
+    XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
 });
 
 function downloadExcel() {
   let payload = null;
   if (nodesDataList && nodesDataList.length > 0) {
     payload = nodesDataList.map((item, idx) => ({
-      idx: idx + 1,
-      inputSite: item.inputSite,
-      inputGrt: item.inputGrt,
-      error: item.error || '',
-      result_json: item.result ? JSON.stringify(item.result) : ''
-    }));
-  } else if (latestNodesData) {
-    payload = [{
-      inputSite: latestNodesData.inputSite,
-      inputGrt: latestNodesData.inputGrt,
-      result_json: latestNodesData.result ? JSON.stringify(latestNodesData.result) : ''
-    }];
-  } else {
-    alert("먼저 데이터를 가져오세요.");
-    return;
-  }
+    idx: idx + 1,
+    error: item.error || '',
+    지자체: item.inputSite || '',
+    IMEI: item.inputGrt || '',
+    IMSI: nodes.imsi || '',
+    // result.nodes 안에서 뽑아오기
+    검침날짜: nodes.date || '',
+    일련번호: nodes.msrNo || '',
+    RSRP: nodes.rsrp ?? '',
+    검침값: nodes.msrValue ?? '',
+    계량기번호: nodes.meterNo || '',
 
-  const ws = XLSX.utils.json_to_sheet(payload);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "NodesData");
-  const now = new Date();
-  const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
-  XLSX.writeFile(wb, `nodesData_${dateStr}.xlsx`);
+    // result_json: item.result ? JSON.stringify(item.result) : '',
+    }));
+    } else if (latestNodesData) {
+      payload = [{
+        inputSite: latestNodesData.inputSite,
+        inputGrt: latestNodesData.inputGrt,
+        result_json: latestNodesData.result ? JSON.stringify(latestNodesData.result) : ''
+      }];
+    } else {
+      alert("먼저 데이터를 가져오세요.");
+      return;
+    }
 }

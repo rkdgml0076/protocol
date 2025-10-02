@@ -1,6 +1,89 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2025-10-02 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Export Excel
+<br>
+Export Excel 다운로드 시 양식 변경<br>
+
+
+### GractorAPI(JS)
+```js
+document.getElementById('downloadAllResults').addEventListener('click', () => {
+  if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 호출을 진행하세요.'); return; }
+ const flat = nodesDataList.map((item, idx) => {
+  const nodes = item.result?.nodes || {};
+
+    return {
+      idx: idx + 1,
+      error: item.error || '',
+      지자체: item.inputSite || '',
+      IMEI: item.inputGrt || '',
+      IMSI: nodes.imsi || '',
+      // result.nodes 안에서 뽑아오기
+      검침날짜: nodes.date || '',
+      일련번호: nodes.msrNo || '',
+      RSRP: nodes.rsrp ?? '',
+      검침값: nodes.msrValue ?? '',
+      계량기번호: nodes.meterNo || '', 
+
+      // result_json: item.result ? JSON.stringify(item.result) : '',
+    };
+  });
+    const ws = XLSX.utils.json_to_sheet(flat);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'AllResults');
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
+    XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
+});
+
+function downloadExcel() {
+  let payload = null;
+  if (nodesDataList && nodesDataList.length > 0) {
+    payload = nodesDataList.map((item, idx) => ({
+    idx: idx + 1,
+    error: item.error || '',
+    지자체: item.inputSite || '',
+    IMEI: item.inputGrt || '',
+    IMSI: nodes.imsi || '',
+    // result.nodes 안에서 뽑아오기
+    검침날짜: nodes.date || '',
+    일련번호: nodes.msrNo || '',
+    RSRP: nodes.rsrp ?? '',
+    검침값: nodes.msrValue ?? '',
+    계량기번호: nodes.meterNo || '',
+
+    // result_json: item.result ? JSON.stringify(item.result) : '',
+    }));
+    } else if (latestNodesData) {
+      payload = [{
+        inputSite: latestNodesData.inputSite,
+        inputGrt: latestNodesData.inputGrt,
+        result_json: latestNodesData.result ? JSON.stringify(latestNodesData.result) : ''
+      }];
+    } else {
+      alert("먼저 데이터를 가져오세요.");
+      return;
+    }
+}
+```
+
+### 진행 내용
+**Excel 출력 결과 변경**
+1. 전체 결과인 result는 주석처리 후 IMSI, 검침날짜, 일련번호, RSRP, 검침값, 계량기번호 만 출력하여 Export
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/4e80a9c6-364d-44ea-9671-77f7ed57d5a0)
+
 ---
 ### 2025-10-01 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
