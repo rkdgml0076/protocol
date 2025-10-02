@@ -78,11 +78,103 @@ function downloadExcel() {
 }
 ```
 
+## style.css
+<br>
+protocol.html 전용 CSS 분류<br>
+
+
+### pro.css
+```css
+    body {
+      font-family: sans-serif;
+      margin: 30px;
+      background: #f7f7f7;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* padding: 10px 20px; */
+      background-color: #f7f7f7;
+    }
+    .header img {
+      padding: 10px 20px;
+      height: 50px;
+      object-fit: contain;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 30px;
+    }
+    h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+    #message {
+      display:none; 
+      font-size:18px; 
+      font-weight:bold; 
+      margin-top:10px; 
+      color: #000;
+    }
+    .btn-primary{
+      display: inline-block;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      background: linear-gradient(180deg, #ddd 0%, #ccc 100%);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(21, 101, 216, 0.12);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn-primary:hover{ 
+      /* transform: translateY(-2px);  */
+      filter: brightness(.98); 
+    }
+    .btn-primary:active{ 
+      transform: translateY(0); 
+      box-shadow: 0 4px 12px rgba(21,101,216,0.14); 
+    }
+    .btn-primary:focus{ 
+      outline: none; box-shadow: 0 0 0 6px rgba(21,101,216,0.14); 
+    }
+```
+
 ### 진행 내용
 **Excel 출력 결과 변경**
 1. 전체 결과인 result는 주석처리 후 IMSI, 검침날짜, 일련번호, RSRP, 검침값, 계량기번호 만 출력하여 Export
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/4e80a9c6-364d-44ea-9671-77f7ed57d5a0)
+2. 초기 페이지 버튼 hover 기능 추가
 
 ---
 ### 2025-10-01 GitHub Commit
