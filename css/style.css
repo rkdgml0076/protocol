@@ -64,8 +64,7 @@
     }
     .btn-primary:hover{ 
       /* transform: translateY(-2px);  */
-      filter: brightness(.98); 
-      background: linear-gradient(180deg, #bbb 0%, #ccc 100%);
+      filter: brightness(.85); 
     }
     .btn-primary:active{ 
       transform: translateY(0); 
