@@ -194,7 +194,7 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
       // result.nodes 안에서 뽑아오기
       검침날짜: nodes.date || '',
       일련번호: nodes.msrNo || '',
-      SW_Ver: nodes.msrFw || '',
+      SW: nodes.msrFw || '',
       배터리: nodes.msrVolt ?? '',
       RSRP: nodes.rsrp ?? '',
       RSRQ: nodes.rsrq ?? '',
@@ -225,7 +225,7 @@ function downloadExcel() {
     // result.nodes 안에서 뽑아오기
     검침날짜: nodes.date || '',
     일련번호: nodes.msrNo || '',
-    SW_Ver: nodes.msrFw || '',
+    SW: nodes.msrFw || '',
     배터리: nodes.msrVolt ?? '',
     RSRP: nodes.rsrp ?? '',
     RSRQ: nodes.rsrq ?? '',
