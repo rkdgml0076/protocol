@@ -17,6 +17,7 @@
     .header h2 {
       margin: 0;
       font-size: 40px;
+      font-family: "Noto Sans KR", sans-serif;  
     }
     textarea {
       width: 100%;
