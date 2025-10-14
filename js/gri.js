@@ -32,9 +32,9 @@ async function fetchDataFor(grtId, siteId) {
 }
 
 function downloadTemplate() {
-    // 엑셀 시트 데이터 (헤더만 설정)
+    // 샘플 데이터
     let worksheetData = [
-    ["IMEI", "지자체"]  // 첫 번째 행: 헤더
+    ["IMEI", "지자체"], ["865343071819914", "고창군"], ["355800490911801", "김제시"], ["869692067499248", "의정부시"]
     ];
 
     // 워크시트와 워크북 생성

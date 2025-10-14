@@ -68,6 +68,16 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
       padding: 6px 15px;
     }
 ```
+## UI Design
+<br>
+Import Excel 양식 샘플 데이터 추가<br>
+
+### GractorAPI(JS)
+```JS
+    let worksheetData = [
+    ["IMEI", "지자체"], ["865343071819914", "고창군"], ["355800490911801", "김제시"], ["869692067499248", "의정부시"]
+    ];
+```
 
 ### 진행 내용
 **Excel 출력 결과 변경**
@@ -78,6 +88,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 3. 변환하기 버튼 용도 분류를 위하여 (KT) 텍스트 추가
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/e48c698f-91de-4420-b518-f3f2df4a38fc)
+4. Import 샘플 데이터는 고창군, 김제시 의정부시 3개 데이터 설정
 
 ---
 
