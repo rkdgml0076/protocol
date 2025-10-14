@@ -68,7 +68,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
       padding: 6px 15px;
     }
 ```
-## UI Design
+## Excel Sample
 <br>
 Import Excel 양식 샘플 데이터 추가<br>
 
