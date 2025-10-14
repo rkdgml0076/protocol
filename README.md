@@ -17,7 +17,6 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 
 ### GractorAPI(HTML)
 ```html
-<body oncontextmenu="return false;">
   <div class="header">
     <h2>검침 데이터 API</h2>
     <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
@@ -25,13 +24,13 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
   <br>
   <h2>복수 데이터 확인</h2>
   <label style="display:inline-flex; align-items:center; gap:8px;">
-      <span style="font-size:13px;">'1', '2', '3', '4' 번호 순서대로 버튼을 클릭하여 진행해 주세요 <br>1: Excel 양식을 다운로드하여 IMEI, 지자체(시, 군 포함 예:고창X 고창군O) 부분을 기입해주세요<br>2: 기입해주신 엑셀 파일을 선택해주세요<br>3: Excel 목록 전체 호출 버튼을 클릭하여 API 데이터를 가져옵니다.<br>4: 결과 데이터 다운로드 버튼을 클릭하여 결과를 다운로드합니다.</span>
+      <span style="font-size:13px;">'1', '2', '3', '4' 번호 순서대로 버튼을 클릭하여 진행해 주세요 <br>1: Excel 양식을 다운로드하여 IMEI, 지자체(시, 군 포함 예:고창X 고창군O) 부분을 기입해주세요<br>2: 기입해주신 엑셀 파일을 선택해주세요<br>3: 전체 데이터 불러오기 버튼을 클릭하여 API 데이터를 가져옵니다.<br>4: 결과 데이터 다운로드 버튼을 클릭하여 결과를 다운로드합니다.</span>
   </label>
   <div class="controls">
     <button class="btn-primary small" onclick="downloadTemplate()">1. Import 양식 다운로드</button>
     <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" style="display:none;" />
-    <label for="excelInput" class="btn-primary small" style="display:inline-flex; align-items:center; gap:8px; height: 22px;" >2. 엑셀 파일 선택</label>
-    <button id="fetchAllBtn" class="btn-primary small">3. Excel 목록 전체 호출</button>
+    <label for="excelInput" class="btn-primary small" style="display:inline-flex; align-items:center; gap:8px; height: 22px;" >2. Excel 파일 선택</label>
+    <button id="fetchAllBtn" class="btn-primary small">3. 전체 데이터 불러오기</button>
     <button id="downloadAllResults" class="btn-primary small">4. 결과 데이터 다운로드</button>
   </div>
 ```
@@ -75,7 +74,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 1. API 페이지 버튼 내부 텍스트 변경, 복수 데이터 확인 설명 추가
 2. 엑셀 파일 선택 버튼 디자인 통일
 --Image 참고--<br>
-![Image](https://github.com/user-attachments/assets/a745697d-4787-40e5-aafe-8f2a54c76ee4)
+![Image](https://github.com/user-attachments/assets/2a504f2c-ec4b-443b-98ac-8874ead588f9)
 3. 변환하기 버튼 용도 분류를 위하여 (KT) 텍스트 추가
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/e48c698f-91de-4420-b518-f3f2df4a38fc)
