@@ -12,14 +12,23 @@
   </div>
   <br>
   <h2>복수 데이터 확인</h2>
+  <label style="display:inline-flex; align-items:center; gap:8px;">
+      <span style="font-size:13px;">'1', '2', '3', '4' 번호 순서대로 버튼을 클릭하여 진행해 주세요 <br>1: Excel 양식을 다운로드하여 IMEI, 지자체(시, 군 포함 예:고창X 고창군O) 부분을 기입해주세요<br>2: 기입해주신 엑셀 파일을 선택해주세요<br>3: Excel 목록 전체 호출 버튼을 클릭하여 API 데이터를 가져옵니다.<br>4: 결과 데이터 다운로드 버튼을 클릭하여 결과를 다운로드합니다.</span>
+  </label>
   <div class="controls">
-    <button id="fetchAllBtn" class="btn-primary small">Excel 목록 전체 호출</button>
-    <label style="display:inline-flex; align-items:center; gap:8px;">
-      <span style="font-size:13px;">"Excel 목록 전체 호출" 진행 후 "데이터 다운로드"가 가능합니다.</span>
-    </label>
-    <button id="downloadAllResults" class="btn-primary small">호출된 데이터 다운로드</button>
-    <button class="btn-primary small" onclick="downloadTemplate()">Import 양식 다운로드</button>
-    <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" />
+    <button class="btn-primary small" onclick="downloadTemplate()">1. Import 양식 다운로드</button>
+    <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" style="display:none;" />
+    <label for="excelInput" class="btn-primary small" style="display:inline-flex; align-items:center; gap:8px; height: 22px;" >2. 엑셀 파일 선택</label>
+    <button id="fetchAllBtn" class="btn-primary small">3. Excel 목록 전체 호출</button>
+    <!-- progress bar (controls 아래에 추가) -->
+    <!-- <div id="progressContainer" style="display:none; margin-top:12px; max-width:900px;">
+      <div style="background:#eee; border-radius:8px; height:18px; overflow:hidden;">
+        <div id="progressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#4caf50,#2e7d32);"></div>
+      </div>
+      <div id="progressText" style="margin-top:6px; font-size:13px; color:#333;">0%</div>
+    </div> -->
+
+    <button id="downloadAllResults" class="btn-primary small">4. 결과 데이터 다운로드</button>
   </div>
   <div id="parsedTableContainer">
     <table id="parsedTable">

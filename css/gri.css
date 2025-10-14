@@ -61,21 +61,6 @@
     #apiheader {
       height: 45px;
     }
-    .excel-icon-btn {
-      margin: auto;
-      position: relative;
-      background: none;
-      border: none;
-      justify-content: center;
-      align-items: center;
-      border-radius: 20%;
-      padding: 0;
-    }
-    .excel-icon-btn img {
-      width: 40px;
-      height: 40px;
-      margin: 2px;
-    }
     #message {
       display:none; 
       font-size:18px; 

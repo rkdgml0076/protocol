@@ -56,3 +56,25 @@
       margin-top:10px; 
       color: #000;
     }
+    .btn-primary{
+      display: inline-block;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      /* font-size: 14px; */
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 5px;
+      border: none;
+      text-decoration: none;
+      background: linear-gradient(180deg, #ccc 0%, #aaa 100%);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(21, 101, 216, 0.12);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn-primary:hover{ 
+      filter: brightness(.92); 
+    }
+    .small {
+      height: 45px;
+      font-size: 18px;
+      padding: 6px 15px;
+    }
