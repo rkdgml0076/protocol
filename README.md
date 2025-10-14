@@ -72,10 +72,12 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 
 ### 진행 내용
 **Excel 출력 결과 변경**
-1. 버튼 내부 텍스트 변경, 복수 데이터 확인 설명 추가
+1. API 페이지 버튼 내부 텍스트 변경, 복수 데이터 확인 설명 추가
 2. 엑셀 파일 선택 버튼 디자인 통일
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/a745697d-4787-40e5-aafe-8f2a54c76ee4)
+3. 변환하기 버튼 용도 분류를 위하여 (KT) 텍스트 추가
+--Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/e48c698f-91de-4420-b518-f3f2df4a38fc)
 
 ---
