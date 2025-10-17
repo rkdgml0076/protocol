@@ -5,7 +5,7 @@ Site URL: https://rkdgml0076.github.io/protocol/
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
 - 개발 환경(Code Editer) Visual Studio Code 사용 <br>
-- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- index.html을 초기 페이지로 설정
 - Github 와 연동 및 git 활용을 위하여 git Download
 URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
@@ -96,7 +96,7 @@ Import Excel 양식 샘플 데이터 추가<br>
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
 - 개발 환경(Code Editer) Visual Studio Code 사용 <br>
-- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- index.html을 초기 페이지로 설정
 - Github 와 연동 및 git 활용을 위하여 git Download
 URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
@@ -248,15 +248,15 @@ protocol.html 전용 CSS 분류<br>
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
 - 개발 환경(Code Editer) Visual Studio Code 사용 <br>
-- HTML 파일 내부에 script, style 코드 포함하여 진행(JS, CSS 파일 미분류)
+- index.html을 초기 페이지로 설정
 - Github 와 연동 및 git 활용을 위하여 git Download
 URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
-## GractorAPI_1.0.0
+## NTmoreAPI_1.0.0
 <br>
-기존 DataFormatCheck 내부에 있던 그렉터 API 데이터 확인 기능을 별도의 페이지로 분류<br>
+기존 DataFormatCheck 내부에 있던 검침 데이터 API 데이터 확인 기능을 별도의 페이지로 분류<br>
  - index.html 내부에 있던 전체 코드를 GractorAPI, DataFormatCheck 별도 페이지로 분류<br>
  - 상기 페이지 적용되는 style, script를 별도 css, js로 분류하여 관리<br>
  - README 코드 기입 시 적용된 HTML, CSS, JS 분류하여 기재
@@ -267,12 +267,12 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>GractorAPI_1.0.0</title>
+  <title>NTmoreAPI_1.0.0</title>
   <link rel="stylesheet" href="css/gri.css"/>
 </head>
 <body oncontextmenu="return false;">
   <div class="header">
-    <h2>그렉터 API 데이터</h2>
+    <h2>검침 데이터 API 데이터</h2>
     <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
   </div>
   <br>
@@ -713,7 +713,7 @@ function downloadExcel() {
       <h2>사용하실 페이지를 클릭하세요</h2>
       <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
     </div>
-    <h3>API: 그렉터 API에서 데이터를 호출하여 확인하는 페이지<br>PROTOCOL: Payload 데이터를 파싱하여 서버에 전송된 상세정보를 확인하는 페이지</h3>
+    <h3>API: 검침 데이터 API에서 데이터를 호출하여 확인하는 페이지<br>PROTOCOL: Payload 데이터를 파싱하여 서버에 전송된 상세정보를 확인하는 페이지</h3>
     <br>
     <a class="btn-primary" href="api.html" target="_blank" rel="noopener noreferrer" role="button" aria-pressed="false" style="background: linear-gradient(180deg, #999 0%, #aaa 100%);">API</a>
     <a class="btn-primary" href="protocol.html" target="_blank" rel="noopener noreferrer" role="button" aria-pressed="false" style="background: linear-gradient(180deg, #999 0%, #aaa 100%);">PROTOCOL</a>
@@ -1201,13 +1201,13 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
-## 그렉터 API 접속 URL 및 받아온 데이터 Excel Export
+## 검침 데이터 API 접속 URL 및 받아온 데이터 Excel Export
 <br>
 
-값 입력 후 데이터 가져오기를 클릭할 시 그렉터 API 사이트로 연결되는 URL 생성 및 가져온 데이터 Excel로 출력 가능<br>
+값 입력 후 데이터 가져오기를 클릭할 시 검침 데이터 API 사이트로 연결되는 URL 생성 및 가져온 데이터 Excel로 출력 가능<br>
 ```html
 <div id="apiheader">
-  <h2>그렉터 API 데이터 확인</h2>
+  <h2>검침 데이터 API 데이터 확인</h2>
 </div>
 <textarea id="grtIdInput" placeholder="IMEI(예: 865343071819914)"></textarea>
 <span id="urlDisplay" style="position: absolute; margin-left: 5px;"></span><br>
@@ -1457,13 +1457,13 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
-## 그렉터 API
+## 검침 데이터 API
 <br>
 
 지자체를 선택한 뒤 IMEI를 입력하여 API 데이터를 화면에 출력<br>
 ```html
 <div id="apiheader">
-    <h2>그렉터 API 데이터 확인</h2>
+    <h2>검침 데이터 API 데이터 확인</h2>
   </div>
   <textarea id="grtIdInput" placeholder="IMEI(예: 865343071819914)"></textarea><br>
   <select id="siteIdInput">
@@ -1547,9 +1547,9 @@ if (fieldName === "meterStatus") {
 <br>
 
 ### 진행 내용
-**그렉터 API 데이터 출력 성공**
+**검침 데이터 API 데이터 출력 성공**
 1. nodes 내부의 값만 가져오도록 코딩
-2. 서버업체 그렉터 지차체만 메뉴 고를 수 있게 설정: 의정부시, 부산시, 연천군, 김해시, 아산시, 함안군, 고창군, 하동군, 양산시, 군포시 김제시, 남해군<br>
+2. 서버업체 지차체만 메뉴 고를 수 있게 설정: 의정부시, 부산시, 연천군, 김해시, 아산시, 함안군, 고창군, 하동군, 양산시, 군포시 김제시, 남해군<br>
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/2d0e4cbe-99c7-4690-b8a8-223b9d161a6d)<br>
 3. Hex 변환 추가: "msrCnt" 
