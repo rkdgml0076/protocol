@@ -15,7 +15,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 <br>
 검침 데이터 API 버튼 위치 변경 및 설명 추가<br>
 
-### GractorAPI(HTML)
+### NTmoreAPI(HTML)
 ```html
   <div class="header">
     <h2>검침 데이터 API</h2>
@@ -72,7 +72,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 <br>
 Import Excel 양식 샘플 데이터 추가<br>
 
-### GractorAPI(JS)
+### NTmoreAPI(JS)
 ```JS
     let worksheetData = [
     ["IMEI", "지자체"], ["865343071819914", "고창군"], ["355800490911801", "김제시"], ["869692067499248", "의정부시"]
@@ -107,7 +107,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 Export Excel 다운로드 시 양식 변경<br>
 
 
-### GractorAPI(JS)
+### NTmoreAPI(JS)
 ```js
 document.getElementById('downloadAllResults').addEventListener('click', () => {
   if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 호출을 진행하세요.'); return; }
@@ -257,11 +257,11 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 ## NTmoreAPI_1.0.0
 <br>
 기존 DataFormatCheck 내부에 있던 검침 데이터 API 데이터 확인 기능을 별도의 페이지로 분류<br>
- - index.html 내부에 있던 전체 코드를 GractorAPI, DataFormatCheck 별도 페이지로 분류<br>
+ - index.html 내부에 있던 전체 코드를 NTmoreAPI, DataFormatCheck 별도 페이지로 분류<br>
  - 상기 페이지 적용되는 style, script를 별도 css, js로 분류하여 관리<br>
  - README 코드 기입 시 적용된 HTML, CSS, JS 분류하여 기재
 
-### GractorAPI(HTML)
+### NTmoreAPI(HTML)
 ```html 
 <!DOCTYPE html>
 <html lang="ko">
@@ -328,7 +328,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 </html>
 ```
 
-### GractorAPI(CSS)
+### NTmoreAPI(CSS)
 ```css
     body {
       font-family: sans-serif;
@@ -465,7 +465,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
     }
 ```
 
-### GractorAPI(JS)
+### NTmoreAPI(JS)
 ```js
 
 document.addEventListener('keydown', function (e) {
@@ -727,7 +727,7 @@ function downloadExcel() {
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/098f85b0-cf24-4947-ab46-d7a3b0868635)
 
-**GractorAPI page**
+**NTmoreAPI page**
 1. API 페이지 분류 및 일부 UI 디자인 변경
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/7f81505c-ed2e-48bd-8282-fe875bea9f5a)<br>
