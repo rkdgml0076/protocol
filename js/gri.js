@@ -105,7 +105,7 @@ function renderParsedTable() {
       <td>${escapeHtml(r.site)}</td>
       <td>${escapeHtml(r.imei)}</td>
       <td>
-        <button class="btn-primary small" data-idx="${i}" onclick="setAndFetch(${i})">데이터 호출하기</button>
+        <button class="btn-primary small" data-idx="${i}" onclick="setAndFetch(${i})">데이터 불러오기</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -177,11 +177,11 @@ document.getElementById('fetchAllBtn').addEventListener('click', async () => {
     }
     const res = await fetchDataFor(imei, finalSite);
   }
-  alert('데이터 호출 완료. 결과는 "API 전체 조회 데이터 다운로드"로 엑셀 저장하세요.');
+  alert('데이터 불러오기 완료. 결과는 "4. 결과 데이터 다운로드"로 엑셀 저장하세요.');
 });
 
 document.getElementById('downloadAllResults').addEventListener('click', () => {
-  if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 호출을 진행하세요.'); return; }
+  if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 불러오기를 진행하세요.'); return; }
  const flat = nodesDataList.map((item, idx) => {
   const nodes = item.result?.nodes || {};
 
