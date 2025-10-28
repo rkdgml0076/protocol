@@ -602,7 +602,7 @@ if (headerHex === "A3" && typeHex === "70") {
 }
 
 const swapAndDexFields = [
-  "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", 
+  "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", "tempInfo",
   "year", "month", "day", "hour", "minute", "second", "msrCnt",
   "msrStdValue", "msrOffset", "mValue", "tempValue"
 ];
@@ -728,6 +728,14 @@ fieldMap.forEach(([length, start, fieldName]) => {
       displayValue = intValue.toString() + '℃';
     }
   }
+  if (fieldName.startsWith("tempInfo")) {
+    const intValue = parseInt(rawValue, 16);
+    if (intValue >= 128) {
+      displayValue = `-${intValue - 128 + 1}℃`;
+    } else {
+      displayValue = intValue.toString() + '℃';
+    }
+  }
   if (fieldName === "meterType") {
     displayValue = division;
     displayValue = `-${displayValue}`;
@@ -743,6 +751,11 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
   if (fieldName === "snr") {
     displayValue = `${displayValue}`;
+    if (displayValue >= 128) {
+      displayValue = `-${256 - displayValue}`;
+    } else {
+      displayValue = displayValue.toString();
+    }
   }
   if (fieldName === "year") {
     msrOffsetyearVal = displayValue;
