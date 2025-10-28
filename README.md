@@ -1,6 +1,53 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2025-10-28 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## tempInfo
+<br>
+일체형 온도 값 및 SNR 값 수정<br>
+
+
+### Protocol(JS)
+```js
+  const swapAndDexFields = [
+    "rssi", "devTemp", "cid", "rsrp", "rsrq", "snr", "tempInfo",
+    "year", "month", "day", "hour", "minute", "second", "msrCnt",
+    "msrStdValue", "msrOffset", "mValue", "tempValue"
+  ];
+  if (fieldName === "snr") {
+    displayValue = `${displayValue}`;
+    if (displayValue >= 128) {
+      displayValue = `-${256 - displayValue}`;
+    } else {
+      displayValue = displayValue.toString();
+    }
+  }
+    if (fieldName.startsWith("tempInfo")) {
+    const intValue = parseInt(rawValue, 16);
+    if (intValue >= 128) {
+      displayValue = `-${intValue - 128 + 1}℃`;
+    } else {
+      displayValue = intValue.toString() + '℃';
+    }
+  }
+```
+
+### 진행 내용
+**Excel 출력 결과 변경**
+1. 일체형 계량기 TEMP 측정 값인 tempInfo 파싱
+2. SNR 음수 값 파싱되도록 수정
+
+---
+
 ### 2025-10-14 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
