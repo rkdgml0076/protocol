@@ -723,7 +723,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName.startsWith("devTemp")) {
     const intValue = parseInt(rawValue, 16);
     if (intValue >= 128) {
-      displayValue = `-${intValue - 128 + 1}℃`;
+      displayValue = `-${256 - intValue}℃`;
     } else {
       displayValue = intValue.toString() + '℃';
     }
@@ -731,7 +731,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName.startsWith("tempInfo")) {
     const intValue = parseInt(rawValue, 16);
     if (intValue >= 128) {
-      displayValue = `-${intValue - 128 + 1}℃`;
+      displayValue = `-${256 - intValue}℃`;
     } else {
       displayValue = intValue.toString() + '℃';
     }
