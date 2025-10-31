@@ -1,6 +1,136 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2025-10-31 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## ProgressBar
+<br>
+전체 데이터 불러오기 진행률 표시<br>
+
+### NTmoreAPI(HTML)
+```html
+  <!-- progressBar 영역 -->
+  <div id="progressContainer" style="display:none; margin-top:12px; max-width:300px;">
+    <div style="background:#eee; border-radius:8px; height:18px; overflow:hidden;">
+      <div id="progressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#4caf50,#2e7d32); transition:width 0.3s;"></div>
+    </div>
+    <div id="progressText" style="margin-top:6px; font-size:13px; color:#333;">0%</div>
+  </div>
+```
+
+### NTmoreAPI(JS)
+```js
+document.getElementById('fetchAllBtn').addEventListener('click', async () => {
+  if (!parsedRows || parsedRows.length === 0) {
+    alert("선택된 Excel 파일이 없습니다.");
+    return;
+  }
+  if (!confirm(`총 ${parsedRows.length}건을 순차적으로 호출합니다. 진행할까요?`)) return;
+
+  const btn = document.getElementById('fetchAllBtn');
+  btn.disabled = true;
+
+  const progressContainer = document.getElementById('progressContainer');
+  const bar = document.getElementById('progressBar');
+  const text = document.getElementById('progressText');
+
+  if (!progressContainer || !bar || !text) {
+    alert("진행률 표시 요소가 존재하지 않습니다.");
+    btn.disabled = false;
+    return;
+  }
+
+  progressContainer.style.display = 'block';
+  nodesDataList = [];
+
+  for (let i = 0; i < parsedRows.length; i++) {
+    const { imei, site } = parsedRows[i];
+
+    // IMEI가 없으면 기록 후 건너뛰기
+    if (!imei) {
+      nodesDataList.push({ inputGrt: imei, inputSite: site, error: 'IMEI missing' });
+      continue;
+    }
+
+    // 사이트 처리
+    let finalSite = site || document.getElementById('siteIdInput')?.value;
+    const select = document.getElementById('siteIdInput');
+    if (select) {
+      let found = false;
+      for (let j = 0; j < select.options.length; j++) {
+        if (select.options[j].value.toLowerCase() === String(finalSite).toLowerCase()) {
+          finalSite = select.options[j].value;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        for (let j = 0; j < select.options.length; j++) {
+          if (select.options[j].text.toLowerCase() === String(finalSite).toLowerCase()) {
+            finalSite = select.options[j].value;
+            found = true;
+            break;
+          }
+        }
+      }
+    } else if (!finalSite) {
+      nodesDataList.push({ inputGrt: imei, inputSite: finalSite, error: 'Site missing' });
+      continue;
+    }
+
+    // fetchDataFor 안전하게 호출
+    try {
+      await fetchDataFor(imei, finalSite);
+    } catch (err) {
+      nodesDataList.push({
+        inputGrt: imei,
+        inputSite: finalSite,
+        error: err?.message || String(err)
+      });
+    }
+
+    // 진행률 업데이트
+    const percent = Math.round(((i + 1) / parsedRows.length) * 100);
+    bar.style.width = percent + '%';
+    text.textContent = `${percent}% (${i + 1}/${parsedRows.length})`;
+  }
+
+  btn.disabled = false;
+  alert('데이터 불러오기 완료. 결과는 "4. 결과 데이터 다운로드"로 엑셀 저장하세요.');
+});
+```
+
+devTemp bug fix<br>
+### protocol(JS)
+```js
+  if (fieldName.startsWith("devTemp")) {
+    const intValue = parseInt(rawValue, 16);
+    if (intValue >= 128) {
+      displayValue = `-${256 - intValue}℃`;
+    } else {
+      displayValue = intValue.toString() + '℃';
+    }
+  }
+```
+
+### 진행 내용
+**ProgressBar 추가**
+1. 기존 코드에 진행률 표시 코드 추가 시 500 Error가 나타나 'fetchAllBtn' JS 전체 부분 수정
+2. 불필요한 주석 코드 삭제 Excel Export 코드 삭제
+--Image 참고--<br>
+![Image](https://github.com/user-attachments/assets/96018199-2b32-4f18-948f-7c693e1b7eac)
+3. devTemp 영하 기온이 보수 값(256)으로 출력되는 현상 수정
+
+---
+
 ### 2025-10-28 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

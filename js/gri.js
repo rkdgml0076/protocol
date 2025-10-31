@@ -153,36 +153,88 @@ async function setAndFetch(idx) {
 }
 
 document.getElementById('fetchAllBtn').addEventListener('click', async () => {
-  if (!parsedRows || parsedRows.length === 0) { alert("선택된 Excel 파일이 없습니다."); return; }
+  if (!parsedRows || parsedRows.length === 0) {
+    alert("선택된 Excel 파일이 없습니다.");
+    return;
+  }
   if (!confirm(`총 ${parsedRows.length}건을 순차적으로 호출합니다. 진행할까요?`)) return;
+
+  const btn = document.getElementById('fetchAllBtn');
+  btn.disabled = true;
+
+  const progressContainer = document.getElementById('progressContainer');
+  const bar = document.getElementById('progressBar');
+  const text = document.getElementById('progressText');
+
+  if (!progressContainer || !bar || !text) {
+    alert("진행률 표시 요소가 존재하지 않습니다.");
+    btn.disabled = false;
+    return;
+  }
+
+  progressContainer.style.display = 'block';
   nodesDataList = [];
-  for (let i=0;i<parsedRows.length;i++){
-    const r = parsedRows[i];
-    let site = r.site || document.getElementById('siteIdInput').value;
-    const imei = r.imei || document.getElementById('grtIdInput').value;
+
+  for (let i = 0; i < parsedRows.length; i++) {
+    const { imei, site } = parsedRows[i];
+
+    // IMEI가 없으면 기록 후 건너뛰기
     if (!imei) {
       nodesDataList.push({ inputGrt: imei, inputSite: site, error: 'IMEI missing' });
       continue;
     }
+
+    // 사이트 처리
+    let finalSite = site || document.getElementById('siteIdInput')?.value;
     const select = document.getElementById('siteIdInput');
-    let finalSite = site;
-    let found = false;
-    for (let j=0;j<select.options.length;j++){
-      if (select.options[j].value.toLowerCase() === String(site).toLowerCase()) { finalSite = select.options[j].value; found = true; break; }
-    }
-    if (!found) {
-      for (let j=0;j<select.options.length;j++){
-        if (select.options[j].text.toLowerCase() === String(site).toLowerCase()) { finalSite = select.options[j].value; found = true; break; }
+    if (select) {
+      let found = false;
+      for (let j = 0; j < select.options.length; j++) {
+        if (select.options[j].value.toLowerCase() === String(finalSite).toLowerCase()) {
+          finalSite = select.options[j].value;
+          found = true;
+          break;
+        }
       }
+      if (!found) {
+        for (let j = 0; j < select.options.length; j++) {
+          if (select.options[j].text.toLowerCase() === String(finalSite).toLowerCase()) {
+            finalSite = select.options[j].value;
+            found = true;
+            break;
+          }
+        }
+      }
+    } else if (!finalSite) {
+      nodesDataList.push({ inputGrt: imei, inputSite: finalSite, error: 'Site missing' });
+      continue;
     }
-    const res = await fetchDataFor(imei, finalSite);
+
+    // fetchDataFor 안전하게 호출
+    try {
+      await fetchDataFor(imei, finalSite);
+    } catch (err) {
+      nodesDataList.push({
+        inputGrt: imei,
+        inputSite: finalSite,
+        error: err?.message || String(err)
+      });
+    }
+
+    // 진행률 업데이트
+    const percent = Math.round(((i + 1) / parsedRows.length) * 100);
+    bar.style.width = percent + '%';
+    text.textContent = `${percent}% (${i + 1}/${parsedRows.length})`;
   }
+
+  btn.disabled = false;
   alert('데이터 불러오기 완료. 결과는 "4. 결과 데이터 다운로드"로 엑셀 저장하세요.');
 });
 
+
 document.getElementById('downloadAllResults').addEventListener('click', () => {
   if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 불러오기를 진행하세요.'); return; }
- const flat = nodesDataList.map((item, idx) => {
+  const flat = nodesDataList.map((item, idx) => {
   const nodes = item.result?.nodes || {};
 
     return {
@@ -190,8 +242,8 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
       error: item.error || '',
       지자체: item.inputSite || '',
       IMEI: item.inputGrt || '',
-      IMSI: nodes.imsi || '',
       // result.nodes 안에서 뽑아오기
+      IMSI: nodes.imsi || '',
       검침날짜: nodes.date || '',
       일련번호: nodes.msrNo || '',
       SW: nodes.msrFw || '',
@@ -212,37 +264,3 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
     const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
     XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
 });
-
-function downloadExcel() {
-  let payload = null;
-  if (nodesDataList && nodesDataList.length > 0) {
-    payload = nodesDataList.map((item, idx) => ({
-    idx: idx + 1,
-    error: item.error || '',
-    지자체: item.inputSite || '',
-    IMEI: item.inputGrt || '',
-    IMSI: nodes.imsi || '',
-    // result.nodes 안에서 뽑아오기
-    검침날짜: nodes.date || '',
-    일련번호: nodes.msrNo || '',
-    SW: nodes.msrFw || '',
-    배터리: nodes.msrVolt ?? '',
-    RSRP: nodes.rsrp ?? '',
-    RSRQ: nodes.rsrq ?? '',
-    SINR: nodes.snr ?? '',
-    검침값: nodes.msrValue ?? '',
-    계량기번호: nodes.meterNo || '', 
-
-    // result_json: item.result ? JSON.stringify(item.result) : '',
-    }));
-    } else if (latestNodesData) {
-      payload = [{
-        inputSite: latestNodesData.inputSite,
-        inputGrt: latestNodesData.inputGrt,
-        result_json: latestNodesData.result ? JSON.stringify(latestNodesData.result) : ''
-      }];
-    } else {
-      alert("먼저 데이터를 가져오세요.");
-      return;
-    }
-}

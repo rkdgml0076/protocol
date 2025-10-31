@@ -20,16 +20,16 @@
     <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" style="display:none;" />
     <label for="excelInput" class="btn-primary small" style="display:inline-flex; align-items:center; gap:8px; height: 22px;" >2. Excel 파일 선택</label>
     <button id="fetchAllBtn" class="btn-primary small">3. 전체 데이터 불러오기</button>
-    <!-- progress bar (초기에는 숨김) -->
-    <!-- <div id="progressContainer" style="display:none; margin-top:12px; max-width:900px;">
-      <div style="background:#eee; border-radius:8px; height:18px; overflow:hidden;">
-        <div id="progressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#4caf50,#2e7d32);"></div>
-      </div>
-      <div id="progressText" style="margin-top:6px; font-size:13px; color:#333;">0%</div>
-    </div> -->
-  
     <button id="downloadAllResults" class="btn-primary small">4. 결과 데이터 다운로드</button>
   </div>
+  <!-- progressBar 영역 -->
+  <div id="progressContainer" style="display:none; margin-top:12px; max-width:300px;">
+    <div style="background:#eee; border-radius:8px; height:18px; overflow:hidden;">
+      <div id="progressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#4caf50,#2e7d32); transition:width 0.3s;"></div>
+    </div>
+    <div id="progressText" style="margin-top:6px; font-size:13px; color:#333;">0%</div>
+  </div>
+
   <div id="parsedTableContainer">
     <table id="parsedTable">
       <thead>
