@@ -124,7 +124,7 @@ devTemp bug fix<br>
 ### 진행 내용
 **ProgressBar 추가**
 1. 기존 코드에 진행률 표시 코드 추가 시 500 Error가 나타나 'fetchAllBtn' JS 전체 부분 수정
-2. 불필요한 주석 코드 삭제 Excel Export 코드 삭제
+2. 불필요한 주석 코드 삭제 및 Excel Export 코드 삭제
 --Image 참고--<br>
 ![Image](https://github.com/user-attachments/assets/96018199-2b32-4f18-948f-7c693e1b7eac)
 3. devTemp 영하 기온이 보수 값(256)으로 출력되는 현상 수정
