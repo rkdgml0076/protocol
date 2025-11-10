@@ -1,6 +1,126 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2025-11-10 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Menubar
+<br>
+지자체 선택 메뉴바 직접 입력 가능<br>
+
+### NTmoreAPI(CSS)
+```css
+  #siteIdInput, #siteIdInput_editable {
+    width: 220px;
+    height: 35px;
+    font-family: sans-serif;
+    font-size: 14px;
+    border: 1px solid #000;
+    border-radius: 2px;
+    padding: 4px 6px;
+    background: #fff;
+    box-sizing: border-box;
+  }
+```
+
+### NTmoreAPI(JS)
+```js
+function makeEditable(selectEl) {
+  // handler는 항상 event.currentTarget을 사용해서 "현재" select를 참조
+  const handler = function (event) {
+    const sel = event.currentTarget; // 현재 DOM에 있는 select
+    const currentValue = sel.value;
+    const currentText = sel.options[sel.selectedIndex]?.text || '';
+
+    // input 생성
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentText;
+    input.id = sel.id + '_editable';
+    input.style.minWidth = (sel.offsetWidth || 160) + 'px';
+
+    // select -> input 교체
+    sel.replaceWith(input);
+    input.focus();
+    // 커서 끝으로 이동
+    input.setSelectionRange(input.value.length, input.value.length);
+
+    // 엔터로 확정 지원
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        input.blur(); // blur 이벤트로 한 번에 처리
+      } else if (e.key === 'Escape') {
+        // ESC 누르면 취소하고 원래 select 복원
+        restoreSelect(sel, currentValue, currentText);
+      }
+    });
+
+    // blur 시 처리
+    input.addEventListener('blur', () => {
+      const newValueRaw = input.value.trim();
+      const newValue = newValueRaw;
+      // 새 select를 원본 select의 클론으로 만듦 (옵션 포함)
+      const newSelect = sel.cloneNode(true);
+
+      if (newValue) {
+        // 기존 옵션 중 텍스트 또는 value가 같은지 검사
+        const existingOption = Array.from(newSelect.options).find(
+          (opt) => opt.text === newValue || opt.value === newValue
+        );
+
+        if (existingOption) {
+          // 중복이면 기존 옵션을 선택
+          newSelect.value = existingOption.value;
+        } else {
+          // 중복이 없으면 맨 위에 추가 (원하면 끝에 추가로 변경 가능)
+          const addedOption = document.createElement('option');
+          // value는 입력 그대로 사용 (원하면 변환 로직 추가)
+          addedOption.value = newValue;
+          addedOption.textContent = newValue;
+          newSelect.insertBefore(addedOption, newSelect.firstChild);
+          newSelect.value = addedOption.value;
+        }
+      } else {
+        // 입력이 비어있으면 이전 선택값 유지
+        newSelect.value = currentValue;
+      }
+
+      // input을 교체하고 다시 이벤트 등록
+      input.replaceWith(newSelect);
+      makeEditable(newSelect);
+    });
+
+    // ESC 취소시 원래 select 복구 함수
+    function restoreSelect(originalSelect, value, text) {
+      const restored = originalSelect.cloneNode(true);
+      restored.value = value;
+      // 교체
+      const maybeInput = document.getElementById(originalSelect.id + '_editable');
+      if (maybeInput) maybeInput.replaceWith(restored);
+      makeEditable(restored);
+    }
+  };
+
+  // 기존에 동일한 핸들러가 중복 등록되는 걸 방지하려면 먼저 리스너 제거(안전)
+  selectEl.removeEventListener('dblclick', handler);
+  selectEl.addEventListener('dblclick', handler);
+}
+```
+
+### 진행 내용
+**메뉴바 기능 추가**
+1. 더블 클릭 시 지자체 이름 직접 입력 가능하도록 변경
+2. 입력 가능한 지자체는 메뉴바에서 고를 수 있는 지자체와 같으며, 새로 입력한 지자체는 저장은 되나 실질적으로 사용 불가(수정필요)
+
+---
+
 ### 2025-10-31 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

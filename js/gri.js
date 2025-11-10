@@ -31,6 +31,90 @@ async function fetchDataFor(grtId, siteId) {
   }
 }
 
+function makeEditable(selectEl) {
+  // handler는 항상 event.currentTarget을 사용해서 "현재" select를 참조
+  const handler = function (event) {
+    const sel = event.currentTarget; // 현재 DOM에 있는 select
+    const currentValue = sel.value;
+    const currentText = sel.options[sel.selectedIndex]?.text || '';
+
+    // input 생성
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentText;
+    input.id = sel.id + '_editable';
+    input.style.minWidth = (sel.offsetWidth || 160) + 'px';
+
+    // select -> input 교체
+    sel.replaceWith(input);
+    input.focus();
+    // 커서 끝으로 이동
+    input.setSelectionRange(input.value.length, input.value.length);
+
+    // 엔터로 확정 지원
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        input.blur(); // blur 이벤트로 한 번에 처리
+      } else if (e.key === 'Escape') {
+        // ESC 누르면 취소하고 원래 select 복원
+        restoreSelect(sel, currentValue, currentText);
+      }
+    });
+
+    // blur 시 처리
+    input.addEventListener('blur', () => {
+      const newValueRaw = input.value.trim();
+      const newValue = newValueRaw;
+      // 새 select를 원본 select의 클론으로 만듦 (옵션 포함)
+      const newSelect = sel.cloneNode(true);
+
+      if (newValue) {
+        // 기존 옵션 중 텍스트 또는 value가 같은지 검사
+        const existingOption = Array.from(newSelect.options).find(
+          (opt) => opt.text === newValue || opt.value === newValue
+        );
+
+        if (existingOption) {
+          // 중복이면 기존 옵션을 선택
+          newSelect.value = existingOption.value;
+        } else {
+          // 중복이 없으면 맨 위에 추가 (원하면 끝에 추가로 변경 가능)
+          const addedOption = document.createElement('option');
+          // value는 입력 그대로 사용 (원하면 변환 로직 추가)
+          addedOption.value = newValue;
+          addedOption.textContent = newValue;
+          newSelect.insertBefore(addedOption, newSelect.firstChild);
+          newSelect.value = addedOption.value;
+        }
+      } else {
+        // 입력이 비어있으면 이전 선택값 유지
+        newSelect.value = currentValue;
+      }
+
+      // input을 교체하고 다시 이벤트 등록
+      input.replaceWith(newSelect);
+      makeEditable(newSelect);
+    });
+
+    // ESC 취소시 원래 select 복구 함수
+    function restoreSelect(originalSelect, value, text) {
+      const restored = originalSelect.cloneNode(true);
+      restored.value = value;
+      // 교체
+      const maybeInput = document.getElementById(originalSelect.id + '_editable');
+      if (maybeInput) maybeInput.replaceWith(restored);
+      makeEditable(restored);
+    }
+  };
+
+  // 기존에 동일한 핸들러가 중복 등록되는 걸 방지하려면 먼저 리스너 제거(안전)
+  selectEl.removeEventListener('dblclick', handler);
+  selectEl.addEventListener('dblclick', handler);
+}
+
+// 초기 호출
+const initialSelect = document.getElementById('siteIdInput');
+makeEditable(initialSelect);
 function downloadTemplate() {
     // 샘플 데이터
     let worksheetData = [
