@@ -364,7 +364,7 @@ const fieldMapV6 = [
   [16, 7, "imei"],
   [16, 23, "imsi"],
   [2, 39, "rssi"],
-  [2, 41, "ber"],
+  [2, 41, "NoACK"],
   [8, 43, "cid"],
   [4, 51, "rsrp"],
   [4, 55, "rsrq"],

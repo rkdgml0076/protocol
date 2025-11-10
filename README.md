@@ -114,10 +114,77 @@ function makeEditable(selectEl) {
 }
 ```
 
+ber fix<br>
+### Protocol(JS)
+```js
+/* DataFormat_V2.0 */
+const fieldMapV6 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "NoACK"],
+  [8, 43, "cid"],
+  [4, 51, "rsrp"],
+  [4, 55, "rsrq"],
+  [4, 59, "snr"],
+  [10, 63, "devNo"],
+  [4, 73, "devFw"],
+  [2, 77, "devVolt"],
+  [8, 79, "meterNo"],
+  [2, 87, "meterType"],
+  [2, 89, "meterCaliber"],
+  [2, 91, "meterStatus"],
+  [2, 93, "manufacturerCode"],
+  [2, 95, "tempInfo"],
+  [2, 97, "correctionInfo"],
+  [4, 99, "Reserved"],
+  [2, 103, "timeInterval"],
+  [2, 105, "msrCycle"],
+  [2, 107, "msrReport"],
+  [2, 109, "year"],
+  [2, 111, "month"],
+  [2, 113, "day"],
+  [2, 115, "hour"],
+  [2, 117, "minute"],
+  [2, 119, "second"],
+  [2, 121, "msrCycle"],
+  [2, 123, "msrCnt"],
+  [2, 125, "msrStdIdx"],
+  [8, 127, "mValue 0"],
+  [8, 135, "mValue 1"],
+  [8, 143, "mValue 2"],
+  [8, 151, "mValue 3"],
+  [8, 159, "mValue 4"],
+  [8, 167, "mValue 5"],
+  [8, 175, "mValue 6"],
+  [8, 183, "mValue 7"],
+  [8, 191, "mValue 8"],
+  [8, 199, "mValue 9"],
+  [8, 207, "mValue 10"],
+  [8, 215, "mValue 11"],
+  [8, 223, "mValue 12"],
+  [8, 231, "mValue 13"],
+  [8, 239, "mValue 14"],
+  [8, 247, "mValue 15"],
+  [8, 255, "mValue 16"],
+  [8, 263, "mValue 17"],
+  [8, 271, "mValue 18"],
+  [8, 279, "mValue 19"],
+  [8, 287, "mValue 20"],
+  [8, 295, "mValue 21"],
+  [8, 303, "mValue 22"],
+  [8, 311, "mValue 23"]
+];
+```
+
 ### 진행 내용
 **메뉴바 기능 추가**
 1. 더블 클릭 시 지자체 이름 직접 입력 가능하도록 변경
 2. 입력 가능한 지자체는 메뉴바에서 고를 수 있는 지자체와 같으며, 새로 입력한 지자체는 저장은 되나 실질적으로 사용 불가(수정필요)
+3. ber을 NoACK(ACK 미수신)로 변경
 
 ---
 
