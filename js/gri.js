@@ -5,6 +5,11 @@ document.addEventListener('keydown', function (e) {
   if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); alert('Error'); }
 });
 
+document.querySelector('label[for="excelInput"]').addEventListener('click', () => {
+  const input = document.getElementById('excelInput');
+  input.value = '';
+});
+
 // 내부 상태
 let latestNodesData = null; // 가장 최근 호출 결과
 let nodesDataList = [];     // 여러 호출 결과 누적 (Fetch All용)
