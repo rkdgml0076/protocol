@@ -1,7 +1,7 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
-### 2025-11-10 GitHub Commit
+### 2025-11-27 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
 - 개발 환경(Code Editer) Visual Studio Code 사용 <br>
@@ -62,9 +62,9 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
 프로토콜 페이지 설명 추가<br>
 ### Protocol(htm;)
 ```html
-    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px;">
-        <span style="font-size:13px;">1. 파싱을 진행할 Payload 데이터를 입력 칸에 붙여넣고 '파싱하기'를 클릭해주세요.<br>2. 파싱 성공 시 아래로 스크롤하여 데이터를 확인해 주세요<br>3. (KT)IoTMaker Attributes 데이터 확인 필요 시 [] 내부에 있는 값 복사 후 입력 칸에 붙여넣고 변환하기(KT)를 클릭해주세요.<br>4. (KT)변환되어 나온 데이터를 복사한 후 (1.), (2.)번을 다시 진행해주세요.</span>
-    </label>
+  <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px;">
+      <span style="font-size:13px;">1. 파싱을 진행할 Payload 데이터를 입력 칸에 붙여넣고 '파싱하기'를 클릭해주세요.<br>2. 파싱 성공 시 아래로 스크롤하여 데이터를 확인해 주세요<br>3. (KT)IoTMaker Attributes 데이터 확인 필요 시 [] 내부에 있는 값 복사 후 입력 칸에 붙여넣고 변환하기(KT)를 클릭해주세요.<br>4. (KT)변환되어 나온 데이터를 복사한 후 (1.), (2.)번을 다시 진행해주세요.</span>
+  </label>
 ```
 
 ### 진행 내용
