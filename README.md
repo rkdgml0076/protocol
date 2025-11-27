@@ -11,6 +11,78 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
+## Import Bug
+<br>
+새로운 Excel 파일 import 시 갱신되지 않던 버그 수정 및 Export 결과 셀 Ber 추가 <br>
+
+### NTmoreAPI(JS)
+```js
+document.querySelector('label[for="excelInput"]').addEventListener('click', () => {
+  const input = document.getElementById('excelInput');
+  input.value = '';
+});
+
+document.getElementById('downloadAllResults').addEventListener('click', () => {
+  if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 불러오기를 진행하세요.'); return; }
+  const flat = nodesDataList.map((item, idx) => {
+  const nodes = item.result?.nodes || {};
+
+    return {
+      idx: idx + 1,
+      error: item.error || '',
+      지자체: item.inputSite || '',
+      IMEI: item.inputGrt || '',
+      // result.nodes 안에서 뽑아오기
+      IMSI: nodes.imsi || '',
+      검침날짜: nodes.date || '',
+      일련번호: nodes.msrNo || '',
+      SW: nodes.msrFw || '',
+      배터리: nodes.msrVolt ?? '',
+      RSRP: nodes.rsrp ?? '',
+      RSRQ: nodes.rsrq ?? '',
+      SINR: nodes.snr ?? '',
+      검침값: nodes.msrValue ?? '',
+      계량기번호: nodes.meterNo || '', 
+      Ber: nodes.ber || '', 
+
+      // result_json: item.result ? JSON.stringify(item.result) : '',
+    };
+  });
+    const ws = XLSX.utils.json_to_sheet(flat);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'AllResults');
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
+    XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
+});
+```
+
+## Guide
+<br>
+프로토콜 페이지 설명 추가<br>
+### Protocol(htm;)
+```html
+    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px;">
+        <span style="font-size:13px;">1. 파싱을 진행할 Payload 데이터를 입력 칸에 붙여넣고 '파싱하기'를 클릭해주세요.<br>2. 파싱 성공 시 아래로 스크롤하여 데이터를 확인해 주세요<br>3. (KT)IoTMaker Attributes 데이터 확인 필요 시 [] 내부에 있는 값 복사 후 입력 칸에 붙여넣고 변환하기(KT)를 클릭해주세요.<br>4. (KT)변환되어 나온 데이터를 복사한 후 (1.), (2.)번을 다시 진행해주세요.</span>
+    </label>
+```
+
+### 진행 내용
+**메뉴바 기능 추가**
+1. 변환하기 관련 설명은 (KT)로 분류
+2. ber은 고창군 전용
+---
+
+### 2025-11-10 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
 ## Menubar
 <br>
 지자체 선택 메뉴바 직접 입력 가능<br>
