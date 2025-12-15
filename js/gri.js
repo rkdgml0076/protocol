@@ -325,10 +325,10 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
   if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 불러오기를 진행하세요.'); return; }
   const flat = nodesDataList.map((item, idx) => {
   const nodes = item.result?.nodes || {};
+  const isError = Number(nodes.msrError) === 1;
 
     return {
       idx: idx + 1,
-      error: item.error || '',
       지자체: item.inputSite || '',
       IMEI: item.inputGrt || '',
       // result.nodes 안에서 뽑아오기
@@ -340,8 +340,9 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
       RSRP: nodes.rsrp ?? '',
       RSRQ: nodes.rsrq ?? '',
       SINR: nodes.snr ?? '',
-      검침값: nodes.msrValue ?? '',
-      계량기번호: nodes.meterNo || '', 
+      검침이상: nodes.msrError ?? '',
+      검침값: isError ? '검침이상' : (nodes.msrValue ?? ''),
+      계량기번호: isError ? '검침이상' : (nodes.meterNo || ''),
       Ber: nodes.ber || '', 
 
       // result_json: item.result ? JSON.stringify(item.result) : '',
@@ -354,3 +355,4 @@ document.getElementById('downloadAllResults').addEventListener('click', () => {
     const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
     XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
 });
+
