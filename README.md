@@ -1,6 +1,232 @@
 # DataFormatCheck
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-01-02 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## 구리시
+<br>
+신규 데이터 확인 가능 지자체 구리시 추가 <br>
+
+### NTmoreAPI(HTML)
+```html
+  <label for="siteIdInput">지자체</label>
+  <select id="siteIdInput">
+    <option value="gochang">고창군</option>
+    <option value="guri">구리시</option>
+    <option value="gunpo">군포시</option>
+    <option value="gimje">김제시</option>
+    <option value="gimhae">김해시</option>
+    <option value="namhae">남해군</option>
+    <option value="busan">부산시</option>
+    <option value="asan">아산시</option>
+    <option value="yangsan">양산시</option>
+    <option value="yeoncheon">연천군</option>
+    <option value="uijeongbu">의정부시</option>
+    <option value="hadong">하동군</option>
+    <option value="haman">함안군</option>
+  </select>
+```
+
+## 검침이상
+<br>
+Excel Export에 msrError 추가 및 검침이상 내용 추가<br>
+
+### NTmoreAPI(API)
+```js
+  document.getElementById('downloadAllResults').addEventListener('click', () => {
+    if (!nodesDataList || nodesDataList.length === 0) { alert('저장할 결과가 없습니다. 먼저 불러오기를 진행하세요.'); return; }
+    const flat = nodesDataList.map((item, idx) => {
+    const nodes = item.result?.nodes || {};
+    const isError = Number(nodes.msrError) === 1;
+
+      return {
+        idx: idx + 1,
+        지자체: item.inputSite || '',
+        IMEI: item.inputGrt || '',
+        // result.nodes 안에서 뽑아오기
+        IMSI: nodes.imsi || '',
+        검침날짜: nodes.date || '',
+        일련번호: nodes.msrNo || '',
+        SW: nodes.msrFw || '',
+        배터리: nodes.msrVolt ?? '',
+        RSRP: nodes.rsrp ?? '',
+        RSRQ: nodes.rsrq ?? '',
+        SINR: nodes.snr ?? '',
+        검침이상: nodes.msrError ?? '',
+        검침값: isError ? '검침이상' : (nodes.msrValue ?? ''),
+        계량기번호: isError ? '검침이상' : (nodes.meterNo || ''),
+        Ber: nodes.ber || '', 
+
+        // result_json: item.result ? JSON.stringify(item.result) : '',
+      };
+    });
+      const ws = XLSX.utils.json_to_sheet(flat);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'AllResults');
+      const now = new Date();
+      const dateStr = now.toISOString().slice(0, 19).replace(/[-T:]/g, '');
+      XLSX.writeFile(wb, `AllResults_${dateStr}.xlsx`);
+  });
+```
+
+## NFC
+<br>
+NFC 데이터 포맷 추가<br>
+
+### Protocol(JS)
+```js
+  /* V2.0 NFC STOR_RES */
+  const fieldMapV8 = [
+    [4, 1, "cmdByte"],
+    [8, 5, "meterNo"],
+    [12, 13, "FinalReport"],
+    [12, 25, "Finalmeter"],
+    [2, 37, "msrCnt"],
+    [8, 39, "msrStdValue"], 
+    [2, 47, "meterCaliber"],
+    [2, 49, "meterStatus"],
+    [4, 51, "rsrp"],
+    [2, 55, "NoAck"],
+    [2, 57, "mno"],
+    [2, 59, "modem"],
+    [2, 61, "devVolt"],
+    [2, 63, "comOnOff"],
+    [8, 65, "devNO"],
+    [4, 73, "devFw"],
+    [2, 77, "meterCode"],
+    [2, 79, "format"]
+  ];
+
+  const cmdByteMap = {
+    "D500": "저장정보 응답\n(STOR_RES)"
+  };
+
+  function parseFinalReport(hex) {
+    const b = hex.match(/.{2}/g).map(v => parseInt(v, 16));
+
+    return `${2000 + b[0]}-${String(b[1]).padStart(2,'0')}-${String(b[2]).padStart(2,'0')} ` +
+          `${String(b[3]).padStart(2,'0')}:${String(b[4]).padStart(2,'0')}:${String(b[5]).padStart(2,'0')}`;
+  }
+
+  const data = raw.replace(/\s+/g, ""); // 모든 공백 제거
+  
+  // header (2글자)와 type (2글자) 추출
+  const headerHex = data.slice(0, 2).toUpperCase();
+  const typeHex = data.slice(4, 6).toUpperCase();
+  const cmdByteHex = data.slice(0, 4).toUpperCase();
+
+  console.log("Header:", headerHex);
+  console.log("Type:", typeHex);
+  console.log("cmdByte:", cmdByteHex);
+
+  let fieldMap;
+
+  // header + type 값으로 분기
+  if (headerHex === "A3" && typeHex === "70") {
+    fieldMap = fieldMapV1;
+  } else if (headerHex === "A3" && typeHex === "75") {
+    fieldMap = fieldMapV2;
+  } else if (headerHex === "A3" && typeHex === "76") {
+    fieldMap = fieldMapV3;
+  } else if (headerHex === "A4" && typeHex === "70") {
+    fieldMap = fieldMapV4;
+  } else if (headerHex === "A5" && typeHex === "70") {
+    fieldMap = fieldMapV5;
+  } else if (headerHex === "B1" && typeHex === "70") {
+    fieldMap = fieldMapV6;
+  } else if (headerHex === "A3" && typeHex === "71") {
+    fieldMap = fieldMapV7;
+  } else if (cmdByteHex === "D500") {
+    fieldMap = fieldMapV8;
+  } else {
+      alert(`지원하지 않는 데이터포맷입니다.`);
+    return;
+  }
+
+  let pendingMsrStdRaw = null;   // V8용 보류 값
+
+  if (fieldName === "meterCaliber") {
+    const firstCaliber = rawValue.charAt(0);
+    displayValue = caliberTypeMap[firstCaliber] || `알 수 없음 (${firstCaliber})`;
+
+    const secondCaliber = rawValue.charAt(1);
+    division = meterDivisionMap[secondCaliber];
+
+    // fieldMapV8(NFC)전용 msrStdValue 소급 계산
+    if (pendingMsrStdRaw !== null) {
+      const value = pendingMsrStdRaw / Math.pow(10, division);
+      msrStdValueVal = value + " ton";
+      prevOffsetResult = value;
+      pendingMsrStdRaw = null;
+    }
+  }
+
+  if (fieldName === "cmdByte") {
+    displayValue = cmdByteMap[rawValue] || rawValue;
+  }
+  if (fieldName === "FinalReport") {
+    displayValue = parseFinalReport(rawValue);
+  }
+  if (fieldName === "Finalmeter") {
+    displayValue = parseFinalReport(rawValue);
+  }
+
+  if (fieldName === "msrStdValue") {
+    if (isFailValue(rawValue)) {
+      displayValue = "검침이상";
+    } else {
+      const rawNum = Number(displayValue);
+
+      if (division !== "" && division !== undefined) {
+        const value = rawNum / Math.pow(10, division);
+        displayValue = value + " ton";
+        msrStdValueVal = displayValue;
+        prevOffsetResult = value;
+      } else {
+        // meterCaliber(소수점) 받지 못하였을 때(NFC) 소급 계산 처리 
+        pendingMsrStdRaw = rawNum;
+        displayValue = rawNum + " (파싱 데이터 요약 확인)";
+      }
+    }
+  }
+
+  if (cmdByteHex === "D500") {
+    const formatRow = document.createElement("tr");
+    formatRow.innerHTML = `<td>format</td><td>${formatValue}</td><td>${formatValue}</td>`;
+    tbody.appendChild(formatRow);
+  } else {
+    const checksumRow = document.createElement("tr");
+    checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+    tbody.appendChild(checksumRow);
+  }
+```
+
+### 진행 내용
+**구리시, 검침이상, NFC 기능**
+1. 데이터 확인이 가능하게 변경되어 구리시 지자체 추가
+--Image 참고--<br>
+<img width="653" height="243" alt="Image" src="https://github.com/user-attachments/assets/18d75689-4b7f-4c94-b69f-9f9394f5b288" /><br>
+
+2. Excel Export에 msrError 추가 하였으며, msrError: 1 출력 시 검침값, 계량기번호 '검침이상' 텍스트로 출력되도록 변경
+--Image 참고--<br>
+<img width="470" height="154" alt="Image" src="https://github.com/user-attachments/assets/ad98bc90-9bf8-4912-865b-83accf5d7029" /><br>
+
+3. /* V2.0 NFC STOR_RES */: NFC 데이터 포맷 추가(필드맵 내부 샘플 양식은 코드 참고)
+--Image 참고--<br>
+<img width="747" height="771" alt="Image" src="https://github.com/user-attachments/assets/8a26bbd6-f643-4765-9a55-d4a374f9cb97" /><br>
+
+4. 기타 정크 코드 Fix(들여쓰기, 중복코드, 필요 없는 연동 js 삭제 등)
+<br>
+---
+
 ### 2025-11-27 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
