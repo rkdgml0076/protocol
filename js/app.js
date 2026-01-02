@@ -485,6 +485,28 @@ const fieldMapV7 = [
   [2, 231, "magnetic"],
 ];
 
+  /* V2.0 NFC STOR_RES */
+const fieldMapV8 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [4, 51, "rsrp"],
+  [2, 55, "NoAck"],
+  [2, 57, "mno"],
+  [2, 59, "modem"],
+  [2, 61, "devVolt"],
+  [2, 63, "comOnOff"],
+  [8, 65, "devNO"],
+  [4, 73, "devFw"],
+  [2, 77, "meterCode"],
+  [2, 79, "format"]
+];
+
 const headerMap = {
   "A3": "서울시 데이터포맷[V1.5]",
   "a3": "서울시 데이터포맷[V1.5]",
@@ -502,6 +524,11 @@ const typeMap = {
   "75": "(Temp Version)",
   "76": "(Temp + Cable Version)"
 };
+
+const cmdByteMap = {
+  "D500": "저장정보 응답\n(STOR_RES)"
+};
+
 
 const caliberTypeMap = {
   "0": "검침이상",
@@ -562,8 +589,17 @@ document.getElementById("convertBtn").addEventListener("click", () => {
   }
 });
 
+function parseFinalReport(hex) {
+  const b = hex.match(/.{2}/g).map(v => parseInt(v, 16));
+
+  return `${2000 + b[0]}-${String(b[1]).padStart(2,'0')}-${String(b[2]).padStart(2,'0')} ` +
+         `${String(b[3]).padStart(2,'0')}:${String(b[4]).padStart(2,'0')}:${String(b[5]).padStart(2,'0')}`;
+}
+
+
 function parseData() {
-  const data = document.getElementById("inputData").value.trim();
+  const raw = document.getElementById("inputData").value;
+  const data = raw.replace(/\s+/g, ""); // 모든 공백 제거
   const tbody = document.querySelector("#resultTable tbody");
   tbody.innerHTML = "";
 
@@ -575,9 +611,11 @@ if (data.length < 61 || data.length > 401) {
 // header (2글자)와 type (2글자) 추출
 const headerHex = data.slice(0, 2).toUpperCase();
 const typeHex = data.slice(4, 6).toUpperCase();
+const cmdByteHex = data.slice(0, 4).toUpperCase();
 
 console.log("Header:", headerHex);
 console.log("Type:", typeHex);
+console.log("cmdByte:", cmdByteHex);
 
 let fieldMap;
 
@@ -596,6 +634,8 @@ if (headerHex === "A3" && typeHex === "70") {
   fieldMap = fieldMapV6;
 } else if (headerHex === "A3" && typeHex === "71") {
   fieldMap = fieldMapV7;
+} else if (cmdByteHex === "D500") {
+  fieldMap = fieldMapV8;
 } else {
     alert(`지원하지 않는 데이터포맷입니다.`);
   return;
@@ -608,6 +648,7 @@ const swapAndDexFields = [
 ];
 
 const checksumValue = data.slice(-2);
+const formatValue = data.slice(-2);
 const dataWithoutChecksum = data.slice(0, -2);
 
 let yearVal = "", monthVal = "", dayVal = "";
@@ -615,6 +656,7 @@ let hourVal = "", minuteVal = "", secondVal = "";
 let msrStdValueVal = "";
 let division = "";
 let prevOffsetResult = null;      // 이전 msrOffset 결과 저장
+let pendingMsrStdRaw = null;   // V8용 보류 값
 
 fieldMap.forEach(([length, start, fieldName]) => {
   const startIdx = start - 1;
@@ -633,9 +675,9 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
 
   if (fieldName === "imei" && rawValue.length >= 16) {
-  let chars = rawValue.split("");
-  chars.splice(15, 1); // 16번째 문자 제거
-  displayValue = chars.join("");
+    let chars = rawValue.split("");
+    chars.splice(15, 1); // 16번째 문자 제거
+    displayValue = chars.join("");
   }
 
   if (fieldName === "imsi" && rawValue.length >= 16) {
@@ -659,8 +701,17 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "meterCaliber") {
     const firstCaliber = rawValue.charAt(0);
     displayValue = caliberTypeMap[firstCaliber] || `알 수 없음 (${firstCaliber})`;
+
     const secondCaliber = rawValue.charAt(1);
     division = meterDivisionMap[secondCaliber];
+
+    // fieldMapV8(NFC)전용 msrStdValue 소급 계산
+    if (pendingMsrStdRaw !== null) {
+      const value = pendingMsrStdRaw / Math.pow(10, division);
+      msrStdValueVal = value + " ton";
+      prevOffsetResult = value;
+      pendingMsrStdRaw = null;
+    }
   }
 
   if (fieldName === "meterStatus") {
@@ -682,7 +733,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
     }
   }
 
-
   if (fieldName.trim() === "devVolt") {
   // devVolt는 HEX 2자리 → DEX → 소수점 한자리
     if (rawValue.length === 2) {
@@ -691,6 +741,10 @@ fieldMap.forEach(([length, start, fieldName]) => {
       displayValue = (dex / 10).toFixed(1);
       displayValue = `${displayValue}V`;
     }
+  }
+
+  if (fieldName === "cmdByte") {
+    displayValue = cmdByteMap[rawValue] || rawValue;
   }
 
   if (fieldName === "header") {
@@ -708,6 +762,13 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "devFw" && rawValue.length >= 4) {
     displayValue = 'V'+ rawValue[1] + rawValue[3];
   }
+
+  if (fieldName === "FinalReport") {
+  displayValue = parseFinalReport(rawValue);
+}
+  if (fieldName === "Finalmeter") {
+  displayValue = parseFinalReport(rawValue);
+}
   
   // 스왑 및 DEX 변환 대상
   if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
@@ -738,7 +799,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
   if (fieldName === "meterType") {
     displayValue = division;
-    displayValue = `-${displayValue}`;
+    displayValue = `${displayValue}`;
   }
   if (fieldName === "rssi") {
     displayValue = `-${displayValue}`;
@@ -756,6 +817,9 @@ fieldMap.forEach(([length, start, fieldName]) => {
     } else {
       displayValue = displayValue.toString();
     }
+  }
+  if (fieldName === "FinalReport") {
+    displayValue = `${displayValue}`;
   }
   if (fieldName === "year") {
     msrOffsetyearVal = displayValue;
@@ -788,31 +852,29 @@ fieldMap.forEach(([length, start, fieldName]) => {
     secondVal = displayValue;
   }
   if (fieldName === "msrStdValue") {
-    if (isFailValue(rawValue)) { 
+    if (isFailValue(rawValue)) {
       displayValue = "검침이상";
     } else {
-      let numericValue = Number(displayValue);
-      if (division === 1) numericValue /= 10;
-      else if (division === 2) numericValue /= 100;
-      else if (division === 3) numericValue /= 1000;
-      else if (division === 4) numericValue /= 10000;
-      else if (division === 5) numericValue /= 100000;
-      displayValue = numericValue + " ton";
-      msrStdValueVal = numericValue;
-      prevOffsetResult = numericValue;
+      const rawNum = Number(displayValue);
+
+      if (division !== "" && division !== undefined) {
+        const value = rawNum / Math.pow(10, division);
+        displayValue = value + " ton";
+        msrStdValueVal = displayValue;
+        prevOffsetResult = value;
+      } else {
+        // meterCaliber(소수점) 받지 못하였을 때(NFC) 소급 계산 처리 
+        pendingMsrStdRaw = rawNum;
+        displayValue = rawNum + " (파싱 데이터 요약 확인)";
+      }
     }
-    msrStdValueVal = displayValue;
   }
   if (fieldName.startsWith("msrOffset") && displayValue.length >= 1) {
     if (isFailValue(rawValue)) { 
       displayValue = "검침이상";
     } else {
       let offsetValue = Number(displayValue);
-      if (division === 1) offsetValue /= 10;
-      else if (division === 2) offsetValue /= 100;
-      else if (division === 3) offsetValue /= 1000;
-      else if (division === 4) offsetValue /= 10000;
-      else if (division === 5) offsetValue /= 100000;
+      offsetValue /= Math.pow(10, division);
 
       if (typeof prevOffsetResult === "number") {
         const result = prevOffsetResult - offsetValue;
@@ -848,12 +910,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = "검침이상";
       } else {
         let numericValue = Number(displayValue);
-        if (division === 1) numericValue /= 10;
-        else if (division === 2) numericValue /= 100;
-        else if (division === 3) numericValue /= 1000;
-        else if (division === 4) numericValue /= 10000;
-        else if (division === 5) numericValue /= 100000;
-
+        numericValue /= Math.pow(10, division);
         const offsetIndex = parseInt(fieldName.replace("mValue", ""), 10) || 0;
         let baseDate = new Date(
           2000 + Number(msrOffsetyearVal),
@@ -881,30 +938,30 @@ fieldMap.forEach(([length, start, fieldName]) => {
       }
   }
   else if (fieldName.startsWith("tempValue")) {
-    if (rawValue.length === 4) {
-      const upperHex = rawValue.slice(0, 2); // 상위 바이트
-      const lowerHex = rawValue.slice(2, 4); // 하위 바이트
+      if (rawValue.length === 4) {
+        const upperHex = rawValue.slice(0, 2); // 상위 바이트
+        const lowerHex = rawValue.slice(2, 4); // 하위 바이트
 
-      // Little Endian: 하위 + 상위 바이트 순서
-      const swappedHex = lowerHex + upperHex;        // 리틀 에디안 순서 변환
-      let tempRaw = parseInt(swappedHex, 16);        // HEX 변환 
+        // Little Endian: 하위 + 상위 바이트 순서
+        const swappedHex = lowerHex + upperHex;        // 리틀 에디안 순서 변환
+        let tempRaw = parseInt(swappedHex, 16);        // HEX 변환 
 
-      // 2바이트 signed 변환
-      if (tempRaw > 0x0500) {
-        tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x0500(DEX 1280) 이상이면 음수
+        // 2바이트 signed 변환
+        if (tempRaw > 0x0500) {
+          tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x0500(DEX 1280) 이상이면 음수
+        }
+        const tempC = tempRaw / 10;                    // 10으로 나눠서 ℃
+        displayValue = tempC + "℃";
+      } else {
+        displayValue = rawValue;
       }
-      const tempC = tempRaw / 10;                    // 10으로 나눠서 ℃
-      displayValue = tempC + "℃";
-    } else {
-      displayValue = rawValue;
     }
-  }
   }
 
   function isFailValue(value) {
-  if (!value) return false;
-  if (!(value.length === 4 || value.length === 8)) return false;
-  return /^[fF]+$/.test(value);
+    if (!value) return false;
+    if (!(value.length === 4 || value.length === 8)) return false;
+    return /^[fF]+$/.test(value);
   }
 
   const row = document.createElement("tr");
@@ -919,7 +976,13 @@ fieldMap.forEach(([length, start, fieldName]) => {
     `<p><strong>검침 값:</strong> ${msrStdValueVal}</p>` +
     `<p><strong>데이터 전송 시간:</strong> ${yearVal} ${monthVal} ${dayVal} ${hourVal} ${minuteVal} ${secondVal}</p>`;
 
-  const checksumRow = document.createElement("tr");
+  if (cmdByteHex === "D500") {
+    const formatRow = document.createElement("tr");
+    formatRow.innerHTML = `<td>format</td><td>${formatValue}</td><td>${formatValue}</td>`;
+    tbody.appendChild(formatRow);
+  } else {
+    const checksumRow = document.createElement("tr");
     checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
     tbody.appendChild(checksumRow);
+  }
 }
