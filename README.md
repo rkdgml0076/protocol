@@ -193,7 +193,7 @@ NFC 데이터 포맷 추가<br>
       } else {
         // meterCaliber(소수점) 받지 못하였을 때(NFC) 소급 계산 처리 
         pendingMsrStdRaw = rawNum;
-        displayValue = rawNum + " (파싱 데이터 요약 확인)";
+        displayValue = rawNum + " (소수점 미적용)";
       }
     }
   }
