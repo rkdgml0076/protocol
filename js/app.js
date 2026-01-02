@@ -418,7 +418,7 @@ const fieldMapV6 = [
   [8, 311, "mValue 23"]
 ];
 
-  /* GS2.0 DataFormat */
+/* GS2.0 DataFormat */
 const fieldMapV7 = [
   [2, 1, "header"],
   [2, 3, "length"],
@@ -485,7 +485,7 @@ const fieldMapV7 = [
   [2, 231, "magnetic"],
 ];
 
-  /* V2.0 NFC STOR_RES */
+/* V2.0 NFC STOR_RES */
 const fieldMapV8 = [
   [4, 1, "cmdByte"],
   [8, 5, "meterNo"],
@@ -764,11 +764,11 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
 
   if (fieldName === "FinalReport") {
-  displayValue = parseFinalReport(rawValue);
-}
+    displayValue = parseFinalReport(rawValue);
+  }
   if (fieldName === "Finalmeter") {
-  displayValue = parseFinalReport(rawValue);
-}
+    displayValue = parseFinalReport(rawValue);
+  }
   
   // 스왑 및 DEX 변환 대상
   if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
@@ -818,9 +818,6 @@ fieldMap.forEach(([length, start, fieldName]) => {
       displayValue = displayValue.toString();
     }
   }
-  if (fieldName === "FinalReport") {
-    displayValue = `${displayValue}`;
-  }
   if (fieldName === "year") {
     msrOffsetyearVal = displayValue;
     displayValue = `20${displayValue}년`;
@@ -865,7 +862,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
       } else {
         // meterCaliber(소수점) 받지 못하였을 때(NFC) 소급 계산 처리 
         pendingMsrStdRaw = rawNum;
-        displayValue = rawNum + " (파싱 데이터 요약 확인)";
+        displayValue = rawNum + " (소수점 미적용)";
       }
     }
   }

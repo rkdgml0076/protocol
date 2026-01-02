@@ -221,7 +221,7 @@ NFC 데이터 포맷 추가<br>
 
 3. /* V2.0 NFC STOR_RES */: NFC 데이터 포맷 추가(필드맵 내부 샘플 양식은 코드 참고)
 --Image 참고--<br>
-<img width="747" height="771" alt="Image" src="https://github.com/user-attachments/assets/8a26bbd6-f643-4765-9a55-d4a374f9cb97" /><br>
+<img width="734" height="775" alt="Image" src="https://github.com/user-attachments/assets/d25a2ac1-4765-4671-b21b-58f6a39ef1ad" /><br>
 
 4. 기타 정크 코드 Fix(들여쓰기, 중복코드, 필요 없는 연동 js 삭제 등)
 
