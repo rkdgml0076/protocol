@@ -224,7 +224,7 @@ NFC 데이터 포맷 추가<br>
 <img width="747" height="771" alt="Image" src="https://github.com/user-attachments/assets/8a26bbd6-f643-4765-9a55-d4a374f9cb97" /><br>
 
 4. 기타 정크 코드 Fix(들여쓰기, 중복코드, 필요 없는 연동 js 삭제 등)
-<br>
+
 ---
 
 ### 2025-11-27 GitHub Commit
