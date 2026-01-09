@@ -485,8 +485,70 @@ const fieldMapV7 = [
   [2, 231, "magnetic"],
 ];
 
+/* NFC DATA Format Line
+원격기기 정보 응답(MTR_RES)
+0xD5, 0x02
+
+검침정보 응답(AMI_RES)
+0xD5, 0x04
+
+통신 활성화 응답(RSET_RES)
+0xD5, 0x06 
+
+저장정보 응답(STOR_RES)
+0xD5, 0x00 */
+
+/* V2.0 NFC MTR_RES */
+const NFCfieldMap2 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterCode"],
+  [8, 51, "devNO"],
+  [4, 59, "devFw"],
+  [2, 63, "format"],
+  [2, 65, "devVolt"],
+  [2, 67, "comOnOff"]
+];
+
+/* V2.0 NFC AMI_RES */
+const NFCfieldMap3 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [4, 51, "rsrp"],
+  [2, 55, "NoAck"],
+  [2, 57, "mno"],
+  [2, 59, "modem"],
+  [2, 61, "devVolt"],
+  [2, 63, "comOnOff"]
+];
+
+/* V2.0 NFC RSET_RES */
+const NFCfieldMap4 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [2, 51, "devVolt"],
+  [2, 53, "comOnOff"]
+];
+
 /* V2.0 NFC STOR_RES */
-const fieldMapV8 = [
+const NFCfieldMap1 = [
   [4, 1, "cmdByte"],
   [8, 5, "meterNo"],
   [12, 13, "FinalReport"],
@@ -526,9 +588,11 @@ const typeMap = {
 };
 
 const cmdByteMap = {
-  "D500": "저장정보 응답\n(STOR_RES)"
+  "D500": "저장정보 응답\n(STOR_RES)",
+  "D502": "원격기기 정보 응답\n(MTR_RES)",
+  "D504": "검침정보 응답\n(AMI_RES)",
+  "D506": "통신 활성화 응답\n(RSET_RES)"
 };
-
 
 const caliberTypeMap = {
   "0": "검침이상",
@@ -635,7 +699,13 @@ if (headerHex === "A3" && typeHex === "70") {
 } else if (headerHex === "A3" && typeHex === "71") {
   fieldMap = fieldMapV7;
 } else if (cmdByteHex === "D500") {
-  fieldMap = fieldMapV8;
+  fieldMap = NFCfieldMap1;
+} else if (cmdByteHex === "D502") {
+  fieldMap = NFCfieldMap2;
+} else if (cmdByteHex === "D504") {
+  fieldMap = NFCfieldMap3;
+} else if (cmdByteHex === "D506") {
+  fieldMap = NFCfieldMap4;    
 } else {
     alert(`지원하지 않는 데이터포맷입니다.`);
   return;
@@ -705,7 +775,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     const secondCaliber = rawValue.charAt(1);
     division = meterDivisionMap[secondCaliber];
 
-    // fieldMapV8(NFC)전용 msrStdValue 소급 계산
+    // NFCfieldMap1(NFC)전용 msrStdValue 소급 계산
     if (pendingMsrStdRaw !== null) {
       const value = pendingMsrStdRaw / Math.pow(10, division);
       msrStdValueVal = value + " ton";
@@ -973,7 +1043,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     `<p><strong>검침 값:</strong> ${msrStdValueVal}</p>` +
     `<p><strong>데이터 전송 시간:</strong> ${yearVal} ${monthVal} ${dayVal} ${hourVal} ${minuteVal} ${secondVal}</p>`;
 
-  if (cmdByteHex === "D500") {
+  if (/^D50[0246]$/.test(cmdByteHex)) {
     const formatRow = document.createElement("tr");
     formatRow.innerHTML = `<td>format</td><td>${formatValue}</td><td>${formatValue}</td>`;
     tbody.appendChild(formatRow);

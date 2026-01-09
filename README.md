@@ -11,6 +11,164 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
+## NFC
+<br>
+NFC 데이터 포맷 추가<br>
+
+### Protocol(JS)
+```js
+/* NFC DATA Format Line
+원격기기 정보 응답(MTR_RES)
+0xD5, 0x02
+
+검침정보 응답(AMI_RES)
+0xD5, 0x04
+
+통신 활성화 응답(RSET_RES)
+0xD5, 0x06 
+
+저장정보 응답(STOR_RES)
+0xD5, 0x00 */
+
+/* V2.0 NFC MTR_RES */
+const NFCfieldMap2 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterCode"],
+  [8, 51, "devNO"],
+  [4, 59, "devFw"],
+  [2, 63, "format"],
+  [2, 65, "devVolt"],
+  [2, 67, "comOnOff"]
+];
+
+/* V2.0 NFC AMI_RES */
+const NFCfieldMap3 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [4, 51, "rsrp"],
+  [2, 55, "NoAck"],
+  [2, 57, "mno"],
+  [2, 59, "modem"],
+  [2, 61, "devVolt"],
+  [2, 63, "comOnOff"]
+];
+
+/* V2.0 NFC RSET_RES */
+const NFCfieldMap4 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [2, 51, "devVolt"],
+  [2, 53, "comOnOff"]
+];
+
+/* V2.0 NFC STOR_RES */
+const NFCfieldMap1 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [4, 51, "rsrp"],
+  [2, 55, "NoAck"],
+  [2, 57, "mno"],
+  [2, 59, "modem"],
+  [2, 61, "devVolt"],
+  [2, 63, "comOnOff"],
+  [8, 65, "devNO"],
+  [4, 73, "devFw"],
+  [2, 77, "meterCode"],
+  [2, 79, "format"]
+];
+
+const cmdByteMap = {
+  "D500": "저장정보 응답\n(STOR_RES)",
+  "D502": "원격기기 정보 응답\n(MTR_RES)",
+  "D504": "검침정보 응답\n(AMI_RES)",
+  "D506": "통신 활성화 응답\n(RSET_RES)"
+};
+
+// header + type 값으로 분기
+if (headerHex === "A3" && typeHex === "70") {
+  fieldMap = fieldMapV1;
+} else if (headerHex === "A3" && typeHex === "75") {
+  fieldMap = fieldMapV2;
+} else if (headerHex === "A3" && typeHex === "76") {
+  fieldMap = fieldMapV3;
+} else if (headerHex === "A4" && typeHex === "70") {
+  fieldMap = fieldMapV4;
+} else if (headerHex === "A5" && typeHex === "70") {
+  fieldMap = fieldMapV5;
+} else if (headerHex === "B1" && typeHex === "70") {
+  fieldMap = fieldMapV6;
+} else if (headerHex === "A3" && typeHex === "71") {
+  fieldMap = fieldMapV7;
+} else if (cmdByteHex === "D500") {
+  fieldMap = NFCfieldMap1;
+} else if (cmdByteHex === "D502") {
+  fieldMap = NFCfieldMap2;
+} else if (cmdByteHex === "D504") {
+  fieldMap = NFCfieldMap3;
+} else if (cmdByteHex === "D506") {
+  fieldMap = NFCfieldMap4;    
+} else {
+    alert(`지원하지 않는 데이터포맷입니다.`);
+  return;
+}
+
+  if (/^D50[0246]$/.test(cmdByteHex)) {
+    const formatRow = document.createElement("tr");
+    formatRow.innerHTML = `<td>format</td><td>${formatValue}</td><td>${formatValue}</td>`;
+    tbody.appendChild(formatRow);
+  } else {
+    const checksumRow = document.createElement("tr");
+    checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+    tbody.appendChild(checksumRow);
+  }
+```
+
+### 진행 내용
+**NFC Format 3종류 추가**
+1. D502, D504, D506 Format 3종류 추가하였으며, 현재 D500을 포함하여 4종류의 NFC Format 적용중 
+2. 기존 D500에 포함된 파싱 양식을 활용하여 기능은 추가하지 않았으며, CheckSum 분류 양식만 일부 변경
+3. NFC FieldMap Name 변경 및 관련 주석 추가
+--Image 참고--<br>
+<img width="1237" height="89" alt="Image" src="https://github.com/user-attachments/assets/c19d7c8f-d817-4845-839d-26c7922c28fc" /><br>
+<img width="1283" height="90" alt="Image" src="https://github.com/user-attachments/assets/1445a595-3a43-42b7-a9fe-1d7cf779b62b" /><br>
+<img width="1299" height="91" alt="Image" src="https://github.com/user-attachments/assets/3562509c-7d4f-41bb-85f4-af50ab4f2f83" /><br>
+<br>
+---
+
+### 2026-01-02 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
 ## 구리시
 <br>
 신규 데이터 확인 가능 지자체 구리시 추가 <br>
