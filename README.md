@@ -1,6 +1,158 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-01-14 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## QTY
+<br>
+Quality Report 데이터 포맷 추가<br>
+
+### Protocol(JS)
+```js
+  /* LGU+ QTY DataFormat */
+  const LGfieldMapV1 = [
+    [2, 1, "MGSVer"],
+    [12, 3, "CTN"],
+    [2, 15, "unit"],
+    [4, 17, "level"],
+    [8, 21, "CGI"],
+    [4, 29, "RSRP"],
+    [4, 33, "SINR"],
+    [2, 37, "size"],
+    [22, 39, "model"],
+    [2, 61, "size"],
+    [44, 63, "firmwareVer"],
+    [4, 107, "TxPower"],
+    [2, 111, "GPS"],
+    [2, 113, "CellID"],
+    [2, 115, "UE"],
+    [6, 117, "PortInfo"],
+    [6, 123, "reserved"]
+  ];
+
+  const MGSVerMap = {
+    "04": "LGU+ Quality NB-IoT Ver.4"
+  };
+
+  function hexToAscii(hex) {
+    if (!hex || hex.length % 2 !== 0) return hex;
+
+    return hex.match(/.{2}/g)
+      .map(h => {
+        const code = parseInt(h, 16);
+        // 출력 가능한 ASCII만
+        if (code >= 32 && code <= 126) {
+          return String.fromCharCode(code);
+        }
+        return '';
+      })
+      .join('')
+      .trim();
+  }
+
+  // header (2글자)와 type (2글자) 추출
+  // cmdByte (4글자) 추출
+  // MGSVer (2글자) 추출
+  const headerHex = data.slice(0, 2).toUpperCase();
+  const typeHex = data.slice(4, 6).toUpperCase();
+  const cmdByteHex = data.slice(0, 4).toUpperCase();
+  const MGSVerHex = data.slice(0, 2).toUpperCase();
+
+  console.log("Header:", headerHex);
+  console.log("Type:", typeHex);
+  console.log("cmdByte:", cmdByteHex);
+  console.log("cMGSVer:", MGSVerHex);
+
+  // header + type 값으로 분기
+  if (headerHex === "A3" && typeHex === "70") {
+    fieldMap = fieldMapV1;
+  } else if (headerHex === "A3" && typeHex === "75") {
+    fieldMap = fieldMapV2;
+  } else if (headerHex === "A3" && typeHex === "76") {
+    fieldMap = fieldMapV3;
+  } else if (headerHex === "A4" && typeHex === "70") {
+    fieldMap = fieldMapV4;
+  } else if (headerHex === "A5" && typeHex === "70") {
+    fieldMap = fieldMapV5;
+  } else if (headerHex === "B1" && typeHex === "70") {
+    fieldMap = fieldMapV6;
+  } else if (headerHex === "A3" && typeHex === "71") {
+    fieldMap = fieldMapV7;
+  } else if (cmdByteHex === "D500") {
+    fieldMap = NFCfieldMap1;
+  } else if (cmdByteHex === "D502") {
+    fieldMap = NFCfieldMap2;
+  } else if (cmdByteHex === "D504") {
+    fieldMap = NFCfieldMap3;
+  } else if (cmdByteHex === "D506") {
+    fieldMap = NFCfieldMap4;    
+  } else if (MGSVerHex === "04") {
+    fieldMap = LGfieldMapV1;  
+  } else {
+      alert(`지원하지 않는 데이터포맷입니다.`);
+    return;
+  }
+
+  const reservedValue = data.slice(-6);
+
+  if (fieldName === "MGSVer") {
+    displayValue = MGSVerMap[rawValue] || rawValue;
+  }
+
+  if (fieldName === "model" || fieldName === "firmwareVer") {
+    displayValue = hexToAscii(rawValue);
+  }
+
+  if (fieldName === "RSRP" || fieldName === "SINR") {
+    // 앞자리 0 제거 → 숫자로 변환
+    const num = parseInt(rawValue, 10);
+
+    if (!isNaN(num)) {
+      displayValue = `-${num}`;
+    } else {
+      displayValue = rawValue; // fallback
+    }
+  }
+
+  if (fieldName === "SINR") {
+    displayValue = parseInt(rawValue, 10);
+  }
+
+
+  if (/^D50[0246]$/.test(cmdByteHex)) {
+    const formatRow = document.createElement("tr");
+    formatRow.innerHTML = `<td>format</td><td>${formatValue}</td><td>${formatValue}</td>`;
+    tbody.appendChild(formatRow);
+  } else if (/^04$/.test(MGSVerHex)) {
+    const reservedRow = document.createElement("tr");
+    reservedRow.innerHTML = `<td>reserved</td><td>${reservedValue}</td><td>${reservedValue}</td>`;
+    tbody.appendChild(reservedRow);
+  } else {
+    const checksumRow = document.createElement("tr");
+    checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
+    tbody.appendChild(checksumRow);
+  }
+
+```
+
+### 진행 내용
+**NB-IoT QTY Ver.4 추가**
+1. 모델명 및 F/W 아스키코드로 적용되어 있어 Ascii 변환 기능 추가
+2. RSRP, SINR 파싱 양식이 달라 리틀 에드안 방식 없이 DEX 파싱
+--Image 참고--<br>
+<img width="966" height="753" alt="Image" src="https://github.com/user-attachments/assets/b8d7b917-2a3a-4c45-ac27-37791eb8196a" /><br>
+<br>
+
+---
+
 ### 2026-01-09 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

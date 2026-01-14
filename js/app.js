@@ -485,6 +485,27 @@ const fieldMapV7 = [
   [2, 231, "magnetic"],
 ];
 
+/* LGU+ QTY DataFormat */
+const LGfieldMapV1 = [
+  [2, 1, "MGSVer"],
+  [12, 3, "CTN"],
+  [2, 15, "unit"],
+  [4, 17, "level"],
+  [8, 21, "CGI"],
+  [4, 29, "RSRP"],
+  [4, 33, "SINR"],
+  [2, 37, "size"],
+  [22, 39, "model"],
+  [2, 61, "size"],
+  [44, 63, "firmwareVer"],
+  [4, 107, "TxPower"],
+  [2, 111, "GPS"],
+  [2, 113, "CellID"],
+  [2, 115, "UE"],
+  [6, 117, "PortInfo"],
+  [6, 123, "reserved"]
+];
+
 /* NFC DATA Format Line
 원격기기 정보 응답(MTR_RES)
 0xD5, 0x02
@@ -587,6 +608,11 @@ const typeMap = {
   "76": "(Temp + Cable Version)"
 };
 
+
+const MGSVerMap = {
+  "04": "LGU+ Quality NB-IoT Ver.4"
+};
+
 const cmdByteMap = {
   "D500": "저장정보 응답\n(STOR_RES)",
   "D502": "원격기기 정보 응답\n(MTR_RES)",
@@ -660,6 +686,21 @@ function parseFinalReport(hex) {
          `${String(b[3]).padStart(2,'0')}:${String(b[4]).padStart(2,'0')}:${String(b[5]).padStart(2,'0')}`;
 }
 
+function hexToAscii(hex) {
+  if (!hex || hex.length % 2 !== 0) return hex;
+
+  return hex.match(/.{2}/g)
+    .map(h => {
+      const code = parseInt(h, 16);
+      // 출력 가능한 ASCII만
+      if (code >= 32 && code <= 126) {
+        return String.fromCharCode(code);
+      }
+      return '';
+    })
+    .join('')
+    .trim();
+}
 
 function parseData() {
   const raw = document.getElementById("inputData").value;
@@ -667,19 +708,23 @@ function parseData() {
   const tbody = document.querySelector("#resultTable tbody");
   tbody.innerHTML = "";
 
-if (data.length < 61 || data.length > 401) {
-  alert("데이터는 62자 이상 400자 이하이어야 합니다.");
-  return;
-}
+// if (data.length < 61 || data.length > 401) {
+//   alert("데이터는 62자 이상 400자 이하이어야 합니다.");
+//   return;
+// }
 
 // header (2글자)와 type (2글자) 추출
+// cmdByte (4글자) 추출
+// MGSVer (2글자) 추출
 const headerHex = data.slice(0, 2).toUpperCase();
 const typeHex = data.slice(4, 6).toUpperCase();
 const cmdByteHex = data.slice(0, 4).toUpperCase();
+const MGSVerHex = data.slice(0, 2).toUpperCase();
 
 console.log("Header:", headerHex);
 console.log("Type:", typeHex);
 console.log("cmdByte:", cmdByteHex);
+console.log("cMGSVer:", MGSVerHex);
 
 let fieldMap;
 
@@ -706,6 +751,8 @@ if (headerHex === "A3" && typeHex === "70") {
   fieldMap = NFCfieldMap3;
 } else if (cmdByteHex === "D506") {
   fieldMap = NFCfieldMap4;    
+} else if (MGSVerHex === "04") {
+  fieldMap = LGfieldMapV1;  
 } else {
     alert(`지원하지 않는 데이터포맷입니다.`);
   return;
@@ -719,6 +766,7 @@ const swapAndDexFields = [
 
 const checksumValue = data.slice(-2);
 const formatValue = data.slice(-2);
+const reservedValue = data.slice(-6);
 const dataWithoutChecksum = data.slice(0, -2);
 
 let yearVal = "", monthVal = "", dayVal = "";
@@ -811,6 +859,29 @@ fieldMap.forEach(([length, start, fieldName]) => {
       displayValue = (dex / 10).toFixed(1);
       displayValue = `${displayValue}V`;
     }
+  }
+
+  if (fieldName === "MGSVer") {
+    displayValue = MGSVerMap[rawValue] || rawValue;
+  }
+
+  if (fieldName === "model" || fieldName === "firmwareVer") {
+    displayValue = hexToAscii(rawValue);
+  }
+
+  if (fieldName === "RSRP" || fieldName === "SINR") {
+    // 앞자리 0 제거 → 숫자로 변환
+    const num = parseInt(rawValue, 10);
+
+    if (!isNaN(num)) {
+      displayValue = `-${num}`;
+    } else {
+      displayValue = rawValue; // fallback
+    }
+  }
+
+  if (fieldName === "SINR") {
+    displayValue = parseInt(rawValue, 10);
   }
 
   if (fieldName === "cmdByte") {
@@ -1047,9 +1118,14 @@ fieldMap.forEach(([length, start, fieldName]) => {
     const formatRow = document.createElement("tr");
     formatRow.innerHTML = `<td>format</td><td>${formatValue}</td><td>${formatValue}</td>`;
     tbody.appendChild(formatRow);
+  } else if (/^04$/.test(MGSVerHex)) {
+    const reservedRow = document.createElement("tr");
+    reservedRow.innerHTML = `<td>reserved</td><td>${reservedValue}</td><td>${reservedValue}</td>`;
+    tbody.appendChild(reservedRow);
   } else {
     const checksumRow = document.createElement("tr");
     checksumRow.innerHTML = `<td>checksum</td><td>${checksumValue}</td><td>${checksumValue}</td>`;
     tbody.appendChild(checksumRow);
   }
 }
+
