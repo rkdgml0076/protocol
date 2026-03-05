@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>NTmoreData_1.0.0</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+</head>
+<body>
+  <div class="header">
+    <h2>UDP HEX → Base64 전송 테스트</h2>
+    <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
+  </div>
+    <a href="http://127.0.0.1:5000/">Refresh</a>
+  <div class="row">
+    <label for="ipInput">목적지 IP:</label>
+    <input type="text" id="ipInput" value="15.164.9.31" />
+  </div>
+
+  <div class="row">
+    <label for="portInput">목적지 PORT:</label>
+    <input type="number" id="portInput" value="15023" />
+  </div>
+
+  <div class="row">
+    <label for="msgInput">HEX 메시지:</label>
+    <input type="text" id="msgInput" value="A5011010" style="width:420px;" />
+  </div>
+
+  <!-- Base64 결과 표시창 -->
+  <div class="row">
+    <label for="base64Output">Base64 변환:</label>
+    <input type="text" id="base64Output" readonly style="width:420px;" />
+  </div>
+
+  <div class="row">
+    <button id="sendBtn">UDP 전송</button>
+    &nbsp;
+    <span>전송 상태: <strong id="status">대기 중</strong></span>
+  </div>
+  <br>
+
+  <div class="row">
+    <label for="ipInput">Entity ID</label>
+    <input type="text" id="time" value="(예시 : ASN_CSE-D-73020407fa-NN17)" style="width:420px;" />
+  </div>
+
+  <div class="row">
+    <label for="ipInput">ACK</label>
+    <input type="text" id="device" value="(Base64 변환 후 값 예시 : pQEQEA==)" style="width:420px;" />
+  </div>
+
+  <div class="row">
+    <button id="send">ACK 설정</button>
+  </div>
+  <br>
+
+  <h3>실시간 로그</h3>
+  <div id="log"></div>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="http://15.164.9.31:7784/socket.io/socket.io.js"></script>
+  <script src="{{ url_for('static', filename='js/data.js') }}"></script>
+</body>
+</html>
