@@ -4,17 +4,19 @@
   <meta charset="UTF-8" />
   <title>NTmoreData_1.0.0</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+  <link rel="stylesheet" href="css/data.css">
 </head>
 <body>
   <div class="header">
     <h2>UDP HEX → Base64 전송 테스트</h2>
     <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
   </div>
-    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px;">
-        <span style="font-size:13px;">1. UDP 데이터를 전송할 IP와 PORT를 작성해주세요.<br>2. UDP 전송을 눌러 정상적으로 전송되었는지 실시간 로그를 통해 확인해 주세요.<br>3. ACK 설정을 위해 Entity ID와 전송할 Base64변환된 ACK 데이터를 작성해주세요.<br>ACK 설정 버튼을 클릭 후 전송완료 팝업을 확인해주세요.</span>
+  <div>
+    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px; width: 100%;">
+        <span style="font-size:13px;">1. UDP 데이터를 전송할 IP와 PORT를 작성해주세요.<br>2. UDP 전송을 눌러 정상적으로 전송되었는지 실시간 로그를 통해 확인해 주세요.<br>3. ACK 설정을 위해 Entity ID와 전송할 Base64변환된 ACK 데이터를 작성해주세요.<br>4. ACK 설정 버튼을 클릭 후 전송완료 팝업을 확인해주세요.</span>
     </label>
-    <a href="http://127.0.0.1:5000/">Refresh</a>
-    <h3>PAYLOAD DATA 전송</h3>
+  </div>
+  <h3>PAYLOAD DATA 전송</h3>
   <div class="row">
     <label for="ipInput">목적지 IP:</label>
     <input type="text" id="ipInput" value="15.164.9.31" />
@@ -64,5 +66,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="http://15.164.9.31:7784/socket.io/socket.io.js"></script>
   <script src="{{ url_for('static', filename='js/data.js') }}"></script>
+  <script src="js/data.js"></script>
 </body>
 </html>
