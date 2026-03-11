@@ -1,5 +1,385 @@
 # NTmoreTool
-Site URL: https://WonKH-Project.github.io/NTmoreTool/
+Site URL: https://rkdgml0076.github.io/protocol/
+
+### 2026-03-10 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## 고양
+<br>
+고양시 API 접속 URL 추가<br>
+
+### API(html)
+```html
+  <div style="display:flex; flex-direction:column;">
+    <label for="siteIdInput">지자체</label>
+    <select id="siteIdInput">
+      <option value="goyang">고양시</option>
+      <option value="gochang">고창군</option>
+      <option value="guri">구리시</option>
+      <option value="gunpo">군포시</option>
+      <option value="gimje">김제시</option>
+      <option value="gimhae">김해시</option>
+      <option value="namhae">남해군</option>
+      <option value="busan">부산시</option>
+      <option value="asan">아산시</option>
+      <option value="yangsan">양산시</option>
+      <option value="yeoncheon">연천군</option>
+      <option value="uijeongbu">의정부시</option>
+      <option value="hadong">하동군</option>
+      <option value="haman">함안군</option>
+    </select>
+```
+
+### 진행 내용
+**고양시 지자체 추가**
+1. API 접속 가능 확인
+--Image 참고--<br>
+<img width="657" height="173" alt="Image" src="https://github.com/user-attachments/assets/df62a872-509d-45c1-87d1-a22019e6c78c" />
+<br>
+
+---
+
+### 2026-03-06 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## UDP DATA SEND
+IP, PORT를 설정하여 Payload 데이터를 전송하거나 ACK 설정하는 페이지 <br>
+<br>
+
+### DATA(html)
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>NTmoreData_1.0.0</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+  <link rel="stylesheet" href="css/data.css">
+</head>
+<body>
+  <div class="header">
+    <h2>UDP HEX → Base64 전송 테스트</h2>
+    <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
+  </div>
+  <div>
+    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px; width: 100%;">
+        <span style="font-size:13px;">1. UDP 데이터를 전송할 IP와 PORT를 작성해주세요.<br>2. UDP 전송을 눌러 정상적으로 전송되었는지 실시간 로그를 통해 확인해 주세요.<br>3. ACK 설정을 위해 Entity ID와 전송할 Base64변환된 ACK 데이터를 작성해주세요.<br>4. ACK 설정 버튼을 클릭 후 전송완료 팝업을 확인해주세요.</span>
+    </label>
+  </div>
+  <h3>PAYLOAD DATA 전송</h3>
+  <div class="row">
+    <label for="ipInput">목적지 IP:</label>
+    <input type="text" id="ipInput" value="15.164.9.31" />
+  </div>
+
+  <div class="row">
+    <label for="portInput">목적지 PORT:</label>
+    <input type="number" id="portInput" value="15023" />
+  </div>
+
+  <div class="row">
+    <label for="msgInput">HEX 메시지:</label>
+    <input type="text" id="msgInput" value="A5011010" style="width:420px;" />
+  </div>
+
+  <!-- Base64 결과 표시창 -->
+  <div class="row">
+    <label for="base64Output">Base64 변환:</label>
+    <input type="text" id="base64Output" readonly style="width:420px;" />
+  </div>
+
+  <div class="row">
+    <button id="sendBtn">UDP 전송</button>
+    &nbsp;
+    <span>전송 상태: <strong id="status">대기 중</strong></span>
+  </div>
+  <br>
+
+  <h3>ACK 전송</h3>
+  <div class="row">
+    <label for="ipInput">Entity ID</label>
+    <input type="text" id="time" value="(예시 : ASN_CSE-D-73020407fa-NN17)" style="width:420px;" />
+  </div>
+
+  <div class="row">
+    <label for="ipInput">ACK</label>
+    <input type="text" id="device" value="(Base64 변환 후 값 예시 : pQEQEA==)" style="width:420px;" />
+  </div>
+
+  <div class="row">
+    <button id="send">ACK 설정</button>
+  </div>
+  <br>
+
+  <h3>실시간 로그</h3>
+  <div id="log"></div>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="http://15.164.9.31:7784/socket.io/socket.io.js"></script>
+  <script src="{{ url_for('static', filename='js/data.js') }}"></script>
+  <script src="js/data.js"></script>
+</body>
+</html>
+```
+
+
+### DATA(js)
+```js
+(function () {
+      const logEl = document.getElementById("log");
+      const statusEl = document.getElementById("status");
+      const sendBtn = document.getElementById("sendBtn");
+      const msgInput = document.getElementById("msgInput");
+      const base64Output = document.getElementById("base64Output");
+
+      function ts() {
+        return new Date().toLocaleString();
+      }
+
+      function appendLog(text) {
+        logEl.textContent += `[${ts()}] ${text}\n`;
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      function setStatus(text) {
+        statusEl.textContent = text;
+      }
+
+      function hexToBytes(hexStr) {
+        const matches = hexStr.match(/[0-9a-fA-F]{2}/g);
+        return matches ? new Uint8Array(matches.map(b => parseInt(b, 16))) : new Uint8Array([]);
+      }
+
+      function bytesToBase64(bytes) {
+        let binary = '';
+        bytes.forEach(b => binary += String.fromCharCode(b));
+        return btoa(binary);
+      }
+
+      // HEX 입력이 바뀔 때마다 Base64 업데이트
+      function updateBase64() {
+        const hex = msgInput.value.trim();
+        if (!hex) { base64Output.value = ''; return; }
+        try {
+          const bytes = hexToBytes(hex);
+          base64Output.value = bytesToBase64(bytes);
+        } catch (e) {
+          base64Output.value = '오류';
+        }
+      }
+
+      msgInput.addEventListener('input', updateBase64);
+      updateBase64(); // 초기값 반영
+
+      async function sendUdp() {
+        const ip = document.getElementById("ipInput").value.trim();
+        const port = document.getElementById("portInput").value.trim();
+        const msg = base64Output.value.trim(); // Base64로 전송
+
+        if (!ip) { appendLog("오류: IP가 비어있음."); setStatus("오류"); return; }
+        if (!port || isNaN(port) || Number(port) <= 0) { appendLog("오류: 포트가 유효하지 않음."); setStatus("오류"); return; }
+        if (!msg) { appendLog("오류: 메시지가 비어있음."); setStatus("오류"); return; }
+
+        sendBtn.disabled = true;
+        setStatus("전송 중...");
+
+        try {
+          const res = await fetch("/send_udp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ip, port, msg })
+          });
+
+          const data = await res.json();
+
+          if (data.status === "sent") {
+            appendLog(`[성공] ${data.ip}:${data.port} 길이=${data.msg_len}바이트, Base64=${msg}`);
+            setStatus("UDP 전송 성공 ✅");
+          } else {
+            appendLog(`[실패] ${data.message || "알 수 없는 오류"}`);
+            setStatus("UDP 전송 실패 ❌");
+          }
+        } catch (err) {
+          appendLog(`요청 실패: ${err}`);
+          setStatus("요청 실패");
+        } finally {
+          sendBtn.disabled = false;
+        }
+      }
+
+      sendBtn.addEventListener("click", sendUdp);
+      appendLog("HEX → Base64 UDP 전송 페이지 로드 완료.");
+    })();
+
+    socket();
+	function socket(){
+		try{
+			var socket = io.connect("http://15.164.9.31:7784", { transports: ['websocket'] });
+	        
+			$('#send').click(function(){
+				alert("전송 하였습니다.");
+				text = $('#time').val() + "," + $('#device').val();
+				socket.emit("send", text);
+	    	});
+
+	        //소켓 서버로 부터 send_msg를 통해 이벤트를 받을 경우 
+	    	//socket.on('send_msg', function(msg) {
+			//	alert(msg);
+	        //});
+		}catch(e){
+			
+		}
+  }
+```
+
+### DATA(css)
+```css
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* padding: 10px 20px; */
+      /* background-color: #f7f7f7; */
+    }
+    .header img {
+      padding: 10px 20px;
+      height: 50px;
+      object-fit: contain;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 30px;
+    }
+    h3 {
+      margin: 0;
+      padding-bottom: 10px;
+      font-size: 16px;
+    }
+    body { 
+        font-family: Arial, sans-serif; 
+        padding: 20px; 
+        background: #f0f0f0;}
+    #log {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      background: #f9f9f9;
+    }
+    .row { 
+        margin-bottom: 8px; 
+    }
+    label { 
+        display:inline-block; 
+        width: 110px; 
+    }
+    input[type="text"], 
+    input[type="number"] 
+    { width: 250px; padding:4px; }
+    input[readonly] { background: #eee; }
+    button { padding:6px 12px; }
+```
+
+### DATA(py)
+```py
+from flask import Flask, render_template, request, jsonify
+import socket
+import base64
+import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS  # PyInstaller 임시 폴더
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+app = Flask(
+    __name__,
+    template_folder=resource_path("templates"),
+    static_folder=resource_path("static")
+)
+
+@app.route("/")
+def index():
+    return render_template("data.html")
+
+@app.route("/send_udp", methods=["POST"])
+def send_udp():
+    try:
+        data = request.get_json(force=True)
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"JSON 파싱 실패: {e}"}), 400
+
+    msg = data.get("msg", "")
+    target_ip = data.get("ip", "15.164.9.31")
+
+    try:
+        target_port = int(data.get("port", 7784))
+    except Exception:
+        return jsonify({"status": "error", "message": "포트는 정수여야 합니다."}), 400
+
+    # ✅ Base64 → Binary 변환
+    try:
+        binary_data = base64.b64decode(msg, validate=True)
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"Base64 변환 실패: {e}"}), 400
+
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.sendto(binary_data, (target_ip, target_port))
+        sock.close()
+
+        print(f"[UDP 전송 성공] {target_ip}:{target_port} ({len(binary_data)}B)")
+
+        return jsonify({
+            "status": "sent",
+            "ip": target_ip,
+            "port": target_port,
+            "msg_len": len(binary_data)
+        })
+
+    except Exception as e:
+        print(f"[UDP 전송 실패] {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+if __name__ == "__main__":
+    # Flask Port 5000
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
+```
+
+### 진행 내용
+**UDP 데이터 전송하는 페이지 개발**
+1. IP, PORT 기본 값 변경 가능
+2. ACK 설정 IP, PORT는 고정이며, A5 Portocol 할당 단말만 설정 가능
+3. Python 은 Github 환경에서 자동실행이 불가능하여, ntmore_data.exe 다운로드 링크 생성
+ - DATA 버튼을 클릭하여 사이트 접속 후 exe 파일 실행(사이트 미적용 시 실행 파일에서 Enter 클릭 시 적용)--Image 참고--<br>
+<img width="753" height="271" alt="Image" src="https://github.com/user-attachments/assets/84b7fe07-c0f3-4f17-aa45-4d543c05c82d" />
+<br>
+<img width="1181" height="370" alt="Image" src="https://github.com/user-attachments/assets/632db5f0-4bd1-49cc-954c-91220d030ed7" />
+<br>
+<img width="942" height="606" alt="Image" src="https://github.com/user-attachments/assets/55d441f2-fbd5-4c88-a2da-98289f18a6a0" />
+<br>
+---
 
 ### 2026-01-14 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
