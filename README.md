@@ -54,7 +54,7 @@ document.getElementById("convertBtn").addEventListener("click", () => {
     parseData();
 
   } catch (e) {
-    alert("[1,2,3,...] 형태로 넣어주세요.");
+    // alert("[1,2,3,...] 형태로 넣어주세요.");
   }
 });
 
@@ -93,6 +93,7 @@ if (headerHex === "A3" && typeHex === "70") {
 **변환하기(KT) 버튼 삭제 및 해석하기 버튼에 통합**
 1. 기존에 변환하던 Byte Array 데이터를 붙여넣고 파싱하기 클릭 시 동일하게 적용
 2. alert(`지원하지 않는 데이터포맷입니다.`); Byte Array 데이터 파싱 시 충돌이 일어나 주석처리
+3. alert("[1,2,3,...] 형태로 넣어주세요."); 기존 데이터 포맷 Payload 데이터 파싱 시 충돌이 일어나 주석처리
 <br>
 
 ---

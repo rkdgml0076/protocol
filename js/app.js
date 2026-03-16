@@ -675,7 +675,7 @@ document.getElementById("convertBtn").addEventListener("click", () => {
     parseData();
 
   } catch (e) {
-    alert("[1,2,3,...] 형태로 넣어주세요.");
+    // alert("[1,2,3,...] 형태로 넣어주세요.");
   }
 });
 
