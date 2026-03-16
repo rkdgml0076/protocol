@@ -1,6 +1,105 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-03-16 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Byte Array
+<br>
+기존 Byte Array 형식의 글자를 파싱하기 버튼에 통합<br>
+
+### protocol(HTM:)
+```html
+    <div class="header">
+      <h2>서울시 원격검침 서버 수신용 데이터포맷 NB-IoT</h2>
+      <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
+    </div>
+    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom: 10px;">
+        <span style="font-size:13px;">1. 파싱을 진행할 Payload 데이터를 입력 칸에 붙여넣고 '파싱하기'를 클릭해주세요.<br>2. 해석 성공 시 아래로 스크롤하여 데이터를 확인해 주세요.</span>
+    </label>
+    <textarea id="inputData" placeholder="여기에 데이터를 붙여넣으세요 (최소 61자)"></textarea>
+    <br/>
+    <button class="btn-primary small" id="convertBtn" onclick="parseData()">파싱하기</button>
+    <br>
+    <div id="summaryBox" style="margin-top:20px; background:#fff; padding:10px; border:1px solid #ddd;">
+      <strong><파싱 데이터 요약></strong>
+      <div id="summaryContent">-</div>
+    </div>
+```
+
+### protocol(JS)
+```js
+document.getElementById("convertBtn").addEventListener("click", () => {
+  const raw = document.getElementById("inputData").value.trim();
+
+  try {
+    const cleaned = raw.replace(/[\[\]]/g, "").trim();
+    const arr = cleaned.split(/[\s,]+/)
+      .map(v => parseInt(v, 10))
+      .filter(v => !isNaN(v));
+
+    if (arr.length === 0) throw new Error("No valid numbers");
+    const hexValues = arr.map(v => (v < 0 ? 256 + v : v).toString(16).padStart(2, "0"));
+    const result = hexValues.join("").toUpperCase();
+
+    // 바로 파싱
+    document.getElementById("inputData").value = result;
+    parseData();
+
+  } catch (e) {
+    alert("[1,2,3,...] 형태로 넣어주세요.");
+  }
+});
+
+// header + type 값으로 분기
+if (headerHex === "A3" && typeHex === "70") {
+  fieldMap = fieldMapV1;
+} else if (headerHex === "A3" && typeHex === "75") {
+  fieldMap = fieldMapV2;
+} else if (headerHex === "A3" && typeHex === "76") {
+  fieldMap = fieldMapV3;
+} else if (headerHex === "A4" && typeHex === "70") {
+  fieldMap = fieldMapV4;
+} else if (headerHex === "A5" && typeHex === "70") {
+  fieldMap = fieldMapV5;
+} else if (headerHex === "B1" && typeHex === "70") {
+  fieldMap = fieldMapV6;
+} else if (headerHex === "A3" && typeHex === "71") {
+  fieldMap = fieldMapV7;
+} else if (cmdByteHex === "D500") {
+  fieldMap = NFCfieldMap1;
+} else if (cmdByteHex === "D502") {
+  fieldMap = NFCfieldMap2;
+} else if (cmdByteHex === "D504") {
+  fieldMap = NFCfieldMap3;
+} else if (cmdByteHex === "D506") {
+  fieldMap = NFCfieldMap4;    
+} else if (MGSVerHex === "04") {
+  fieldMap = LGfieldMapV1;  
+} else {
+    // alert(`지원하지 않는 데이터포맷입니다.`);
+    // 변환하기 통합과 동시에 충돌방지 위해 alert 제거
+  return;
+}
+```
+
+### 진행 내용
+**변환하기(KT) 기능 삭제 및 통합**
+1. 기존에 변환하던 Byte Array 데이터를 붙여넣고 파싱하기 클릭 시 동일하게 적용
+2. alert(`지원하지 않는 데이터포맷입니다.`); Byte Array 데이터 파싱 시 충돌이나 주석처리
+--Image 참고--<br>
+<img width="657" height="173" alt="Image" src="https://github.com/user-attachments/assets/df62a872-509d-45c1-87d1-a22019e6c78c" />
+<br>
+
+---
+
 ### 2026-03-10 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

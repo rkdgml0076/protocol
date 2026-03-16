@@ -659,23 +659,23 @@ const bitEventMap = {
 
 document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
-  const message = document.getElementById("message");
-  const output = document.getElementById("numericOutput");
 
   try {
     const cleaned = raw.replace(/[\[\]]/g, "").trim();
-    const arr = cleaned.split(/[\s,]+/).map(v => parseInt(v, 10)).filter(v => !isNaN(v));
+    const arr = cleaned.split(/[\s,]+/)
+      .map(v => parseInt(v, 10))
+      .filter(v => !isNaN(v));
 
     if (arr.length === 0) throw new Error("No valid numbers");
     const hexValues = arr.map(v => (v < 0 ? 256 + v : v).toString(16).padStart(2, "0"));
     const result = hexValues.join("").toUpperCase();
 
-    output.textContent = result;
-    message.style.display = "block";
+    // 바로 파싱
+    document.getElementById("inputData").value = result;
+    parseData();
 
   } catch (e) {
-    alert("[1,2,3,...] 형태로 넣어주세요.");      
-    message.style.display = "none";
+    alert("[1,2,3,...] 형태로 넣어주세요.");
   }
 });
 
@@ -754,7 +754,8 @@ if (headerHex === "A3" && typeHex === "70") {
 } else if (MGSVerHex === "04") {
   fieldMap = LGfieldMapV1;  
 } else {
-    alert(`지원하지 않는 데이터포맷입니다.`);
+    // alert(`지원하지 않는 데이터포맷입니다.`);
+    // 변환하기 통합과 동시에 충돌방지 위해 alert 제거
   return;
 }
 
