@@ -13,7 +13,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 
 ## Byte Array
 <br>
-기존 Byte Array 형식의 글자를 파싱하기 버튼에 통합<br>
+변환하기(KT) 기능을 파싱하기 버튼에 통합<br>
 
 ### protocol(HTM:)
 ```html
@@ -89,13 +89,11 @@ if (headerHex === "A3" && typeHex === "70") {
   return;
 }
 ```
-
+ㅇ
 ### 진행 내용
-**변환하기(KT) 기능 삭제 및 통합**
+**변환하기(KT) 버튼 삭제 및 해석하기 버튼에 통합**
 1. 기존에 변환하던 Byte Array 데이터를 붙여넣고 파싱하기 클릭 시 동일하게 적용
 2. alert(`지원하지 않는 데이터포맷입니다.`); Byte Array 데이터 파싱 시 충돌이나 주석처리
---Image 참고--<br>
-<img width="657" height="173" alt="Image" src="https://github.com/user-attachments/assets/df62a872-509d-45c1-87d1-a22019e6c78c" />
 <br>
 
 ---
