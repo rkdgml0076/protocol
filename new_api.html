@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>NTmoreAPI_1.0.0</title>
+  <link rel="stylesheet" href="css/gri.css"/>
+</head>
+<body oncontextmenu="return false;">
+  <div class="header">
+    <h2>검침 데이터 API</h2>
+    <a href="https://ntmore.kr/"><img src="https://ntmore.kr/images/kor06r-22-0459/common/top_logo_on.png" alt="Logo"></a>
+  </div>
+  <br>
+  <h2>복수 데이터 확인</h2>
+  <label style="display:inline-flex; align-items:center; gap:8px;">
+      <span style="font-size:13px;">'1', '2', '3', '4' 번호 순서대로 버튼을 클릭하여 진행해 주세요 <br>1: Excel 양식을 다운로드하여 IMEI, 지자체(시, 군 포함 예:고창X 고창군O) 부분을 기입해주세요<br>2: 기입해주신 엑셀 파일을 선택해주세요<br>3: 전체 데이터 불러오기 버튼을 클릭하여 API 데이터를 가져옵니다.<br>4: 결과 데이터 다운로드 버튼을 클릭하여 결과를 다운로드합니다.</span>
+  </label>
+  <div class="controls">
+    <button class="btn-primary small" onclick="downloadTemplate()">1. Import 양식 다운로드</button>
+    <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" style="display:none;" />
+    <label for="excelInput" class="btn-primary small" style="display:inline-flex; align-items:center; gap:8px; height: 22px;" >2. Excel 파일 선택</label>
+    <button id="fetchAllBtn" class="btn-primary small">3. 전체 데이터 불러오기</button>
+    <button id="downloadAllResults" class="btn-primary small">4. 결과 데이터 다운로드</button>
+  </div>
+  <!-- progressBar 영역 -->
+  <div id="progressContainer" style="display:none; margin-top:12px; max-width:300px;">
+    <div style="background:#eee; border-radius:8px; height:18px; overflow:hidden;">
+      <div id="progressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#4caf50,#2e7d32); transition:width 0.3s;"></div>
+    </div>
+    <div id="progressText" style="margin-top:6px; font-size:13px; color:#333;">0%</div>
+  </div>
+
+  <div id="parsedTableContainer">
+    <table id="parsedTable">
+      <thead>
+        <tr><th>#</th><th>지자체</th><th>IMEI</th><th>동작</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <br>
+  <h2>단일 데이터 확인</h2>
+    <div style="display:flex; align-items:flex-start; gap:16px;">
+    <!-- IMEI 영역 -->
+    <div style="display:flex; flex-direction:column;">
+      <label for="grtIdInput">IMEI</label>
+      <input id="grtIdInput" placeholder="IMEI(예: 353220629538247)" />
+    </div>
+    <!-- 지자체 영역 -->
+    <div style="display:flex; flex-direction:column;">
+      <label for="siteIdInput">지자체</label>
+      <select id="siteIdInput">
+        <option value="gimhae">김해시</option>
+      </select>
+    </div><button id="fetchBtn" class="btn-primary small" style="margin-top: 24px;">데이터 불러오기</button>
+  </div>
+  <span id="urlDisplay" style="display:block; margin-top:8px; "></span>
+  <pre id="output"></pre>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> -->
+  <script src="js/new_gri.js"></script>
+</body>
+</html>
