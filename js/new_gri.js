@@ -17,8 +17,7 @@ let parsedRows = [];        // Excel에서 읽어온 {siteId, grtId} 배열
 
 // 공통: API 호출 함수 (grtId, siteId 받음)
 async function fetchDataFor(grtId, siteId) {
-  // const url = `http://211.34.194.70:9000/sampledata?grtId=${encodeURIComponent(grtId)}&siteId=${encodeURIComponent(siteId)}`;
-    const url = `http://dfm-ct.watergrid.kr/api?grtId=${encodeURIComponent(grtId)}&siteId=${encodeURIComponent(siteId)}`;
+  const url = `http://211.34.194.70:9000/sampledata?grtId=${encodeURIComponent(grtId)}&siteId=${encodeURIComponent(siteId)}`;
   document.getElementById("urlDisplay").innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
   try {
     const resp = await fetch(url);
