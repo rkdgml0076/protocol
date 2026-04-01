@@ -1,0 +1,13 @@
+# Node modules
+node_modules/
+venv/
+
+py/build/
+dist/
+ack.txt
+data.spec
+
+settings.json
+
+package-lock.json
+package.json
