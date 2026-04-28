@@ -659,32 +659,44 @@ const bitEventMap = {
 
 document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
-
   try {
+    // ===== Base64 자동 감지 =====
+    if (/^[A-Za-z0-9+/=]+$/.test(raw) && raw.length % 4 === 0) {
+      const binary = atob(raw);
+
+      const hex = [...binary]
+        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+
+      document.getElementById("inputData").value = hex;
+      parseData();
+      return;
+    }
+
+    // ===== 기존 [1,2,3] 숫자 배열 처리 =====
     const cleaned = raw.replace(/[\[\]]/g, "").trim();
     const arr = cleaned.split(/[\s,]+/)
       .map(v => parseInt(v, 10))
       .filter(v => !isNaN(v));
 
     if (arr.length === 0) throw new Error("No valid numbers");
-    const hexValues = arr.map(v => (v < 0 ? 256 + v : v).toString(16).padStart(2, "0"));
+
+    const hexValues = arr.map(v =>
+      (v < 0 ? 256 + v : v)
+        .toString(16)
+        .padStart(2, "0")
+    );
+
     const result = hexValues.join("").toUpperCase();
 
-    // 바로 파싱
     document.getElementById("inputData").value = result;
     parseData();
 
   } catch (e) {
-    // alert("[1,2,3,...] 형태로 넣어주세요.");
+    parseData(); // 그냥 HEX 직접 입력했을 수도 있으니 파싱 시도
   }
 });
-
-function parseFinalReport(hex) {
-  const b = hex.match(/.{2}/g).map(v => parseInt(v, 16));
-
-  return `${2000 + b[0]}-${String(b[1]).padStart(2,'0')}-${String(b[2]).padStart(2,'0')} ` +
-         `${String(b[3]).padStart(2,'0')}:${String(b[4]).padStart(2,'0')}:${String(b[5]).padStart(2,'0')}`;
-}
 
 function hexToAscii(hex) {
   if (!hex || hex.length % 2 !== 0) return hex;

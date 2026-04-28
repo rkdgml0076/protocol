@@ -1,6 +1,72 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-04-28 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Base64
+<br>
+Base64 양식의 텍스트를 자동 감지하여 파싱하는 기능 추가<br>
+
+### protocol(JS)
+```js
+document.getElementById("convertBtn").addEventListener("click", () => {
+  const raw = document.getElementById("inputData").value.trim();
+  try {
+    // ===== Base64 자동 감지 =====
+    if (/^[A-Za-z0-9+/=]+$/.test(raw) && raw.length % 4 === 0) {
+      const binary = atob(raw);
+
+      const hex = [...binary]
+        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+
+      document.getElementById("inputData").value = hex;
+      parseData();
+      return;
+    }
+
+    // ===== 기존 [1,2,3] 숫자 배열 처리 =====
+    const cleaned = raw.replace(/[\[\]]/g, "").trim();
+    const arr = cleaned.split(/[\s,]+/)
+      .map(v => parseInt(v, 10))
+      .filter(v => !isNaN(v));
+
+    if (arr.length === 0) throw new Error("No valid numbers");
+
+    const hexValues = arr.map(v =>
+      (v < 0 ? 256 + v : v)
+        .toString(16)
+        .padStart(2, "0")
+    );
+
+    const result = hexValues.join("").toUpperCase();
+
+    document.getElementById("inputData").value = result;
+    parseData();
+
+  } catch (e) {
+    parseData(); // 그냥 HEX 직접 입력했을 수도 있으니 파싱 시도
+  }
+});
+```
+### 진행 내용
+**Base64 파싱기능 추가**
+1. 기존에 변환하던 Byte Array 데이터와 마찬가지로 데이터 붙여넣고 파싱하기 버튼 클릭 시 자동 변환 후 파싱
+2. New_api, Data 페이지 내용은 추후 기술
+
+<br>
+
+---
+
 ### 2026-03-16 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
@@ -15,7 +81,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 <br>
 변환하기(KT) 기능을 파싱하기 버튼에 통합<br>
 
-### protocol(HTM:)
+### protocol(HTML)
 ```html
     <div class="header">
       <h2>서울시 원격검침 서버 수신용 데이터포맷 NB-IoT</h2>
