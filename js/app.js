@@ -659,42 +659,23 @@ const bitEventMap = {
 
 document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
+
   try {
-    // ===== Base64 자동 감지 =====
-    if (/^[A-Za-z0-9+/=]+$/.test(raw) && raw.length % 4 === 0) {
-      const binary = atob(raw);
-
-      const hex = [...binary]
-        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
-        .join("")
-        .toUpperCase();
-
-      document.getElementById("inputData").value = hex;
-      parseData();
-      return;
-    }
-
-    // ===== 기존 [1,2,3] 숫자 배열 처리 =====
     const cleaned = raw.replace(/[\[\]]/g, "").trim();
     const arr = cleaned.split(/[\s,]+/)
       .map(v => parseInt(v, 10))
       .filter(v => !isNaN(v));
 
     if (arr.length === 0) throw new Error("No valid numbers");
-
-    const hexValues = arr.map(v =>
-      (v < 0 ? 256 + v : v)
-        .toString(16)
-        .padStart(2, "0")
-    );
-
+    const hexValues = arr.map(v => (v < 0 ? 256 + v : v).toString(16).padStart(2, "0"));
     const result = hexValues.join("").toUpperCase();
 
+    // 바로 파싱
     document.getElementById("inputData").value = result;
     parseData();
 
   } catch (e) {
-    parseData(); //예외 발생해도 기존 방식으로 시도
+    // alert("[1,2,3,...] 형태로 넣어주세요.");
   }
 });
 
