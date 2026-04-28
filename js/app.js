@@ -694,7 +694,7 @@ document.getElementById("convertBtn").addEventListener("click", () => {
     parseData();
 
   } catch (e) {
-    parseData(); // 그냥 HEX 직접 입력했을 수도 있으니 파싱 시도
+    parseData(); //예외 발생해도 기존 방식으로 시도
   }
 });
 
