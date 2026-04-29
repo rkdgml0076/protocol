@@ -661,39 +661,56 @@ document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
 
   try {
-    const cleaned = raw.replace(/[\[\]]/g, "").trim();
-    const arr = cleaned.split(/[\s,]+/)
-      .map(v => parseInt(v, 10))
-      .filter(v => !isNaN(v));
+    const compact = raw.replace(/\s+/g, "");
 
-    if (arr.length === 0) throw new Error("No valid numbers");
-    const hexValues = arr.map(v => (v < 0 ? 256 + v : v).toString(16).padStart(2, "0"));
-    const result = hexValues.join("").toUpperCase();
+    // 1) HEX 직접 입력이면 절대 Base64 변환하지 않음
+    if (/^[0-9A-Fa-f]+$/.test(compact) && compact.length % 2 === 0) {
+      document.getElementById("inputData").value = compact.toUpperCase();
+      parseData();
+      return;
+    }
 
-    // 바로 파싱
-    document.getElementById("inputData").value = result;
-    parseData();
+    // 2) [1,2,3] 또는 1, 2, 3 배열 입력 처리
+    if (/^[\[\]\d\s,\-]+$/.test(raw)) {
+      const cleaned = raw.replace(/[\[\]]/g, "").trim();
+      const arr = cleaned.split(/[\s,]+/)
+        .map(v => parseInt(v, 10))
+        .filter(v => !isNaN(v));
+
+      if (arr.length > 0) {
+        const hexValues = arr.map(v =>
+          (v < 0 ? 256 + v : v)
+            .toString(16)
+            .padStart(2, "0")
+        );
+
+        const result = hexValues.join("").toUpperCase();
+        document.getElementById("inputData").value = result;
+        parseData();
+        return;
+      }
+    }
+
+    // 3) Base64는 HEX/배열이 아닐 때만 처리
+    if (/^[A-Za-z0-9+/=]+$/.test(compact) && compact.length % 4 === 0) {
+      const binary = atob(compact);
+
+      const hex = [...binary]
+        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+
+      document.getElementById("inputData").value = hex;
+      parseData();
+      return;
+    }
+
+    alert("지원하지 않는 입력 형식입니다.");
 
   } catch (e) {
-    // alert("[1,2,3,...] 형태로 넣어주세요.");
+    alert("변환 중 오류가 발생했습니다.");
   }
 });
-
-function hexToAscii(hex) {
-  if (!hex || hex.length % 2 !== 0) return hex;
-
-  return hex.match(/.{2}/g)
-    .map(h => {
-      const code = parseInt(h, 16);
-      // 출력 가능한 ASCII만
-      if (code >= 32 && code <= 126) {
-        return String.fromCharCode(code);
-      }
-      return '';
-    })
-    .join('')
-    .trim();
-}
 
 function parseData() {
   const raw = document.getElementById("inputData").value;

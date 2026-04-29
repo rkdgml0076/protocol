@@ -1,6 +1,86 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-04-29 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Base64(BugFix)
+<br>
+기존 파싱하던 데이터 포맷 양식도 Base64로 인식하여 변환하던 버그 수정<br>
+
+### protocol(JS)
+```js
+document.getElementById("convertBtn").addEventListener("click", () => {
+  const raw = document.getElementById("inputData").value.trim();
+
+  try {
+    const compact = raw.replace(/\s+/g, "");
+
+    // 1) HEX 직접 입력이면 절대 Base64 변환하지 않음
+    if (/^[0-9A-Fa-f]+$/.test(compact) && compact.length % 2 === 0) {
+      document.getElementById("inputData").value = compact.toUpperCase();
+      parseData();
+      return;
+    }
+
+    // 2) [1,2,3] 또는 1, 2, 3 배열 입력 처리
+    if (/^[\[\]\d\s,\-]+$/.test(raw)) {
+      const cleaned = raw.replace(/[\[\]]/g, "").trim();
+      const arr = cleaned.split(/[\s,]+/)
+        .map(v => parseInt(v, 10))
+        .filter(v => !isNaN(v));
+
+      if (arr.length > 0) {
+        const hexValues = arr.map(v =>
+          (v < 0 ? 256 + v : v)
+            .toString(16)
+            .padStart(2, "0")
+        );
+
+        const result = hexValues.join("").toUpperCase();
+        document.getElementById("inputData").value = result;
+        parseData();
+        return;
+      }
+    }
+
+    // 3) Base64는 HEX/배열이 아닐 때만 처리
+    if (/^[A-Za-z0-9+/=]+$/.test(compact) && compact.length % 4 === 0) {
+      const binary = atob(compact);
+
+      const hex = [...binary]
+        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+
+      document.getElementById("inputData").value = hex;
+      parseData();
+      return;
+    }
+
+    alert("지원하지 않는 입력 형식입니다.");
+
+  } catch (e) {
+    alert("변환 중 오류가 발생했습니다.");
+  }
+});
+```
+### 진행 내용
+**Base64 파싱기능 추가**
+1. 기존 데이터 포맷 파싱, Base64 변환, Attributes 음의 보수값 변환 기능 사용가능
+2. New_api, Data 페이지 내용은 추후 기술
+
+<br>
+
+---
+
 ### 2026-04-28 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
