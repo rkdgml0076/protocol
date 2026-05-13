@@ -1,6 +1,46 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-05-13 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Base64(BugFix)
+<br>
+QTY 데이터 파싱이 안되던 버그 수정<br>
+
+### protocol(JS)
+```js
+  const compact = raw.replace(/\s+/g, "");
+
+  // HEX 우선 판정
+  const isHex =
+    /^[0-9A-Fa-f]+$/.test(compact) &&
+    compact.length % 2 === 0;
+
+  // HEX면 절대 Base64 처리 금지
+  if (isHex) {
+    document.getElementById("inputData").value = compact.toUpperCase();
+    parseData();
+    return;
+  }
+
+```
+### 진행 내용
+**BugFix**
+1. Hex 데이터를 우선처리 하도록 변경
+2. New_api, Data 페이지 내용은 추후 기술
+
+<br>
+
+---
+
 ### 2026-04-29 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
@@ -73,7 +113,7 @@ document.getElementById("convertBtn").addEventListener("click", () => {
 });
 ```
 ### 진행 내용
-**Base64 파싱기능 추가**
+**Base64 파싱기능 추가, BugFix**
 1. 기존 데이터 포맷 파싱, Base64 변환, Attributes 음의 보수값 변환 기능 사용가능
 2. New_api, Data 페이지 내용은 추후 기술
 

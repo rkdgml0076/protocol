@@ -659,6 +659,19 @@ const bitEventMap = {
 
 document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
+  const compact = raw.replace(/\s+/g, "");
+
+  // HEX 우선 판정
+  const isHex =
+    /^[0-9A-Fa-f]+$/.test(compact) &&
+    compact.length % 2 === 0;
+
+  // HEX면 절대 Base64 처리 금지
+  if (isHex) {
+    document.getElementById("inputData").value = compact.toUpperCase();
+    parseData();
+    return;
+  }
 
   try {
     const compact = raw.replace(/\s+/g, "");
