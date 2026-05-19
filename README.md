@@ -1,6 +1,56 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-05-19 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## (STOR_RES)(BugFix)
+<br>
+D500 NFC Read 데이터 파싱 버그 수정<br>
+
+### protocol(JS)
+```js
+function hexToAscii(hex) {
+  if (!hex || hex.length % 2 !== 0) return hex;
+
+  return hex.match(/.{2}/g)
+    .map(h => {
+      const code = parseInt(h, 16);
+      if (code >= 32 && code <= 126) {
+        return String.fromCharCode(code);
+      }
+      return '';
+    })
+    .join('')
+    .trim();
+}
+
+function parseFinalReport(hex) {
+  if (!hex || hex.length % 2 !== 0) return hex;
+
+  const bytes = hex.match(/.{2}/g).map(v => parseInt(v, 16));
+  if (bytes.length < 6 || bytes.some(isNaN)) return hex;
+
+  return `${2000 + bytes[0]}-${String(bytes[1]).padStart(2, '0')}-${String(bytes[2]).padStart(2, '0')} ` +
+         `${String(bytes[3]).padStart(2, '0')}:${String(bytes[4]).padStart(2, '0')}:${String(bytes[5]).padStart(2, '0')}`;
+}
+```
+### 진행 내용
+**BugFix**
+1. meterNo 이후 데이터가 파싱이 안되던 현상 수정
+2. parseFinalReport hex 함수 추가 정의
+
+<br>
+
+---
+
 ### 2026-05-13 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

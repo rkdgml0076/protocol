@@ -613,6 +613,31 @@ const MGSVerMap = {
   "04": "LGU+ Quality NB-IoT Ver.4"
 };
 
+function hexToAscii(hex) {
+  if (!hex || hex.length % 2 !== 0) return hex;
+
+  return hex.match(/.{2}/g)
+    .map(h => {
+      const code = parseInt(h, 16);
+      if (code >= 32 && code <= 126) {
+        return String.fromCharCode(code);
+      }
+      return '';
+    })
+    .join('')
+    .trim();
+}
+
+function parseFinalReport(hex) {
+  if (!hex || hex.length % 2 !== 0) return hex;
+
+  const bytes = hex.match(/.{2}/g).map(v => parseInt(v, 16));
+  if (bytes.length < 6 || bytes.some(isNaN)) return hex;
+
+  return `${2000 + bytes[0]}-${String(bytes[1]).padStart(2, '0')}-${String(bytes[2]).padStart(2, '0')} ` +
+         `${String(bytes[3]).padStart(2, '0')}:${String(bytes[4]).padStart(2, '0')}:${String(bytes[5]).padStart(2, '0')}`;
+}
+
 const cmdByteMap = {
   "D500": "저장정보 응답\n(STOR_RES)",
   "D502": "원격기기 정보 응답\n(MTR_RES)",
