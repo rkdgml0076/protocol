@@ -743,7 +743,7 @@ document.getElementById("convertBtn").addEventListener("click", () => {
       return;
     }
 
-    alert("지원하지 않는 입력 형식입니다.");
+    // alert("지원하지 않는 입력 형식입니다.");
 
   } catch (e) {
     alert("변환 중 오류가 발생했습니다.");
