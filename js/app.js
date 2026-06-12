@@ -1003,7 +1003,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "snr") {
     displayValue = `${displayValue}`;
     if (displayValue >= 128) {
-      displayValue = `-${256 - displayValue}`;
+      displayValue = `-${65536 - displayValue}`;
     } else {
       displayValue = displayValue.toString();
     }
