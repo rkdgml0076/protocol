@@ -1,6 +1,41 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-06-12 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## (SNR)(BugFix)
+<br>
+V1.8, V2.0 SNR 파싱 시 잘못된 값이 나오던 버그 수정<br>
+
+### protocol(JS)
+```js
+const snrMaxValue = (fieldMap === fieldMapV5 || fieldMap === fieldMapV6) ? 65536 : 256;
+
+  if (fieldName === "snr") {
+    const snrValue = Number(displayValue);
+    if (snrValue >= 128) {
+      displayValue = `-${snrMaxValue - snrValue}`;
+    } else {
+      displayValue = snrValue.toString();
+    }
+  }
+```
+### 진행 내용
+**BugFix**
+1. V1.8 및 V2.0 데이터 포맷의 규격이 달라 개별 파싱되도록 수정함
+
+<br>
+
+---
+
 ### 2026-05-19 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
