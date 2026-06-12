@@ -812,6 +812,7 @@ const swapAndDexFields = [
   "year", "month", "day", "hour", "minute", "second", "msrCnt",
   "msrStdValue", "msrOffset", "mValue", "tempValue"
 ];
+const snrMaxValue = (fieldMap === fieldMapV5 || fieldMap === fieldMapV6) ? 65536 : 256;
 
 const checksumValue = data.slice(-2);
 const formatValue = data.slice(-2);
@@ -1001,11 +1002,11 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = `-${displayValue}`;
   }
   if (fieldName === "snr") {
-    displayValue = `${displayValue}`;
-    if (displayValue >= 128) {
-      displayValue = `-${65536 - displayValue}`;
+    const snrValue = Number(displayValue);
+    if (snrValue >= 128) {
+      displayValue = `-${snrMaxValue - snrValue}`;
     } else {
-      displayValue = displayValue.toString();
+      displayValue = snrValue.toString();
     }
   }
   if (fieldName === "year") {
