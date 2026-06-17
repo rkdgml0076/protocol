@@ -960,6 +960,10 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "Finalmeter") {
     displayValue = parseFinalReport(rawValue);
   }
+
+  if (fieldName === "ctnNO") {
+    displayValue = "01" + displayValue;
+  }
   
   // 스왑 및 DEX 변환 대상
   if (swapAndDexFields.some(prefix => fieldName.startsWith(prefix))) {
