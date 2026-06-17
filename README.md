@@ -1,6 +1,75 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-06-17 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## CTN Number 
+<br>
+devNo => ctnNo 변경<br>
+
+### protocol(JS)
+```js
+/* V2.0 NFC MTR_RES */
+const NFCfieldMap2 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterCode"],
+  [8, 51, "ctnNO"],
+  [4, 59, "devFw"],
+  [2, 63, "format"],
+  [2, 65, "devVolt"],
+  [2, 67, "comOnOff"]
+];
+
+/* V2.0 NFC STOR_RES */
+const NFCfieldMap1 = [
+  [4, 1, "cmdByte"],
+  [8, 5, "meterNo"],
+  [12, 13, "FinalReport"],
+  [12, 25, "Finalmeter"],
+  [2, 37, "msrCnt"],
+  [8, 39, "msrStdValue"], 
+  [2, 47, "meterCaliber"],
+  [2, 49, "meterStatus"],
+  [4, 51, "rsrp"],
+  [2, 55, "NoAck"],
+  [2, 57, "mno"],
+  [2, 59, "modem"],
+  [2, 61, "devVolt"],
+  [2, 63, "comOnOff"],
+  [8, 65, "ctnNO"],
+  [4, 73, "devFw"],
+  [2, 77, "meterCode"],
+  [2, 79, "format"]
+];
+
+  if (fieldName === "ctnNO") {
+    displayValue = "01" + displayValue;
+  }
+```
+### 진행 내용
+**ctnNo**
+1. 기존 데이터키 devNo은 일련번호 데이터와 명칭이 동일하여 구분이 어려워 ctnNo으로 변경
+2. 가독성을 위해 기존 PhoneNumber 처럼 ctnNo 해석 값 앞에 '01' 추가
+--Image 참고--<br>
+<img width="901" height="51" alt="Image" src="https://github.com/user-attachments/assets/8d5b4916-8ba2-4107-a7f1-30453de0dfd8" />
+<br>
+
+---
+
 ### 2026-06-12 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
