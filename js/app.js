@@ -529,7 +529,7 @@ const NFCfieldMap2 = [
   [8, 39, "msrStdValue"], 
   [2, 47, "meterCaliber"],
   [2, 49, "meterCode"],
-  [8, 51, "devNO"],
+  [8, 51, "ctnNO"],
   [4, 59, "devFw"],
   [2, 63, "format"],
   [2, 65, "devVolt"],
@@ -584,7 +584,7 @@ const NFCfieldMap1 = [
   [2, 59, "modem"],
   [2, 61, "devVolt"],
   [2, 63, "comOnOff"],
-  [8, 65, "devNO"],
+  [8, 65, "ctnNO"],
   [4, 73, "devFw"],
   [2, 77, "meterCode"],
   [2, 79, "format"]
