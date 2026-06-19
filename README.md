@@ -11,6 +11,52 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 - Visual Studio Code 확장에서 Live Server 다운로드
 - 코드 결과물 확인은 "alt + L" + "alt + O "
 
+## MNO 
+<br>
+통신사 3사 해석 추가<br>
+
+### protocol(JS)
+```js
+const mnoMap = {
+  "12": "SKT",
+  "02": "KT",
+  "98": "LGU+"
+};
+
+
+  if (fieldName === "mno") {
+    displayValue = mnoMap[rawValue.toUpperCase()] || "알수없는 통신사";
+  }
+  if (fieldName.trim() === "devVolt") {
+  // devVolt는 HEX 2자리 → DEX → 소수점 한자리
+    if (rawValue.length === 2) {
+      // 예: 36 → 54 → 5.4
+      const dex = parseInt(rawValue, 16);
+      displayValue = (dex / 10).toFixed(1);
+      displayValue = `${displayValue}V`;
+    }
+  }
+```
+### 진행 내용
+**MNO 추가**
+1. SKT, KT, LGU+ 추가 분류
+2. 이외의 값을 받아올 시 "알수없는 통신사" 출력
+--Image 참고--<br>
+<img width="767" height="45" alt="Image" src="https://github.com/user-attachments/assets/8faa044f-109d-48c0-bd3c-6e6f69eea03c" />
+<br>
+
+---
+
+### 2026-06-17 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
 ## CTN Number 
 <br>
 devNo => ctnNo 변경<br>
