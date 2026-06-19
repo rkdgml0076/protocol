@@ -1,4 +1,4 @@
-document.addEventListener('keydown', function (e) {
+﻿document.addEventListener('keydown', function (e) {
   // F12
   if (e.keyCode === 123) {
     e.preventDefault();
@@ -682,6 +682,12 @@ const bitEventMap = {
   7: "과부하"
 };
 
+const mnoMap = {
+  "12": "SKT",
+  "02": "KT",
+  "98": "LGU+"
+};
+
 document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
   const compact = raw.replace(/\s+/g, "");
@@ -901,6 +907,9 @@ fieldMap.forEach(([length, start, fieldName]) => {
     }
   }
 
+  if (fieldName === "mno") {
+    displayValue = mnoMap[rawValue.toUpperCase()] || "알수없는 통신사";
+  }
   if (fieldName.trim() === "devVolt") {
   // devVolt는 HEX 2자리 → DEX → 소수점 한자리
     if (rawValue.length === 2) {
