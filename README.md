@@ -237,6 +237,7 @@ if (headerHex === "A3" && typeHex === "70") {
 4. 별도의 계산식 추가 없이 2바이트를 16비트 값으로 조합된 결과값을 그대로 배열에 대입해서 제조사 이름 해석 출력
 5. 검침 값 부분 파싱 시 hex 변환 없이 리틀 에드안 방식으로 조합하여 출력
 6. Lfield 필드 값을 기준으로 분기(12: 대구, 0F: 서울)
+7. 메인 페이지에 Last Update 내용 추가(README 업데이트 할 때마다 적용 예정)
 --Image 참고--<br>
 <img width="956" height="713" alt="Image" src="https://github.com/user-attachments/assets/a6eed740-e24a-4217-ad7d-a5ad95d27c2c" />
 <br>
