@@ -1,6 +1,248 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-06-30 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## METER PROTOCOL
+<br>
+수도검침 데이터 포맷 파싱 필드 추가<br>
+
+### protocol(JS)
+```js
+/* DAEGU METER PROTOCOL*/
+const MeterfieldMap1 = [
+  [2, 1, "start"],
+  [2, 3, "Lfield"],
+  [2, 5, "Lfield"],
+  [2, 7, "start"],
+  [2, 9, "CField"],
+  [2, 11, "Afield"],
+  [2, 13, "ClField"],
+  [2, 15, "mdh"],
+  [8, 17, "identNo"],
+  [2, 25, "verMo"],
+  [4, 27, "manID"],
+  [2, 31, "status"],
+  [2, 33, "meterCaliber"],
+  [2, 35, "vif"],
+  [8, 37, "meterData"],
+  [2, 45, "checkSum"],
+  [2, 47, "stop"],
+];
+
+/* SEOUL METER PROTOCOL*/
+const MeterfieldMap2 = [
+  [2, 1, "start"],
+  [2, 3, "Lfield"],
+  [2, 5, "Lfield"],
+  [2, 7, "start"],
+  [2, 9, "CField"],
+  [2, 11, "Afield"],
+  [2, 13, "ClField"],
+  [2, 15, "mdh"],
+  [8, 17, "identNo"],
+  [2, 25, "status"],
+  [2, 27, "meterCaliber"],
+  [2, 29, "vif"],
+  [8, 31, "meterData"],
+  [2, 39, "checkSum"],
+  [2, 41, "stop"],
+];
+
+const MeterVerMap = {
+  "12": "대구시 검침데이터 프로토콜",
+  "0F": "서울시 검침데이터 프로토콜"
+};
+
+const meterDeviceMap = {
+  "7712": "디에스워터(DSW)", "1277": "디에스워터(DSW)",
+  "3012": "신한정밀 주식회사(SHP)", "1230": "신한정밀 주식회사(SHP)",
+  "6812": "두산하이텍주식회사(DSH)", "1268": "두산하이텍주식회사(DSH)",
+  "2311": "주식회사 리테크(RTC)", "1123": "주식회사 리테크(RTC)",
+  "6411": "주식회사 대덕하이테크(DHT)", "1164": "주식회사 대덕하이테크(DHT)",
+  "8c0c": "주식회사 그린플로우(GFL)", "0c8c": "주식회사 그린플로우(GFL)",
+  "3414": "자인테크놀로지(주)(JIT)", "1434": "자인테크놀로지(주)(JIT)",
+  "7011": "주식회사대한계기정밀(DHP)", "1170": "주식회사대한계기정밀(DHP)",
+  "4a15": "경성제닉스 주식회사(KSJ)", "154a": "경성제닉스 주식회사(KSJ)",
+  "3013": "한서정밀계기(주)(HSP)", "1330": "한서정밀계기(주)(HSP)",
+  "341a": "아이원테크(IWT)", "1a34": "아이원테크(IWT)",
+  "6911": "주식회사 대명아이티(DMI)", "1169": "주식회사 대명아이티(DMI)",
+  "6312": "주식회사 두레콤(DRC)", "1263": "주식회사 두레콤(DRC)",
+  "2d12": "신한메카트로닉스(주)(SHM)", "122d": "신한메카트로닉스(주)(SHM)",
+  "3314": "시안시스템(SAS)", "1433": "시안시스템(SAS)",
+  "3432": "주식회사 와이엔 이천텍(YIT)", "3234": "주식회사 와이엔 이천텍(YIT)",
+  "2313": "주식회사 에이치에스씨엠티(HSC)", "1323": "주식회사 에이치에스씨엠티(HSC)",
+  "6d11": "주식회사 대한계전(DHM)", "116d": "주식회사 대한계전(DHM)",
+  "2d11": "청수계기(CSM)", "112d": "청수계기(CSM)",
+  "2914": "일천산업(ICI)", "1429": "일천산업(ICI)",
+  "770a": "부경수도 주식회사(BKW)", "0a77": "부경수도 주식회사(BKW)",
+  "7010": "주식회사 청호정밀(CHP)", "1070": "주식회사 청호정밀(CHP)",
+  "3416": "한국유체기술(주)(KFT)", "1634": "한국유체기술(주)(KFT)",
+  "2317": "케이큐 주식회사(KQC)", "1723": "케이큐 주식회사(KQC)",
+  "3413": "주식회사 한진테크(HJT)", "1334": "주식회사 한진테크(HJT)",
+  "3422": "피에스텍(주)(PST)", "2234": "피에스텍(주)(PST)",
+  "2319": "한국아이치 주식회사(IHC)", "1923": "한국아이치 주식회사(IHC)",
+  "7412": "주식회사 디알텍(DRT)", "1274": "주식회사 디알텍(DRT)",
+  "6916": "삼성계기공업(SMI)", "1669": "삼성계기공업(SMI)",
+  "ef1d": "(주)정오(JOO)", "1def": "(주)정오(JOO)",
+  "cd16": "주식회사 한국워터미터테크(KWM)", "16cd": "주식회사 한국워터미터테크(KWM)",
+  "3316": "세나스(SNS)", "1633": "세나스(SNS)",
+  "6315": "경도계전주식회사(KMC)", "1563": "경도계전주식회사(KMC)",
+  "3415": "아이에스테크놀로지 주식회사(IST)", "1534": "아이에스테크놀로지 주식회사(IST)",
+  "6d13": "주식회사한영계기(HYM)", "136d": "주식회사한영계기(HYM)",
+  "232e": "주식회사 웰콤시스(WCS)", "2e23": "주식회사 웰콤시스(WCS)",
+  "7013": "주식회사 하이텍이피씨(HTP)", "1370": "주식회사 하이텍이피씨(HTP)",
+  "6d17": "(주)한국켄트메타스(KKM)", "176d": "(주)한국켄트메타스(KKM)",
+  "632e": "신우산업 주식회사(SWC)", "2e63": "신우산업 주식회사(SWC)",
+  "3413": "주식회사 효성테크(HST)", "1334": "주식회사 효성테크(HST)",
+  "742e": "청수미터텍(WMT)", "2e74": "청수미터텍(WMT)",
+  "3317": "주식회사 케이엠에스(KMS)", "1733": "주식회사 케이엠에스(KMS)",
+  "2519": "주식회사 위지트에너지(WJE)", "1925": "주식회사 위지트에너지(WJE)",
+  "332e": "(주)워터엠시스(WMS)", "2e33": "(주)워터엠시스(WMS)",
+  "2512": "신일일렉트로닉 주식회사(SHE)", "1225": "신일일렉트로닉 주식회사(SHE)",
+  "6412": "주식회사 삼원미터텍(SMD)", "1264": "주식회사 삼원미터텍(SMD)",
+  "2514": "신신이앤지(주)(SSE)", "1425": "신신이앤지(주)(SSE)",
+  "3412": "주식회사 이천텍(ICT)", "1234": "주식회사 이천텍(ICT)",
+  "6512": "신동아전자 주식회사(SDE)", "1265": "신동아전자 주식회사(SDE)",
+  "630c": "그린계기 주식회사(GMC)", "0c63": "그린계기 주식회사(GMC)",
+  "232e": "(주)우성피엔에프(WSC)", "2e23": "(주)우성피엔에프(WSC)"
+};
+
+function getManufacturerName(hex) {
+  if (!hex || hex.length !== 4) return hex;
+  
+  const lowerHex = hex.toLowerCase(); // 매핑 편의를 위한 소문자 통일
+  return meterDeviceMap[lowerHex] || `미등록 제조사(${hex.toUpperCase()})`;
+}
+
+// header (2글자)와 type (2글자) 추출
+// cmdByte (4글자) 추출
+// MGSVer (2글자) 추출
+// MeterVer (2글자) 추출
+const headerHex = data.slice(0, 2).toUpperCase();
+const typeHex = data.slice(4, 6).toUpperCase();
+const cmdByteHex = data.slice(0, 4).toUpperCase();
+const MGSVerHex = data.slice(0, 2).toUpperCase();
+const MeterVerHex = data.slice(2, 4).toUpperCase();
+
+console.log("Header:", headerHex);
+console.log("Type:", typeHex);
+console.log("cmdByte:", cmdByteHex);
+console.log("MGSVer:", MGSVerHex);
+console.log("MeterVer:", MeterVerHex);
+
+let fieldMap;
+
+// header + type 값으로 분기
+if (headerHex === "A3" && typeHex === "70") {
+  fieldMap = fieldMapV1;
+} else if (headerHex === "A3" && typeHex === "75") {
+  fieldMap = fieldMapV2;
+} else if (headerHex === "A3" && typeHex === "76") {
+  fieldMap = fieldMapV3;
+} else if (headerHex === "A4" && typeHex === "70") {
+  fieldMap = fieldMapV4;
+} else if (headerHex === "A5" && typeHex === "70") {
+  fieldMap = fieldMapV5;
+} else if (headerHex === "B1" && typeHex === "70") {
+  fieldMap = fieldMapV6;
+} else if (headerHex === "A3" && typeHex === "71") {
+  fieldMap = fieldMapV7;
+} else if (cmdByteHex === "D500") {
+  fieldMap = NFCfieldMap1;
+} else if (cmdByteHex === "D502") {
+  fieldMap = NFCfieldMap2;
+} else if (cmdByteHex === "D504") {
+  fieldMap = NFCfieldMap3;
+} else if (cmdByteHex === "D506") {
+  fieldMap = NFCfieldMap4;    
+} else if (MGSVerHex === "04") {
+  fieldMap = LGfieldMapV1;  
+} else if (MeterVerHex === "12") {
+  fieldMap = MeterfieldMap1;  
+} else if (MeterVerHex === "0F") {
+  fieldMap = MeterfieldMap2;  
+} else {
+    // alert(`지원하지 않는 데이터포맷입니다.`);
+    // 변환하기 통합과 동시에 충돌방지 위해 alert 제거
+  return;
+}
+
+  if (fieldName === "vif") {
+    displayValue = rawValue; // 화면에는 원본 값(예: "11" 또는 "13") 그대로 출력
+    
+    // vif의 뒷자리 글자를 추출하여 전역 division 변수를 강제로 업데이트합니다.
+    const vifSecondChar = rawValue.charAt(1); // "11"이면 '1', "13"이면 '3'
+    if (meterDivisionMap[vifSecondChar] !== undefined) {
+      division = meterDivisionMap[vifSecondChar]; // '1'이면 1, '3'이면 3이 division에 저장됨
+    }
+  }
+
+  if (fieldName === "Lfield") {
+    displayValue = MeterVerMap[rawValue] || rawValue;
+  }
+
+  if (fieldName.trim() === "identNo" && rawValue.length >= 8) {
+    const swapped = rawValue.match(/../g).reverse().join("");
+    displayValue = swapped.slice(0, 2) + "-" + swapped.slice(2, 8);
+  }
+
+  if (fieldName === "manID" || fieldName === "manufacturerCode") {
+    displayValue = getManufacturerName(rawValue);
+  }
+
+  if (fieldName === "meterData") {
+    if (isFailValue(rawValue)) {
+      displayValue = "검침이상";
+    } else {
+      let realRawNum;
+
+      if (rawValue.length === 8) {
+        const byte4 = rawValue.slice(6, 8);
+        const byte3 = rawValue.slice(4, 6);
+        const byte2 = rawValue.slice(2, 4);
+        const byte1 = rawValue.slice(0, 2);
+        realRawNum = Number(byte4 + byte3 + byte2 + byte1); 
+      } else if (rawValue.length === 4) {
+        const byte2 = rawValue.slice(2, 4);
+        const byte1 = rawValue.slice(0, 2);
+        realRawNum = Number(byte2 + byte1);
+      } else {
+        realRawNum = Number(displayValue);
+      }
+
+      let finalDivision = (division !== undefined && division !== null && division !== "") ? Number(division) : 3;
+      let value = realRawNum / Math.pow(10, finalDivision); 
+      displayValue = value.toFixed(finalDivision) + " ton"; 
+      
+      msrStdValueVal = displayValue;
+      prevOffsetResult = value; 
+    }
+  }
+
+```
+### 진행 내용
+**검침 데이터 파싱 추가**
+1. 대구시 계량기 프로토콜 연구가 불씨가 되어 UART로 읽어오는 데이터의 원활한 해석을 위해 검침 데이터 필드 추가 
+2. 서울시, 대구시 계량기 프로토콜 추가
+3. 약어코드 51개 제조사 정보 추가
+4. 별도의 계산식 추가 없이 2바이트를 16비트 값으로 조합된 결과값을 그대로 배열에 대입해서 제조사 이름 해석 출력
+5. 검침 값 부분 파싱 시 hex 변환 없이 리틀 에드안 방식으로 조합하여 출력
+6. Lfield 필드 값을 기준으로 분기(12: 대구, 0F: 서울)
+--Image 참고--<br>
+<img width="956" height="713" alt="Image" src="https://github.com/user-attachments/assets/a6eed740-e24a-4217-ad7d-a5ad95d27c2c" />
+<br>
+
+---
+
 ### 2026-06-19 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
