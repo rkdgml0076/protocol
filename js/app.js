@@ -630,6 +630,21 @@ const MeterfieldMap2 = [
   [2, 41, "stop"],
 ];
 
+/* All In One METER PROTOCOL*/
+const MeterfieldMap3 = [
+  [2, 1, "startByte"],
+  [2, 3, "periold"],
+  [2, 5, "Sensitivity"],
+  [2, 7, "status"],
+  [8, 9, "Fdata"],
+  [8, 17, "Rdata"],
+  [4, 25, "signalA"],
+  [4, 29, "signalB"],
+  [4, 33, "Interference"],
+  [8, 35, "meterData"],
+  [2, 43, "checkSum"],
+  [2, 45, "stop"],
+];
 
 const headerMap = {
   "A3": "서울시 데이터포맷[V1.5]",
@@ -920,6 +935,8 @@ if (headerHex === "A3" && typeHex === "70") {
   fieldMap = MeterfieldMap1;  
 } else if (MeterVerHex === "0F") {
   fieldMap = MeterfieldMap2;  
+} else if (MeterVerHex === "10") {
+  fieldMap = MeterfieldMap3;  
 } else {
     // alert(`지원하지 않는 데이터포맷입니다.`);
     // 변환하기 통합과 동시에 충돌방지 위해 alert 제거
@@ -1264,7 +1281,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
         const minute = String(baseDate.getMinutes()).padStart(2, "0");
         const second = String(baseDate.getSeconds()).padStart(2, "0");
 
-        displayValue = `${result.toFixed(3)} ton (-${offsetValue}) <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        displayValue = `${result.toFixed(3)} ton (offset: ${offsetValue}) <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
         prevOffsetResult = result;
       } else {
         displayValue = "계산 불가";
