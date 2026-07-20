@@ -846,6 +846,23 @@ const caliberTypeMap = {
   // 필요에 따라 더 추가
 };
 
+// Daegu V1.9 DIF: the high nibble indicates the meter caliber.
+const difUpperBitMap = {
+  "1": "15mm",
+  "2": "20mm",
+  "3": "25mm",
+  "4": "32mm",
+  "5": "40mm",
+  "6": "50mm",
+  "7": "80mm",
+  "8": "100mm",
+  "9": "150mm",
+  "A": "200mm",
+  "B": "250mm",
+  "C": "300mm",
+  "D": "350mm"
+};
+
 const meterDivisionMap = {
   "0": 0,
   "1": 1,
@@ -1086,6 +1103,8 @@ let hourVal = "", minuteVal = "", secondVal = "";
 let msrStdValueVal = "";
 let division = "";
 let prevOffsetResult = null;      // 이전 msrOffset 결과 저장
+let msrOffsetyearVal, msrOffsetmonthVal, msrOffsetdayVal;
+let msrOffsethourVal, msrOffsetminuteVal, msrOffsetsecondVal;
 let pendingMsrStdRaw = null;   // V8용 보류 값
 
 fieldMap.forEach(([length, start, fieldName]) => {
@@ -1144,7 +1163,12 @@ fieldMap.forEach(([length, start, fieldName]) => {
     }
   }
 
-  if (fieldName === "vif") {
+  if (fieldName === "dif") {
+    const upperBit = rawValue.charAt(0).toUpperCase();
+    displayValue = difUpperBitMap[upperBit] || rawValue;
+  }
+
+  if (fieldName === "vif" || fieldName.startsWith("vif ")) {
     displayValue = rawValue; // 화면에는 원본 값(예: "11" 또는 "13") 그대로 출력
     
     // vif의 뒷자리 글자를 추출하여 전역 division 변수를 강제로 업데이트합니다.
@@ -1154,7 +1178,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
     }
   }
 
-  if (fieldName === "meterStatus") {
+  if (fieldName === "meterStatus" || fieldName.startsWith("meterStatus ")) {
     const num = parseInt(rawValue, 16);  // HEX → 10진수
     if (!isNaN(num)) {
       const binaryStr = num.toString(2).padStart(8, '0');  // 8비트 변환
@@ -1320,7 +1344,13 @@ fieldMap.forEach(([length, start, fieldName]) => {
   if (fieldName === "rsrp") {
     displayValue = `-${displayValue}`;
   }
+  if (fieldName === "rsrp2") {
+    displayValue = `-${displayValue}`;
+  }
   if (fieldName === "rsrq") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "rsrq2") {
     displayValue = `-${displayValue}`;
   }
   if (fieldName === "snr") {
@@ -1423,25 +1453,34 @@ fieldMap.forEach(([length, start, fieldName]) => {
         let numericValue = Number(displayValue);
         numericValue /= Math.pow(10, division);
         const offsetIndex = parseInt(fieldName.replace("mValue", ""), 10) || 0;
-        let baseDate = new Date(
-          2000 + Number(msrOffsetyearVal),
-          Number(msrOffsetmonthVal) - 1,
-          Number(msrOffsetdayVal),
-          Number(msrOffsethourVal),
-          Number(msrOffsetminuteVal),
-          Number(msrOffsetsecondVal)
-        );
+        const hasOffsetTimestamp = [
+          msrOffsetyearVal, msrOffsetmonthVal, msrOffsetdayVal,
+          msrOffsethourVal, msrOffsetminuteVal, msrOffsetsecondVal
+        ].every(value => value !== undefined && value !== "");
 
-        baseDate.setHours(baseDate.getHours() - offsetIndex);
+        if (hasOffsetTimestamp) {
+          let baseDate = new Date(
+            2000 + Number(msrOffsetyearVal),
+            Number(msrOffsetmonthVal) - 1,
+            Number(msrOffsetdayVal),
+            Number(msrOffsethourVal),
+            Number(msrOffsetminuteVal),
+            Number(msrOffsetsecondVal)
+          );
 
-        const year = baseDate.getFullYear();
-        const month = String(baseDate.getMonth() + 1).padStart(2, "0");
-        const day = String(baseDate.getDate()).padStart(2, "0");
-        const hour = String(baseDate.getHours()).padStart(2, "0");
-        const minute = String(baseDate.getMinutes()).padStart(2, "0");
-        const second = String(baseDate.getSeconds()).padStart(2, "0");
+          baseDate.setHours(baseDate.getHours() - offsetIndex);
 
-        displayValue = `${numericValue} ton <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+          const year = baseDate.getFullYear();
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const hour = String(baseDate.getHours()).padStart(2, "0");
+          const minute = String(baseDate.getMinutes()).padStart(2, "0");
+          const second = String(baseDate.getSeconds()).padStart(2, "0");
+
+          displayValue = `${numericValue} ton <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        } else {
+          displayValue = `${numericValue} ton`;
+        }
 
         if (msrStdValueVal === "") {
           msrStdValueVal = `${numericValue} ton`;
