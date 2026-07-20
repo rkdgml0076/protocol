@@ -949,6 +949,17 @@ function getManufacturerName(hex) {
   const lowerHex = hex.toLowerCase(); // 매핑 편의를 위한 소문자 통일
   return meterDeviceMap[lowerHex] || `미등록 제조사(${hex.toUpperCase()})`;
 }
+// msrTime is a 4-byte unsigned Unix timestamp, stored as big-endian hex.
+function formatMsrTimeKst(hex) {
+  if (!/^[0-9a-fA-F]{8}$/.test(hex)) return hex;
+
+  const epochSeconds = Number.parseInt(hex, 16);
+  const kstDate = new Date((epochSeconds + 9 * 60 * 60) * 1000);
+  const pad = (value) => String(value).padStart(2, "0");
+
+  return `${kstDate.getUTCFullYear()}-${pad(kstDate.getUTCMonth() + 1)}-${pad(kstDate.getUTCDate())} ` +
+    `${pad(kstDate.getUTCHours())}:${pad(kstDate.getUTCMinutes())}:${pad(kstDate.getUTCSeconds())} KST`;
+}
 
 document.getElementById("convertBtn").addEventListener("click", () => {
   const raw = document.getElementById("inputData").value.trim();
@@ -1197,6 +1208,9 @@ fieldMap.forEach(([length, start, fieldName]) => {
     }
   }
 
+  if (fieldName === "msrTime" || fieldName.startsWith("msrTime ")) {
+    displayValue = formatMsrTimeKst(rawValue);
+  }
   if (fieldName === "mno") {
     displayValue = mnoMap[rawValue.toUpperCase()] || "알수없는 통신사";
   }
