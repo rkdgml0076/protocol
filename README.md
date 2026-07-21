@@ -1,6 +1,175 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-07-21 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## DAEGU
+<br>
+대구시 데이터포맷 완성<br>
+
+### protocol(JS)
+```js
+// Daegu V1.9 DIF: the high nibble indicates the meter caliber.
+const difUpperBitMap = {
+  "1": "15mm",
+  "2": "20mm",
+  "3": "25mm",
+  "4": "32mm",
+  "5": "40mm",
+  "6": "50mm",
+  "7": "80mm",
+  "8": "100mm",
+  "9": "150mm",
+  "A": "200mm",
+  "B": "250mm",
+  "C": "300mm",
+  "D": "350mm"
+};
+
+// msrTime is a 4-byte unsigned Unix timestamp, stored as big-endian hex.
+function formatMsrTimeKst(hex) {
+  if (!/^[0-9a-fA-F]{8}$/.test(hex)) return hex;
+
+  const epochSeconds = Number.parseInt(hex, 16);
+  const kstDate = new Date((epochSeconds + 9 * 60 * 60) * 1000);
+  const pad = (value) => String(value).padStart(2, "0");
+
+  return `${kstDate.getUTCFullYear()}-${pad(kstDate.getUTCMonth() + 1)}-${pad(kstDate.getUTCDate())} ` +
+    `${pad(kstDate.getUTCHours())}:${pad(kstDate.getUTCMinutes())}:${pad(kstDate.getUTCSeconds())} KST`;
+}
+
+
+let msrOffsetyearVal, msrOffsetmonthVal, msrOffsetdayVal;
+let msrOffsethourVal, msrOffsetminuteVal, msrOffsetsecondVal;
+
+  if (fieldName === "dif") {
+    const upperBit = rawValue.charAt(0).toUpperCase();
+    displayValue = difUpperBitMap[upperBit] || rawValue;
+  }
+
+  if (fieldName === "vif" || fieldName.startsWith("vif ")) {
+    displayValue = rawValue; // 화면에는 원본 값(예: "11" 또는 "13") 그대로 출력
+    
+    // vif의 뒷자리 글자를 추출하여 전역 division 변수를 강제로 업데이트합니다.
+    const vifSecondChar = rawValue.charAt(1); // "11"이면 '1', "13"이면 '3'
+    if (meterDivisionMap[vifSecondChar] !== undefined) {
+      division = meterDivisionMap[vifSecondChar]; // '1'이면 1, '3'이면 3이 division에 저장됨
+    }
+  }
+
+  if (fieldName === "meterStatus" || fieldName.startsWith("meterStatus ")) {
+    const num = parseInt(rawValue, 16);  // HEX → 10진수
+    if (!isNaN(num)) {
+      const binaryStr = num.toString(2).padStart(8, '0');  // 8비트 변환
+      const events = [];
+
+      for (let i = 0; i < 8; i++) {
+        if (binaryStr.charAt(7 - i) === '1') {
+          events.push(bitEventMap[i]);
+        }
+      }
+
+      const eventText = events.length > 0 ? events.join(", ") : "이벤트 없음";
+      displayValue = `${eventText}`;
+    } else {
+      displayValue = "올바르지 않은 HEX 값";
+    }
+  }
+
+  if (fieldName === "rsrp2") {
+    displayValue = `-${displayValue}`;
+  }
+  if (fieldName === "rsrq2") {
+    displayValue = `-${displayValue}`;
+  }
+
+  if (fieldName.startsWith("mValue") && displayValue.length >= 1) {
+    if (isFailValue(rawValue)) { 
+    displayValue = "검침이상";
+      } else {
+        let numericValue = Number(displayValue);
+        numericValue /= Math.pow(10, division);
+        const offsetIndex = parseInt(fieldName.replace("mValue", ""), 10) || 0;
+        const hasOffsetTimestamp = [
+          msrOffsetyearVal, msrOffsetmonthVal, msrOffsetdayVal,
+          msrOffsethourVal, msrOffsetminuteVal, msrOffsetsecondVal
+        ].every(value => value !== undefined && value !== "");
+
+        if (hasOffsetTimestamp) {
+          let baseDate = new Date(
+            2000 + Number(msrOffsetyearVal),
+            Number(msrOffsetmonthVal) - 1,
+            Number(msrOffsetdayVal),
+            Number(msrOffsethourVal),
+            Number(msrOffsetminuteVal),
+            Number(msrOffsetsecondVal)
+          );
+
+          baseDate.setHours(baseDate.getHours() - offsetIndex);
+
+          const year = baseDate.getFullYear();
+          const month = String(baseDate.getMonth() + 1).padStart(2, "0");
+          const day = String(baseDate.getDate()).padStart(2, "0");
+          const hour = String(baseDate.getHours()).padStart(2, "0");
+          const minute = String(baseDate.getMinutes()).padStart(2, "0");
+          const second = String(baseDate.getSeconds()).padStart(2, "0");
+
+          displayValue = `${numericValue} ton <br> ${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        } else {
+          displayValue = `${numericValue} ton`;
+        }
+
+        if (msrStdValueVal === "") {
+          msrStdValueVal = `${numericValue} ton`;
+        }
+      }
+  }
+```
+
+### api(HTML)
+```html
+    <!-- 지자체 영역 -->
+    <div style="display:flex; flex-direction:column;">
+      <label for="siteIdInput">지자체</label>
+      <select id="siteIdInput">
+        <option value="goyang">고양시</option>
+        <option value="gochang">고창군</option>
+        <!-- <option value="guri">구리시</option> -->
+        <option value="gunpo">군포시</option>
+        <option value="gimje">김제시</option>
+        <option value="gimhae">김해시</option>
+        <option value="namhae">남해군</option>
+        <!-- <option value="busan">부산시</option> -->
+        <option value="asan">아산시</option>
+        <option value="yangsan">양산시</option>
+        <!-- <option value="yeoncheon">연천군</option> -->
+        <option value="uijeongbu">의정부시</option>
+        <option value="hadong">하동군</option>
+        <option value="haman">함안군</option>
+      </select>
+```
+
+### 진행 내용
+**대구시 데이터포맷 완성본**
+1. 대구시 계량기 전용 구경코드 작성
+2. 반복되는 필드맵 부분 fieldName.startsWith로 대응되게 변경
+3. RSRP, RSRQ 데이터 사이즈 차이로 인한 별도의 RSRP, RSRQ fieldName 생성
+4. msrTime 유닉스 시간 값을 한국표준시(KST:UTC+9) 시간의 10진수 숫자 값을 16진수로 파싱
+5. API 미사용 지자체 주석처리
+--Image 참고--<br>
+<img width="1413" height="1245" alt="Image" src="https://github.com/user-attachments/assets/3aa603a7-c71f-4fd3-9310-949f6660d7a9" />
+<br>
+
+---
+
 ### 2026-07-13 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
