@@ -1,6 +1,151 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+
+### 2026-07-21 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## vermo
+<br>
+month -> vermo<br>
+
+### protocol(JS)
+```js
+/* Daegu DataFormat_V1.9 */
+const fieldMapV8 = [
+  [2, 1, "type"],
+  [2, 3, "header"],
+  [4, 5, "devFw"],
+  [16, 9, "imei"],
+  [16, 25, "imsi"],
+  [2, 41, "rssi"],
+  [2, 43, "rsrp2"],
+  [2, 45, "rsrq2"],
+  [4, 47, "snr"],
+  [2, 51, "devVolt"],
+  [8, 53, "meterNo"],
+  [2, 61, "vermo"],
+  [2, 63, "dif"],
+  [4, 65, "manID"],
+  [2, 69, "msrCycle"],
+  [2, 71, "msrReport"],
+  [4, 73, "tempValue 0"],
+  [2, 77, "mdh"],
+  [2, 79, "msrCnt"],
+  [2, 81, "reserved"],
+  [2, 83, "vif 0"],
+  [2, 85, "meterStatus 0"],
+  [8, 87, "mValue 0"],
+  [8, 95, "msrTime 0"],
+  [2, 103, "vif 1"],
+  [2, 105, "meterStatus 1"],
+  [8, 107, "mValue 1"],
+  [8, 115, "msrTime 1"],
+  [2, 123, "vif 2"],
+  [2, 125, "meterStatus 2"],
+  [8, 127, "mValue 2"],
+  [8, 135, "msrTime 2"],
+  [2, 143, "vif 3"],
+  [2, 145, "meterStatus 3"],
+  [8, 147, "mValue 3"],
+  [8, 155, "msrTime 3"],
+  [2, 163, "vif 4"],
+  [2, 165, "meterStatus 4"],
+  [8, 167, "mValue 4"],
+  [8, 175, "msrTime 4"],
+  [2, 183, "vif 5"],
+  [2, 185, "meterStatus 5"],
+  [8, 187, "mValue 5"],
+  [8, 195, "msrTime 5"],
+  [2, 203, "vif 6"],
+  [2, 205, "meterStatus 6"],
+  [8, 207, "mValue 6"],
+  [8, 215, "msrTime 6"],
+  [2, 223, "vif 7"],
+  [2, 225, "meterStatus 7"],
+  [8, 227, "mValue 7"],
+  [8, 235, "msrTime 7"],
+  [2, 243, "vif 8"],
+  [2, 245, "meterStatus 8"],
+  [8, 247, "mValue 8"],
+  [8, 255, "msrTime 8"],
+  [2, 263, "vif 9"],
+  [2, 265, "meterStatus 9"],
+  [8, 267, "mValue 9"],
+  [8, 275, "msrTime 9"],
+  [2, 283, "vif 10"],
+  [2, 285, "meterStatus 10"],
+  [8, 287, "mValue 10"],
+  [8, 295, "msrTime 10"],
+  [2, 303, "vif 11"],
+  [2, 305, "meterStatus 11"],
+  [8, 307, "mValue 11"],
+  [8, 315, "msrTime 11"],
+  [2, 323, "vif 12"],
+  [2, 325, "meterStatus 12"],
+  [8, 327, "mValue 12"],
+  [8, 335, "msrTime 12"],
+  [2, 343, "vif 13"],
+  [2, 345, "meterStatus 13"],
+  [8, 347, "mValue 13"],
+  [8, 355, "msrTime 13"],
+  [2, 363, "vif 14"],
+  [2, 365, "meterStatus 14"],
+  [8, 367, "mValue 14"],
+  [8, 375, "msrTime 14"],
+  [2, 383, "vif 15"],
+  [2, 385, "meterStatus 15"],
+  [8, 387, "mValue 15"],
+  [8, 395, "msrTime 15"],
+  [2, 403, "vif 16"],
+  [2, 405, "meterStatus 16"],
+  [8, 407, "mValue 16"],
+  [8, 415, "msrTime 16"],
+  [2, 423, "vif 17"],
+  [2, 425, "meterStatus 17"],
+  [8, 427, "mValue 17"],
+  [8, 435, "msrTime 17"],
+  [2, 443, "vif 18"],
+  [2, 445, "meterStatus 18"],
+  [8, 447, "mValue 18"],
+  [8, 455, "msrTime 18"],
+  [2, 463, "vif 19"],
+  [2, 465, "meterStatus 19"],
+  [8, 467, "mValue 19"],
+  [8, 475, "msrTime 19"],
+  [2, 483, "vif 20"],
+  [2, 485, "meterStatus 20"],
+  [8, 487, "mValue 20"],
+  [8, 495, "msrTime 20"],
+  [2, 503, "vif 21"],
+  [2, 505, "meterStatus 21"],
+  [8, 507, "mValue 21"],
+  [8, 515, "msrTime 21"],
+  [2, 523, "vif 22"],
+  [2, 525, "meterStatus 22"],
+  [8, 527, "mValue 22"],
+  [8, 535, "msrTime 22"],
+  [2, 543, "vif 23"],
+  [2, 545, "meterStatus 23"],
+  [8, 547, "mValue 23"],
+  [8, 555, "msrTime 23"],
+];
+```
+
+### 진행 내용
+**Month 필드명을 Vermo로 변경**
+1. 프로토콜 필드맵 구간이 검침월이 아닌 검정월로 정정
+<br>
+
+---
+
 ### 2026-07-21 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

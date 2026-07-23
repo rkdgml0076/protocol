@@ -498,7 +498,7 @@ const fieldMapV8 = [
   [4, 47, "snr"],
   [2, 51, "devVolt"],
   [8, 53, "meterNo"],
-  [2, 61, "month"],
+  [2, 61, "vermo"],
   [2, 63, "dif"],
   [4, 65, "manID"],
   [2, 69, "msrCycle"],
@@ -1058,7 +1058,6 @@ console.log("MeterVer:", MeterVerHex);
 
 let fieldMap;
 
-// header + type 값으로 분기
 if (headerHex === "A3" && typeHex === "70") {
   fieldMap = fieldMapV1;
 } else if (headerHex === "A3" && typeHex === "75") {
@@ -1180,8 +1179,7 @@ fieldMap.forEach(([length, start, fieldName]) => {
   }
 
   if (fieldName === "vif" || fieldName.startsWith("vif ")) {
-    displayValue = rawValue; // 화면에는 원본 값(예: "11" 또는 "13") 그대로 출력
-    
+    displayValue = rawValue;
     // vif의 뒷자리 글자를 추출하여 전역 division 변수를 강제로 업데이트합니다.
     const vifSecondChar = rawValue.charAt(1); // "11"이면 '1', "13"이면 '3'
     if (meterDivisionMap[vifSecondChar] !== undefined) {
