@@ -603,6 +603,7 @@ const fieldMapV8 = [
   [2, 547, "meterStatus 23"],
   [8, 549, "mValue 23"],
   [8, 557, "msrTime 23"],
+  [4, 565, "checksum"]
 ];
 
 /* LGU+ QTY DataFormat */
@@ -1103,10 +1104,12 @@ const swapAndDexFields = [
 ];
 const snrMaxValue = (fieldMap === fieldMapV5 || fieldMap === fieldMapV6) ? 65536 : 256;
 
-const checksumValue = data.slice(-2);
+const checksumLength = fieldMap === fieldMapV8 ? 4 : 2;
+const checksumValue = data.slice(-checksumLength);
 const formatValue = data.slice(-2);
 const reservedValue = data.slice(-6);
-const dataWithoutChecksum = data.slice(0, -2);
+const dataWithoutChecksum = data.slice(0, -checksumLength);
+const fieldData = dataWithoutChecksum;
 
 let yearVal = "", monthVal = "", dayVal = "";
 let hourVal = "", minuteVal = "", secondVal = "";
@@ -1120,7 +1123,7 @@ let pendingMsrStdRaw = null;   // V8용 보류 값
 fieldMap.forEach(([length, start, fieldName]) => {
   const startIdx = start - 1;
   const endIdx = startIdx + length;
-  if (endIdx > dataWithoutChecksum.length) return;
+  if (endIdx > fieldData.length) return;
   const rawValue = data.slice(startIdx, endIdx);
   let displayValue = rawValue;
 

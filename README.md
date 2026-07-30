@@ -1,6 +1,160 @@
 # NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-07-30 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## Checksum
+<br>
+대구시 Checksum<br>
+
+### protocol(JS)
+```js
+/* Daegu DataFormat_V1.9 */
+const fieldMapV8 = [
+  [2, 1, "type"],
+  [2, 3, "header"],
+  [4, 5, "devFw"],
+  [16, 9, "imei"],
+  [16, 25, "imsi"],
+  [2, 41, "rssi"],
+  [2, 43, "rsrp2"],
+  [2, 45, "rsrq2"],
+  [4, 47, "snr"],
+  [2, 51, "devVolt"],
+  [8, 53, "meterNo"],
+  [2, 61, "vermo"],
+  [2, 63, "dif"],
+  [4, 65, "manID"],
+  [2, 69, "msrCycle"],
+  [2, 71, "msrReport"],
+  [4, 73, "tempValue"],
+  [2, 77, "mdh"],
+  [2, 79, "msrCnt"],
+  [4, 81, "reserved"],
+  [2, 85, "vif 0"],
+  [2, 87, "meterStatus 0"],
+  [8, 89, "mValue 0"],
+  [8, 97, "msrTime 0"],
+  [2, 105, "vif 1"],
+  [2, 107, "meterStatus 1"],
+  [8, 109, "mValue 1"],
+  [8, 117, "msrTime 1"],
+  [2, 125, "vif 2"],
+  [2, 127, "meterStatus 2"],
+  [8, 129, "mValue 2"],
+  [8, 137, "msrTime 2"],
+  [2, 145, "vif 3"],
+  [2, 147, "meterStatus 3"],
+  [8, 149, "mValue 3"],
+  [8, 157, "msrTime 3"],
+  [2, 165, "vif 4"],
+  [2, 167, "meterStatus 4"],
+  [8, 169, "mValue 4"],
+  [8, 177, "msrTime 4"],
+  [2, 185, "vif 5"],
+  [2, 187, "meterStatus 5"],
+  [8, 189, "mValue 5"],
+  [8, 197, "msrTime 5"],
+  [2, 205, "vif 6"],
+  [2, 207, "meterStatus 6"],
+  [8, 209, "mValue 6"],
+  [8, 217, "msrTime 6"],
+  [2, 225, "vif 7"],
+  [2, 227, "meterStatus 7"],
+  [8, 229, "mValue 7"],
+  [8, 237, "msrTime 7"],
+  [2, 245, "vif 8"],
+  [2, 247, "meterStatus 8"],
+  [8, 249, "mValue 8"],
+  [8, 257, "msrTime 8"],
+  [2, 265, "vif 9"],
+  [2, 267, "meterStatus 9"],
+  [8, 269, "mValue 9"],
+  [8, 277, "msrTime 9"],
+  [2, 285, "vif 10"],
+  [2, 287, "meterStatus 10"],
+  [8, 289, "mValue 10"],
+  [8, 297, "msrTime 10"],
+  [2, 305, "vif 11"],
+  [2, 307, "meterStatus 11"],
+  [8, 309, "mValue 11"],
+  [8, 317, "msrTime 11"],
+  [2, 325, "vif 12"],
+  [2, 327, "meterStatus 12"],
+  [8, 329, "mValue 12"],
+  [8, 337, "msrTime 12"],
+  [2, 345, "vif 13"],
+  [2, 347, "meterStatus 13"],
+  [8, 349, "mValue 13"],
+  [8, 357, "msrTime 13"],
+  [2, 365, "vif 14"],
+  [2, 367, "meterStatus 14"],
+  [8, 369, "mValue 14"],
+  [8, 377, "msrTime 14"],
+  [2, 385, "vif 15"],
+  [2, 387, "meterStatus 15"],
+  [8, 389, "mValue 15"],
+  [8, 397, "msrTime 15"],
+  [2, 405, "vif 16"],
+  [2, 407, "meterStatus 16"],
+  [8, 409, "mValue 16"],
+  [8, 417, "msrTime 16"],
+  [2, 425, "vif 17"],
+  [2, 427, "meterStatus 17"],
+  [8, 429, "mValue 17"],
+  [8, 437, "msrTime 17"],
+  [2, 445, "vif 18"],
+  [2, 447, "meterStatus 18"],
+  [8, 449, "mValue 18"],
+  [8, 457, "msrTime 18"],
+  [2, 465, "vif 19"],
+  [2, 467, "meterStatus 19"],
+  [8, 469, "mValue 19"],
+  [8, 477, "msrTime 19"],
+  [2, 485, "vif 20"],
+  [2, 487, "meterStatus 20"],
+  [8, 489, "mValue 20"],
+  [8, 497, "msrTime 20"],
+  [2, 505, "vif 21"],
+  [2, 507, "meterStatus 21"],
+  [8, 509, "mValue 21"],
+  [8, 517, "msrTime 21"],
+  [2, 525, "vif 22"],
+  [2, 527, "meterStatus 22"],
+  [8, 529, "mValue 22"],
+  [8, 537, "msrTime 22"],
+  [2, 545, "vif 23"],
+  [2, 547, "meterStatus 23"],
+  [8, 549, "mValue 23"],
+  [8, 557, "msrTime 23"],
+  [4, 565, "checksum"]
+];
+
+const checksumLength = fieldMap === fieldMapV8 ? 4 : 2;
+const checksumValue = data.slice(-checksumLength);
+
+const dataWithoutChecksum = data.slice(0, -checksumLength);
+const fieldData = dataWithoutChecksum;
+
+
+  if (endIdx > fieldData.length) return;
+
+```
+
+### 진행 내용
+**대구시 Checksum 추가**
+1. 타 필드맵과 달리 checksum 사이즈가 2byte이므로 별도로 분류
+<br>
+---
+
 ### 2026-07-28 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정
