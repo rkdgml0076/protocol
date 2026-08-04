@@ -496,7 +496,7 @@ const fieldMapV8 = [
   [2, 43, "rsrp2"],
   [2, 45, "rsrq2"],
   [4, 47, "snr"],
-  [2, 51, "devVolt"],
+  [2, 51, "voltStatus"],
   [8, 53, "meterNo"],
   [2, 61, "vermo"],
   [2, 63, "dif"],
@@ -776,8 +776,8 @@ const headerMap = {
   "a5": "서울시 데이터포맷[V1.8]",
   "B1": "서울시 데이터포맷[V2.0]",
   "b1": "서울시 데이터포맷[V2.0]",
-  "C1": "대구시 데이터포맷[V1.9]",
-  "c1": "대구시 데이터포맷[V1.9]"
+  "C1": "대구시 데이터포맷[V1.0]",
+  "c1": "대구시 데이터포맷[V1.0]"
 };
 
 const typeMap = {
@@ -796,6 +796,20 @@ const MeterVerMap = {
   "12": "대구시 검침데이터 프로토콜",
   "0F": "서울시 검침데이터 프로토콜",
   "0f": "서울시 검침데이터 프로토콜"
+};
+
+const voltStatusMap = {
+  "E0": "배터리 상태 양호(90% 이상), 검침데이터 정상",
+  "e0": "배터리 상태 양호(90% 이상), 검침데이터 정상",
+  "A0": "배터리 상태 보통(90% 이하), 검침데이터 정상",
+  "a0": "배터리 상태 보통(90% 이하), 검침데이터 정상",
+  "60": "배터리 상태 위험(10% 이하), 검침데이터 정상",
+  "20": "배터리 상태 방전(5% 이하), 검침데이터 ",
+  "C0": "배터리 상태 양호(90% 이상), 검침이상",
+  "c0": "배터리 상태 보통(90% 이하), 검침이상",
+  "80": "배터리 상태 보통(90% 이하), 검침이상",
+  "40": "배터리 상태 위험(10% 이하), 검침이상",
+  "00": "배터리 상태 방전(5% 이하), 검침이상"
 };
 
 function hexToAscii(hex) {
@@ -1263,6 +1277,10 @@ fieldMap.forEach(([length, start, fieldName]) => {
 
   if (fieldName === "Lfield") {
     displayValue = MeterVerMap[rawValue] || rawValue;
+  }
+
+  if (fieldName === "voltStatus") {
+    displayValue = voltStatusMap[rawValue] || rawValue;
   }
 
   if (fieldName.trim() === "meterNo" && rawValue.length >= 8) {
