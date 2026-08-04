@@ -496,7 +496,7 @@ const fieldMapV8 = [
   [2, 43, "rsrp2"],
   [2, 45, "rsrq2"],
   [4, 47, "snr"],
-  [2, 51, "voltStatus"],
+  [2, 51, "devStatus"],
   [8, 53, "meterNo"],
   [2, 61, "vermo"],
   [2, 63, "dif"],
@@ -798,7 +798,7 @@ const MeterVerMap = {
   "0f": "서울시 검침데이터 프로토콜"
 };
 
-const voltStatusMap = {
+const devStatusMap = {
   "E0": "배터리 상태 양호(90% 이상), 검침이상",
   "e0": "배터리 상태 양호(90% 이상), 검침이상",
   "A0": "배터리 상태 보통(90% 이하), 검침이상",
@@ -1279,8 +1279,8 @@ fieldMap.forEach(([length, start, fieldName]) => {
     displayValue = MeterVerMap[rawValue] || rawValue;
   }
 
-  if (fieldName === "voltStatus") {
-    displayValue = voltStatusMap[rawValue] || rawValue;
+  if (fieldName === "devStatus") {
+    displayValue = devStatusMap[rawValue] || rawValue;
   }
 
   if (fieldName.trim() === "meterNo" && rawValue.length >= 8) {
