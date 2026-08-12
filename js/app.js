@@ -489,7 +489,7 @@ const fieldMapV7 = [
 const fieldMapV8 = [
   [2, 1, "type"],
   [2, 3, "header"],
-  [2, 5, "devFw"],
+  [2, 5, "devFw2"],
   [16, 7, "imei"],
   [16, 23, "imsi"],
   [2, 39, "rssi"],
@@ -1291,8 +1291,11 @@ fieldMap.forEach(([length, start, fieldName]) => {
     const swapped = rawValue.match(/../g).reverse().join("");
     displayValue = swapped.slice(0, 2) + "-" + swapped.slice(2, 8);
   }
+  if (fieldName === "devFw" && rawValue.length >= 4) {
+    displayValue = 'V'+ rawValue[1] + rawValue[3];
+  }
   
-  if (fieldName === "devFw") {
+  if (fieldName === "devFw2") {
     displayValue = "V" + displayValue;
   }
 
