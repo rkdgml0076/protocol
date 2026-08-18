@@ -495,7 +495,7 @@ const fieldMapV8 = [
   [2, 39, "rssi"],
   [2, 41, "rsrp2"],
   [2, 43, "rsrq2"],
-  [4, 45, "snr"],
+  [4, 45, "Daegu_snr"],
   [2, 49, "devStatus"],
   [8, 51, "meterNo"],
   [2, 59, "vermo"],
@@ -1533,8 +1533,8 @@ fieldMap.forEach(([length, start, fieldName]) => {
         let tempRaw = parseInt(swappedHex, 16);        // HEX 변환 
 
         // 2바이트 signed 변환
-        if (tempRaw > 0x0500) {
-          tempRaw = -(tempRaw - 0x0500); // signed 변환: 0x0500(DEX 1280) 이상이면 음수
+        if (tempRaw & 0x8000) {
+          tempRaw = -(tempRaw & 0x7FFF);
         }
         const tempC = tempRaw / 10;                    // 10으로 나눠서 ℃
         displayValue = tempC + "℃";
@@ -1576,4 +1576,3 @@ fieldMap.forEach(([length, start, fieldName]) => {
     tbody.appendChild(checksumRow);
   }
 }
-
