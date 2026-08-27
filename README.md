@@ -3538,7 +3538,7 @@ URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
 ```
 
 ### 진행 내용
-**Excel 출력 결과 변경**
+**일체형 온도 양식**
 1. 일체형 계량기 TEMP 측정 값인 tempInfo 파싱
 2. SNR 음수 값 파싱되도록 수정
 
