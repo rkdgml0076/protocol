@@ -1,5 +1,135 @@
-# NTmoreTool
+﻿# NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
+
+### 2026-09-04 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## cableStatus
+<br>
+온도+단선 확장형 필드맵 수정<br>
+
+### protocol(JS)
+```js
+/* DataFormat_V1.5 (Temp + Cable) */
+const fieldMapV3 = [
+  [2, 1, "header"],
+  [2, 3, "length"],
+  [2, 5, "type"],
+  [16, 7, "imei"],
+  [16, 23, "imsi"],
+  [2, 39, "rssi"],
+  [2, 41, "ber"],
+  [4, 43, "cid"],
+  [4, 47, "rsrp"],
+  [4, 51, "rsrq"],
+  [4, 55, "snr"],
+  [10, 59, "devNo"],
+  [4, 69, "devFw"],
+  [2, 73, "devVolt"],
+  [8, 75, "meterNo"],
+  [2, 83, "meterType"],
+  [2, 85, "meterCaliber"],
+  [2, 87, "meterStatus"],
+  [2, 89, "msrCycle"],
+  [2, 91, "msrReport"],
+  [2, 93, "year"],
+  [2, 95, "month"],
+  [2, 97, "day"],
+  [2, 99, "hour"],
+  [2, 101, "minute"],
+  [2, 103, "second"],
+  [2, 105, "msrCycle"],
+  [2, 107, "msrCnt"],
+  [2, 109, "msrStdIdx"],
+  [8, 111, "msrStdValue"],
+  [4, 119, "msrOffset 0"],
+  [4, 123, "tempValue 0"],
+  [4, 127, "cableStatus 0"],
+  [4, 131, "msrOffset 1"],
+  [4, 135, "tempValue 1"],
+  [4, 139, "cableStatus 1"],
+  [4, 143, "msrOffset 2"],
+  [4, 147, "tempValue 2"],
+  [4, 151, "cableStatus 2"],
+  [4, 155, "msrOffset 3"],
+  [4, 159, "tempValue 3"],
+  [4, 163, "cableStatus 3"],
+  [4, 167, "msrOffset 4"],
+  [4, 171, "tempValue 4"],
+  [4, 175, "cableStatus 4"],
+  [4, 179, "msrOffset 5"],
+  [4, 183, "tempValue 5"],
+  [4, 187, "cableStatus 5"],
+  [4, 191, "msrOffset 6"],
+  [4, 195, "tempValue 6"],
+  [4, 199, "cableStatus 6"],
+  [4, 203, "msrOffset 7"],
+  [4, 207, "tempValue 7"],
+  [4, 211, "cableStatus 7"],
+  [4, 215, "msrOffset 8"],
+  [4, 219, "tempValue 8"],
+  [4, 223, "cableStatus 8"],
+  [4, 227, "msrOffset 9"],
+  [4, 231, "tempValue 9"],
+  [4, 235, "cableStatus 9"],
+  [4, 239, "msrOffset 10"],
+  [4, 243, "tempValue 10"],
+  [4, 247, "cableStatus 10"],
+  [4, 251, "msrOffset 11"],
+  [4, 255, "tempValue 11"],
+  [4, 259, "cableStatus 11"],
+  [4, 263, "msrOffset 12"],
+  [4, 267, "tempValue 12"],
+  [4, 271, "cableStatus 12"],
+  [4, 275, "msrOffset 13"],
+  [4, 279, "tempValue 13"],
+  [4, 283, "cableStatus 13"],
+  [4, 287, "msrOffset 14"],
+  [4, 291, "tempValue 14"],
+  [4, 295, "cableStatus 14"],
+  [4, 299, "msrOffset 15"],
+  [4, 303, "tempValue 15"],
+  [4, 307, "cableStatus 15"],
+  [4, 311, "msrOffset 16"],
+  [4, 315, "tempValue 16"],
+  [4, 319, "cableStatus 16"],
+  [4, 323, "msrOffset 17"],
+  [4, 327, "tempValue 17"],
+  [4, 331, "cableStatus 17"],
+  [4, 335, "msrOffset 18"],
+  [4, 339, "tempValue 18"],
+  [4, 343, "cableStatus 18"],
+  [4, 347, "msrOffset 19"],
+  [4, 351, "tempValue 19"],
+  [4, 355, "cableStatus 19"],
+  [4, 359, "msrOffset 20"],
+  [4, 363, "tempValue 20"],
+  [4, 367, "cableStatus 20"],
+  [4, 371, "msrOffset 21"],
+  [4, 375, "tempValue 21"],
+  [4, 379, "cableStatus 21"],
+  [4, 383, "msrOffset 22"],
+  [4, 387, "tempValue 22"],
+  [4, 391, "cableStatus 22"],
+  [4, 395, "msrOffset 23"],
+  [4, 399, "tempValue 23"],
+  [4, 403, "cableStatus 23"]
+];
+
+```
+### 진행 내용
+**버그수정**
+1. cableStatus 데이터 키가 누락되어 있던 버그 수정
+<br>
+
+---
 
 ### 2026-08-18 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
@@ -163,7 +293,6 @@ const fieldMapV8 = [
 1. 온도가 음수값으로 측정될 시 받아오는 hex 값의 양식이 기준 양식과 상이한 것을 발견
 2. 대구시 temp와 마찬가지로 상위 4bit 0, 1 값이 양수로 측정되는 계산식
 3. 대구시 snr 값의 양식이 상이하여 필드명 변경
---Image 참고--<br>
 <br>
 
 ---
