@@ -1,6 +1,93 @@
 ﻿# NTmoreTool
 Site URL: https://rkdgml0076.github.io/protocol/
 
+### 2026-11-06 GitHub Commit
+#### 본 사이트를 개발하기위한 기본 작업 환경 
+## 작업 환경 설정
+- 개발 환경(Code Editer) Visual Studio Code 사용 <br>
+- index.html을 초기 페이지로 설정
+- Github 와 연동 및 git 활용을 위하여 git Download
+URL (Widows 최신버전 Download) : https://git-scm.com/downloads<br>
+- Visual Studio Code 확장에서 Live Server 다운로드
+- 코드 결과물 확인은 "alt + L" + "alt + O "
+
+## V2.0 NFC STOR_RES
+<br>
+통신 ON/OFF 및 검침값 소수점 추가<br>
+
+### protocol(JS)
+```js
+let msrStdValueRow = null;
+
+  if (fieldName === "meterCaliber") {
+    const firstCaliber = rawValue.charAt(0);
+    displayValue = caliberTypeMap[firstCaliber] || `알 수 없음 (${firstCaliber})`;
+
+    const secondCaliber = rawValue.charAt(1);
+    division = meterDivisionMap[secondCaliber];
+
+    // NFCfieldMap1(NFC)전용 msrStdValue 소급 계산
+    if (pendingMsrStdRaw !== null) {
+      const value = pendingMsrStdRaw / Math.pow(10, division);
+      const formattedValue = fieldMap === NFCfieldMap1 ? value.toFixed(3) : value;
+      msrStdValueVal = formattedValue + " ton";
+      if (msrStdValueRow) {
+        msrStdValueRow.cells[2].textContent = msrStdValueVal;
+      }
+      prevOffsetResult = value;
+      pendingMsrStdRaw = null;
+    }
+  }
+
+  if (fieldName === "comOnOff") {
+    const communicationStatus = rawValue.toUpperCase();
+    if (communicationStatus === "01") {
+      displayValue = "통신 ON";
+    } else if (communicationStatus === "0F") {
+      displayValue = "통신 OFF";
+    }
+  }
+
+    if (fieldName === "msrStdValue") {
+    if (isFailValue(rawValue)) {
+      displayValue = "검침이상";
+    } else {
+      const rawNum = Number(displayValue);
+
+      if (division !== "" && division !== undefined) {
+        const value = rawNum / Math.pow(10, division);
+        const formattedValue = fieldMap === NFCfieldMap1 ? value.toFixed(3) : value;
+        displayValue = formattedValue + " ton";
+        msrStdValueVal = displayValue;
+        prevOffsetResult = value;
+      } else {
+        // meterCaliber(소수점) 받지 못하였을 때(NFC) 소급 계산 처리 
+        pendingMsrStdRaw = rawNum;
+        displayValue = rawNum + " (소수점 미적용)";
+      }
+    }
+  }
+    const row = document.createElement("tr");
+  row.innerHTML = 
+    `<td>${fieldName}</td>
+    <td>${rawValue}</td>
+    <td>${displayValue}</td>`;
+  tbody.appendChild(row);
+  if (fieldName === "msrStdValue") {
+    msrStdValueRow = row;
+  }
+
+```
+
+
+### 진행 내용
+**NFC STOR_RES 표시 개선**
+1. `comOnOff` 값이 `01`이면 `통신 ON`, `0F`이면 `통신 OFF`로 표시
+2. V2.0 NFC STOR_RES에서도 msrStdValue 소수점값이 적용되도록 수정
+<br>
+
+---
+
 ### 2026-09-04 GitHub Commit
 #### 본 사이트를 개발하기위한 기본 작업 환경 
 ## 작업 환경 설정

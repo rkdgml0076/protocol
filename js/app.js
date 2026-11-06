@@ -665,53 +665,53 @@ const LGfieldMapV1 = [
 0xD5, 0x00 */
 
 /* V2.0 NFC MTR_RES */
-const NFCfieldMap2 = [
-  [4, 1, "cmdByte"],
-  [8, 5, "meterNo"],
-  [12, 13, "FinalReport"],
-  [12, 25, "Finalmeter"],
-  [2, 37, "msrCnt"],
-  [8, 39, "msrStdValue"], 
-  [2, 47, "meterCaliber"],
-  [2, 49, "meterCode"],
-  [8, 51, "ctnNO"],
-  [4, 59, "devFw"],
-  [2, 63, "format"],
-  [2, 65, "devVolt"],
-  [2, 67, "comOnOff"]
-];
+// const NFCfieldMap2 = [
+//   [4, 1, "cmdByte"],
+//   [8, 5, "meterNo"],
+//   [12, 13, "FinalReport"],
+//   [12, 25, "Finalmeter"],
+//   [2, 37, "msrCnt"],
+//   [8, 39, "msrStdValue"], 
+//   [2, 47, "meterCaliber"],
+//   [2, 49, "meterCode"],
+//   [8, 51, "ctnNO"],
+//   [4, 59, "devFw"],
+//   [2, 63, "format"],
+//   [2, 65, "devVolt"],
+//   [2, 67, "comOnOff"]
+// ];
 
 /* V2.0 NFC AMI_RES */
-const NFCfieldMap3 = [
-  [4, 1, "cmdByte"],
-  [8, 5, "meterNo"],
-  [12, 13, "FinalReport"],
-  [12, 25, "Finalmeter"],
-  [2, 37, "msrCnt"],
-  [8, 39, "msrStdValue"], 
-  [2, 47, "meterCaliber"],
-  [2, 49, "meterStatus"],
-  [4, 51, "rsrp"],
-  [2, 55, "NoAck"],
-  [2, 57, "mno"],
-  [2, 59, "modem"],
-  [2, 61, "devVolt"],
-  [2, 63, "comOnOff"]
-];
+// const NFCfieldMap3 = [
+//   [4, 1, "cmdByte"],
+//   [8, 5, "meterNo"],
+//   [12, 13, "FinalReport"],
+//   [12, 25, "Finalmeter"],
+//   [2, 37, "msrCnt"],
+//   [8, 39, "msrStdValue"], 
+//   [2, 47, "meterCaliber"],
+//   [2, 49, "meterStatus"],
+//   [4, 51, "rsrp"],
+//   [2, 55, "NoAck"],
+//   [2, 57, "mno"],
+//   [2, 59, "modem"],
+//   [2, 61, "devVolt"],
+//   [2, 63, "comOnOff"]
+// ];
 
 /* V2.0 NFC RSET_RES */
-const NFCfieldMap4 = [
-  [4, 1, "cmdByte"],
-  [8, 5, "meterNo"],
-  [12, 13, "FinalReport"],
-  [12, 25, "Finalmeter"],
-  [2, 37, "msrCnt"],
-  [8, 39, "msrStdValue"], 
-  [2, 47, "meterCaliber"],
-  [2, 49, "meterStatus"],
-  [2, 51, "devVolt"],
-  [2, 53, "comOnOff"]
-];
+// const NFCfieldMap4 = [
+//   [4, 1, "cmdByte"],
+//   [8, 5, "meterNo"],
+//   [12, 13, "FinalReport"],
+//   [12, 25, "Finalmeter"],
+//   [2, 37, "msrCnt"],
+//   [8, 39, "msrStdValue"], 
+//   [2, 47, "meterCaliber"],
+//   [2, 49, "meterStatus"],
+//   [2, 51, "devVolt"],
+//   [2, 53, "comOnOff"]
+// ];
 
 /* V2.0 NFC STOR_RES */
 const NFCfieldMap1 = [
@@ -1152,6 +1152,7 @@ const fieldData = dataWithoutChecksum;
 let yearVal = "", monthVal = "", dayVal = "";
 let hourVal = "", minuteVal = "", secondVal = "";
 let msrStdValueVal = "";
+let msrStdValueRow = null;
 let division = "";
 let prevOffsetResult = null;      // 이전 msrOffset 결과 저장
 let msrOffsetyearVal, msrOffsetmonthVal, msrOffsetdayVal;
@@ -1208,9 +1209,22 @@ fieldMap.forEach(([length, start, fieldName]) => {
     // NFCfieldMap1(NFC)전용 msrStdValue 소급 계산
     if (pendingMsrStdRaw !== null) {
       const value = pendingMsrStdRaw / Math.pow(10, division);
-      msrStdValueVal = value + " ton";
+      const formattedValue = fieldMap === NFCfieldMap1 ? value.toFixed(3) : value;
+      msrStdValueVal = formattedValue + " ton";
+      if (msrStdValueRow) {
+        msrStdValueRow.cells[2].textContent = msrStdValueVal;
+      }
       prevOffsetResult = value;
       pendingMsrStdRaw = null;
+    }
+  }
+
+  if (fieldName === "comOnOff") {
+    const communicationStatus = rawValue.toUpperCase();
+    if (communicationStatus === "01") {
+      displayValue = "통신 ON";
+    } else if (communicationStatus === "0F") {
+      displayValue = "통신 OFF";
     }
   }
 
@@ -1459,7 +1473,8 @@ fieldMap.forEach(([length, start, fieldName]) => {
 
       if (division !== "" && division !== undefined) {
         const value = rawNum / Math.pow(10, division);
-        displayValue = value + " ton";
+        const formattedValue = fieldMap === NFCfieldMap1 ? value.toFixed(3) : value;
+        displayValue = formattedValue + " ton";
         msrStdValueVal = displayValue;
         prevOffsetResult = value;
       } else {
@@ -1580,6 +1595,9 @@ fieldMap.forEach(([length, start, fieldName]) => {
     <td>${rawValue}</td>
     <td>${displayValue}</td>`;
   tbody.appendChild(row);
+  if (fieldName === "msrStdValue") {
+    msrStdValueRow = row;
+  }
   });
 
   document.getElementById("summaryContent").innerHTML =
